@@ -12,7 +12,7 @@ unix:LIBS += -L/$$QGIS_DIR/lib \
 
 INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/plugins \
-    $$QGIS_DIR/src/gui/ \
+    $$QGIS_DIR/src/gui \
     $$QGIS_DIR/src/raster \
     $$QGIS_DIR/src/core \
     $$QGIS_DIR/src/core/renderer \
@@ -20,9 +20,11 @@ INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/core/symbology-ng \
     $$QGIS_DIR/src/app \
     $$QGIS_DIR/src/app/legend \
+    $$QGIS_DIR/src/ui \
+    $$QGIS_DIR/build/src/ui \
     $$QGIS_DIR
 
-DEST =qgsconflateplugin.so
+DEST = qgsconflateplugin.so
 
 DEFINES += GUI_EXPORT= \
     CORE_EXPORT=

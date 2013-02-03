@@ -9,6 +9,7 @@
 #include <QtGui>
 #include <qgis/qgisinterface.h>
 #include <qgis/qgsmaplayer.h>
+#include <qgis/qgsgeometry.h>
 
 // Local includes
 #include "ui_dialog.h"
@@ -18,22 +19,47 @@ class Dialog : public QDialog, private Ui::Dialog
     Q_OBJECT
 
 public:
+
     Dialog(QWidget *parent = 0, Qt::WFlags fl = 0, QgisInterface *iface = 0);
     ~Dialog();
 
-    // return selected layer
+    /** Returns selected layer.
+     *  @param index Index of the layer - 0 for reference, 1 for subject
+     *  @return selected layer as QgsVectorLayer *
+     */
     QgsVectorLayer* selectedLayer(int index);
 
+    /** Duplicate reference layer.
+     *  @return true if copied layer is valid
+     */
+    bool copyLayer();
+
+    /** Transfers qgis geometry to geos.
+     *  @param theLayer Layer which geometry has to be transfered.
+     */
+    void transferGeometrytoGeos( QgsVectorLayer *theLayer );
+
+    /** Transfers geos geometry to qgis.
+     */
+    void transferGeometryFromGeos( );
+
+    /** Do something with geos geometry */
+    void vertexSnap();
+
 private slots:
+
+    /** Copy reference layer. */
     void on_okButton_clicked();
 
+    /** Close dialog. */
     void on_closeButton_clicked();
 
 private:
-    QgsMapLayer *mMapLayer;
+
     QgisInterface *mIface;
     QgsVectorLayer *mRefLayer;
     QgsVectorLayer *mSubLayer;
+    std::vector <GEOSGeometry *> mGeosList;
 
 };
 

@@ -18,7 +18,7 @@
 // static members
 static const char * const sName = "Conflate Plugin";
 static const char * const sDescription = "dialog for conflation";
-static const char * const sVersion = "0.00001";
+static const char * const sVersion = "0.1";
 static const QString sCategory = QObject::tr("Vector");
 static const QgisPlugin::PLUGINTYPE sType= QgisPlugin::UI;
 
