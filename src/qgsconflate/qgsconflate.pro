@@ -1,8 +1,8 @@
-QGIS_DIR = /home/tereza/QGIS/dev/cpp/Quantum-GIS
+QGIS_DIR = /opt/Quantum-GIS
 
 TEMPLATE = lib
 
-CONFIG = qt
+CONFIG += qt
 
 QT += xml
 
