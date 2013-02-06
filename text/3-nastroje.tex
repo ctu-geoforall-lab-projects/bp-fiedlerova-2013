@@ -1,0 +1,266 @@
+\chapter{Existující nástroje}
+\label{3-nastroje}
+
+Tato kapitola se zabývá již existujícími nástroji pro~spojování vektorových map z různých zdrojů ('conflation').
+
+\section{Komerční nástroje}
+
+Komerčních nástrojů umožňujících řešení spojování vektorových map ('conflation') existuje celá řada. Některé programy jsou orientovány přímo na~tento problém,
+jiné nabízejí funkce pro~slučování map pouze jako vedlejší funkcionalitu a ne vždy je proto možné pomocí nich řešit složitější problémy. Následující výčet neobsahuje
+všechen komerční software zabývající se slučováním vektorových map ('conflation'), ale nejvýznamnější nástroje, které lze pro~zpracování použít. Vzhledem k~tomu,
+že se jedná o~komerční software, nebylo možné všechny níže popsané nástroje otestovat, proto jejich popis vychází především z~informací dostupných na~oficiálních stránkách
+produktů.
+
+
+\subsection{ESRI ArcGIS}
+
+V~softwaru ArcGIS 10 existuje několik nástrojů, které lze využít pro~spojování geografických dat, přenos atributů a odstraňování geometrických rozdílů mezi~datasety. 
+
+\subsubsection{Spatial Adjustment}
+
+Soubor nástrojů \textit{Spatial Adjustment} systému ArcGIS poskytuje základní funkce pro~'conflation'. Má sloužit především k úpravě dat z~různých zdrojů a zajistit tak
+jejich celistvost. Může být použito několik metod pro~zarovnání jedné vrstvy či její části ke~druhé. Lze provést transformaci, navázání hran (\textit{edge matching}) nebo
+srovnání překrývajících se dat (\textit{rubber sheeting}).
+
+Pro použití metody transformace je nejdříve třeba označit data, která budou do procesu vstupovat. Poté se vyberou dvojice uzlových bodů, které by si měly odpovídat.
+Na~výběr je několik typů transformací. Všechny jsou prováděny na~základě vybraných dvojic identických bodů. %%Tento postup bychom tedy mohly označit za~ruční 'conflation'.
+
+Do~procesu horizontálního zarovnání (\textit{horizontal conflation}) lze zařadit funkce nástroje \textit{Edge Match Tool}, který umožňuje navázat na~sebe dvě sousedící vrstvy.
+Zarovnání je poměrně snadné, stačí pouze zvolit toleranci (maximální vzdálenost pro navázání prvků) a označit tímto nástrojem hranici mezi vrstvami, kde by měly na~sebe
+navazovat. Ve~vybrané oblasti se zobrazí indikátory naznačující způsob zarovnání, které lze ještě ručně upravit. Po~potvrzení se provede zarovnání tak, aby byla zachována
+topologie.
+
+Dalším způsobem geometrického spojení vrstev, který \textit{Spatial Adjustment} nabízí, je \textit{Rubber Sheeting}. V~tomto případě je třeba označit opět odpovídající si body
+a navíc body, jejichž poloha by se neměla změnit. Při~spuštění zarovnání se dočasně vytvoří triangulační síť mezi označenými body (vzájemně si odpovídající body). Poloha 
+ostatních neoznačených bodů je pak vypočtena interpolací v~této síti.
+
+Poslední z~nástrojů pro~'conflation' je \textit{Attribute Transfer}. Pomocí něho je možné převést atributy mezi odpovídajícími si prvky, ale také upravit jejich geometrii.
+Po~volbě jednoho či více atributů, které se mají převádět mezi~zdrojovou a cílovou vrstvou lze interaktivně vybírat odpovídající si dvojice prvků v obou vrstvách. Mezi~těmito
+prvky se převedou atributy a pokud je zaškrtnuta volba \textit{Transfer Geometry} neboli "převést geometrii", změní se geometrie cílového prvku dle~zdrojového. Převod lze
+provést také najednou pro~více vybraných prvků.
+
+
+%% http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/About_spatial_adjustment_attribute_transfer/001t000000v9000000/
+%% http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/About_spatial_adjustment_rubbersheeting/001t000000v3000000/
+
+\subsubsection{Integrate}
+
+Nástroj \textit{Integrate} umožňuje sladění dvou datasetů. Na~vstupu vyžaduje dvě či více vrstev, které chceme sladit, a dále maximální vzdálenost, při~které lze považovat
+prvky za~odpovídající si. U~každého datasetu navíc lze zadat prioritu (\textit{rank}). Prvky s~nižší prioritou se pak budou zarovnávat k těm s prioritou vyšší. Tato funkce
+je velmi užitečná, pokud máme dvě překrývající se nebo sousedící vrstvy s~malými rozdíly např. v důsledku různé přesnosti.
+%% http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#//00170000002s000000
+
+\subsection{ConfleX}
+
+ConfleX je 'conflation' software pro~automatické spojování vektorových GIS dat, který pro~automatizaci využívá umělou inteligenci. ConfleX umožňuje zpracování i takových 
+případů, kdy se zdrojová mapa s cílovou nepřekrývají nebo nejsou topologicky identické. Systém porovnává každé dva segmenty z~obou map a jejich vztah k~ostatním segmentům, 
+na~základě tohoto postupu pak rozhodne, zda se jedná o~stejné prvky či nikoli. Kromě automatického procesu umožňuje program i následnou ruční editaci.
+
+ConfleX je k dispozici jako samostatná aplikace ale také jako extenze programu ArcGIS 9/10.
+
+\subsection{Intergraph GeoMedia Fusion}
+
+Nástroj GeoMedia Fusion firmy Intergraph je navržen pro~úpravu dat, aby byly topologicky korektní, validaci atributů a integraci dat 'conflation'. Cílem je umožnit snadnou 
+údržbu dat v~rozsáhlých geografických databázích, kde jsou data získávána z~různých zdrojů. Nástroj porovnává dva datasety obsahující rozdílné reprezentace stejné skutečnosti.
+Nejdříve automaticky vytvoří \textit{conflation links} indikující způsob spojení vrstev, které lze ještě ručně editovat. Následně umožní geometrie i atributy těchto dvou 
+reprezentací sjednotit. GeoMedia Fusion umožňuje úpravu bodových, liniových i plošných dat včetně jejich atributů.
+
+
+\subsection{MapMerger}
+
+MapMerger je GIS nástroj firmy ESEA zaměřený na~slučování geometrie a atributů vektorových map ('conflation') a kontrolu kvality. Umožňuje převod atributů 
+mezi~dvěma překrývajícími se mapami, navázání hranic dvou sousedících map, přidání prvků z~jedné mapy do~druhé, synchronizaci mapy s~její aktualizovanou verzí, 
+identifikaci geometrických a atributových rozdílů mezi~dvěma verzemi té samé mapy. 
+
+\section{Open Source nástroje}
+
+V~nekomerční sféře zatím neexistuje mnoho nástrojů, které by komplexně řešili problém spojování vektorových map ('conflation'). Většinou jde pouze o~malé prográmky či
+zásuvné moduly k~větším softwarům, pomocí nichž se dá provést manuální či poloautomatické sloučení vektorových datasetů, případně jejich atributů. Ovšem většinou je
+cesta k~dosažení cíle pomocí těchto nástrojů poměrně složitá a ne vždy jsou výsledky takové, jak bychom si představovali. Asi jediným ucelenějším nástrojem je knihovna
+\textit{JCS} implementovaná jako kolekce zásuvných modulů v~programu OpenJUMP.
+
+\subsection{JCS - Java Conflation Suite}
+
+\textit{JCS} je \textit{open source} knihovna napsaná v~jazyce java, která zahrnuje API a soubor interaktivních nástrojů, které slouží ke~slučování ('conflation') 
+prostorových datasetů. Byla vyvinuta společností Vivid Solutions, Inc. Obsahuje funkce umožňující provádění různých procesů spojených se~slučováním vektorových map 
+('map conflation'), které jsou zaměřeny především na~polygonové případně liniové datasety, co se týče bodových vrstev, je její funkcionalita poměrně omezená. 
+Knihovna \textit{JCS} je závislá na knihovně \textit{JTS - Java Topology Suite}, která poskytuje základní geometrické funkce pro~práci s~prostorovými
+ daty. Obě knihovny jsou navrženy v~souladu s~OGC \footnote{OGC - Open Geospatial Consorcium} specifikací \textit{Simple Features} \footnote{specifikace týkající se 2D 
+prostorových predikátů a funkcí}. \textit{JCS} vznikla v~rámci projektu JUMP Unified Mapping Platform. Je poskytována pod~licencí LGPL \footnote{GNU Lesser General Public 
+License}.
+
+\subsubsection{Architektura}
+\label{jcspic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=250pt]{./pictures/JCS_Architecture.png}
+      \caption{Architektura JCS}
+      \label{fig:architektura}
+  \end{figure}
+
+
+Knihovna \textit{JCS} používá pro~vizualizaci dat a interakci JUMP WorkBench a API. Pro~poskytování základní geometrické funkcionality je pak využíváno knihovny \textit{JTS}. 
+JUMP API umožňuje vstup a výstup prostorových dat a další funkcionalitu s~nimi spojenou. Jádro \textit{JCS} tvoří Conflation API obsahující algoritmy pro~'conflation'. 
+Funkce \textit{JCS} jsou v~projektu OpenJUMP implementovány v~podobě kolekce zásuvných modulů - \textit{QA, Conflate, RoadMatcher}.
+
+\subsubsection{OpenJUMP projekt}
+
+OpenJUMP je \textit{open source} projekt, který vyvinula firma Vivid Solutions, Inc. Jedná se o~GIS software, který umožňuje základní práci 
+s~prostorovými daty v~rastrové či vektorové podobě a jejich atributy.
+
+\subsubsection{JTS - Java Topology Suite}
+
+Knihovna \textit{JTS} je jedním ze~základních prvků projektu OpenJUMP. Je napsána v~jazyce java a poskytována pod~licencí LGPL. Obsahuje třídy pro~reprezentaci geometrických
+objektů a základní funkce pro~práci s~prostorovými daty dle~specifikace \textit{Simple Features} pro~SQL od~OGC. Kromě tříd reprezentujících geometrické prvky dle~zmíněné
+specifikace zahrnuje další podpůrné třídy pro~reprezentaci seznamu souřadnic, aplikaci geometrického filtru (např. při~transformaci), uchovávání informace o~maximální a 
+minimální souřadnici objektu a jiné. Dále jsou součástí této knihovny třídy umožňující geometrické výpočty jako je vzájemná polohu bodu a linie, výpočet průsečíku, prostorové
+analýzy, test polohy bodu a uzavřené oblasti atd. 
+
+\subsubsection{Funkcionalita JCS} %% JINÝ NÁZEV?
+
+Projekt \textit{JCS} neobsahuje neumožňuje změnu souřadnicového systému apod. funkcionalitu. Proto je automaticky přepokládáno, že vrstvy vstupující do~zpracování mají stejný
+geodetický referenční systém. Souřadnice bodů výstupních vrstev mají vždy desetinnou přesnost.  %% JE TO SPRÁVNĚ ??
+
+Při většině výpočtů v~zásuvných modulech \textit{JCS} je využívána Hausdorffova metrika. Na~rozdíl od~euklidovské metriky totiž nezkoumá pouze, jak blízko se prvky nacházejí
+(tedy nejkratší vzdálenost), ale i jaká je největší vzdálenost mezi~prvky a tedy zohledňuje i jejich topologické vztahy. 
+
+Na~výpočet je Hausdorffova vzdálenost poměrně složitá. Proto se v~algoritmech použitých v~\textit{JCS} používá spíše vrcholová Hausdorffova vzdálenost (\textit{Vertex Hausdorff
+ Distance}), která není vztažena ke~geometrickému prvku, ale pouze k~jeho vrcholům. Tato varianta Hausdorffovy vzdálenosti ve~většině případů vrací stejně dobré výsledky. 
+
+Postup spojování vektorových datasetů pomocí knihovny \textit{JCS} je založen na~nalezení geometrických rozdílů mezi~oběma mapami a následném odstranění těchto rozdílů.
+
+K~detekci geometrických rozdílů je použit algoritmus pro~prostorové rozdíly. Tento algoritmus funguje tak, že postupně porovnává geometrické prvky z~obou datasetů popřípadě
+ pouze jejich jednotlivé části a pokud se tyto prvky shodují, označí je jako odpovídající si. Výsledkem jsou pak ty prvky z~obou datasetů, ke~kterým nebyly nalezeny žádné 
+odpovídající prvky. Nalezení odpovídajících si prvků probíhá následovně. Pokud je požadována přesná shoda, provede se testování, zda jsou prvky stejného geometrického typu a
+zda se rovná jejich obsah. Porovnání obsahu se zakládá na~porovnávání jednotlivých komponent a seznamu bodů daných geometrií. Ne vždy však je předpokládána přesná shoda,
+proto je možné určit i prvky, které splňují podmínku danou tolerancí. Zde se provádí porovnání Hausdorffovy vzdálenosti mezi~prvky s~touto tolerancí, nepočítá se přitom přímo
+tato vzdálenost. Rozhodující je, jestliže obalová zóna o~velikosti vzdálenostní tolerance prvního prvku obsahuje prvek druhý a naopak. Tato podmínka je ekvivalentní k~podmínce,
+že Hausdorffova vzdálenost musí být menší nebo rovna toleranci. 
+
+Pro~odstraňování překrytů či mezer neexistuje exaktní algoritmus, ale jsou využívány různé heuristiky poskytující dobré topologické výsledky.
+
+Následující výčet podává přehled nejčastějších úloh, které je možné s~tímto nástrojem řešit.
+
+\begin{itemize}
+ \item Jako \textit{Coverage Cleaning} je  označován proces hledání a odstraňování topologických chyb - mezer a překrytů v~rámci jedné vektorové mapy tvořené polygony či 
+	multipolygony. Detekce nežádoucích mezer mezi~polygony je založena na~rozpoznání blízkých liniových segmentů, kde blízkost je určena zvolenou vzdálenostní tolerancí. 
+
+ \item Další často řešenou úlohou je \textit{Boundary Alignment}, což by bylo možné přeložit do češtiny jako "zarovnání či navázání hranic". Cílem je napojit k sobě dvě 
+	vektorové vrstvy, které zobrazují sousedící území, tak, aby se mezi~nimi nevyskytovaly nežádoucí mezery či překryty. Výsledkem jsou tedy plynule navazující datasety,
+	které tvoří bezešvou mapu. Při této úloze je nutné zvolit přesnější referenční vrstvu, jejíž geometrické vlastnosti se nezmění.
+
+ \item U \textit{Coverage Alignment} máme na~vstupu naopak dvě vektorové mapy zobrazující to samé území nebo alespoň jeho část. Tyto mapy se tedy výrazně překrývají. Úkolem
+	je upravit méně přesnou vrstvu tak, aby odpovídala vrstvě referenční popřípadě její části, pokud se vrstvy úplně nepřekrývají. Proces spočívá v~posunutí vrcholů
+	polygonů upravované vrstvy do~blízkých vrcholů vrstvy referenční.
+
+ \item Poměrně specifickou, ale velmi častou úlohou je \textit{Road Network Matching} neboli "spojování silničních sítí". Na~vstupu máme dvě vektorové mapy té samé silniční
+	sítě. Při~této úloze hledáme podobnost mezi~liniovými prvky obou datasetů, které označíme za~odpovídající si. Poté je vytvořena nová vrstva silniční sítě, která
+	obsahuje odpovídající si prvky, přičemž při~mírných odlišnostech použije liniové prvky z~přesnější mapy. \textit{JCS} bohužel zatím neumožňuje automatické provedení
+	této úlohy. Pouze nalezne odpovídající si prvky a další kroky už je nutné provést manuálně.
+
+\item Úloha \textit{Geometry Difference Detection}, v češtině "detekce geometrických rozdílů", na rozdíl od~předchozích nijak neupravuje vstupní vrstvy ani z~nich netvoří jiné.
+	Cílem je pouze nalézt rozdíly mezi vstupními datasety. Nejčastěji je používána pro~rozpoznání změn mezi~dvěma verzemi jedné vektorové mapy (např. po aktualizaci).
+\end{itemize}
+
+\subsubsection{Popis zásuvných modulů}
+
+Zásuvné moduly ze skupiny \textit{QA - Quality Assurance} umožňují najít geometrické rozdíly a nesrovnalosti mezi~datasety, ale také v~rámci jediného datasetu. Funkce zde
+obsažené neslouží k~opravě či propojení vrstev, ale pouze k~identifikaci geometrických rozdílů.
+
+\begin{itemize}
+ \item \textit{Find Misaligned Segments} - slouží k~nalezení segmentů ze~dvou datasetů, které by si v~rámci dané tolerance měli odpovídat, ale je mezi~nimi mezera či překryt. 
+ \item \textit{Find Overlaps} - najde překrývající se prvky ze~dvou datasetů.
+ \item \textit{Find Coverage Gaps} - umožňuje nalézt mezery mezi~polygony jednoho datasetu, které jsou užší než zadaná vzdálenostní tolerance a zároveň je mezi~hranami polygonů,
+	které tvoří tuto mezeru, úhel menší než daná úhlová tolerance.
+ \item \textit{Find Coverage Overlaps} - najde všechny překryty mezi~polygony v~rámci jednoho datasetu, respektive všechny překrývající se polygony.
+ \item \textit{Find Close Vertices} - identifikuje body (samostatné body, vrcholy linií či polygonů) ze~dvou různých datasetů, jejichž vzdálenost je menší než daná tolerance.
+ \item \textit{Find Offset Boundary Corners} - slouží k~nalezení hranic polygonů ze~dvou sousedících vektorových map, které by na~sebe měly navazovat, ale je mezi~nimi posun
+	menší než zadaná tolerance.
+ \item \textit{DiffSegmentsPlugin} - identifikuje liniové segmenty, které jsou obsaženy pouze v~jedné ze~zadaných vrstev, nikoli v~obou dvou.
+ \item \textit{DiffGeometryPlugin} - funguje stejně jako předchozí funkce s~tím rozdílem, že hledá i samostatné geometrie (celé linie, polygony), nikoli jen liniové segmenty.
+\end{itemize}
+
+Další zásuvné moduly zařazené do~skupiny s~názvem \textit{Conflate} slouží k~samotnému spojování vektorových map a navázání dvou sousedních map.
+
+\begin{itemize}
+ \item \textit{Vertex Snapper} - identifikuje a napojí k~sobě blízké uzlové body, vrcholy ze~dvou překrývajících se datasetů. Při~použití této funkce je nutné označit, 
+	která vrstva je referenční (s~body z této vrstvy se nebude hýbat).
+ \item \textit{Coverage Alignment} - zarovná geometrii jednoho datasetu k~jinému referenčnímu datasetu v~místech, kde se překrývají nebo spolu sousedí. Na~rozdíl 
+	od~předchozí funkce nepracuje pouze s~odpovídajícími si body, ale s~celými geometriemi.
+ \item \textit{PolygonToolboxMatcherPlugin} - tento nástroj slouží k~identifikaci podobných polygonů ve~dvou různých datasetech, přičemž umožňuje různá nastavení tak, 
+	aby bylo možné najít opravdu jen odpovídající si polygony popřípadě více polygonů odpovídajících jednomu či naopak. %% NEFUNGUJE MI - CHYBA U ME NEBO V PLUGINU?
+ \item \textit{AlignmentToolboxPlugin} - slouží k~zarovnání dvou vrstev k sobě. Bohužel zatím není plně funkční. %% NEFUNGUJE ???
+\end{itemize}
+
+Skupina označena jako \textit{Clean} obsahuje funkce k k~opravě nepřesností nalezených pomocí funkcí skupiny \textit{QA} v~rámci jednoho datasetu.
+
+\begin{itemize}
+ \item \textit{Remove Coverage Gaps} - odstraní mezery mezi~polygony jedné vrstvy dle~zadané tolerance.
+ \item \textit{Remove Short Segments} - tato funkce by měla dokázat odstranit liniové segmenty kratší než daná tolerance tak, aby co nejméně porušila topologii vrstvy. 
+      Zatím však umožňuje pouze odstranění krátkých izolovaných segmentů.
+ \item \textit{CoverageCleaningToolboxPlugin} - poskytuje stejnou funkcionalitu jako první nástroj z~této skupiny, navíc umožňuje odhalit překryty mezi~polygony jedné vrstvy.
+\end{itemize}
+
+Poslední skupina zásuvných modulů je nazvána \textit{Roads}. Zabývá se spojováním vektorových map silniční sítě.
+
+\begin{itemize}
+ \item \textit{RoadMatcherToolboxPlugin} - umožňuje vytvořit vrstvu s~rozdíly mezi~silnicemi ze~dvou vrstev a na~základě těchto rozdílů a identifikovaných společných prvků 
+	jednu z~těchto vrstev navázat na~druhou referenční tak, aby si odpovídaly.
+\end{itemize}
+
+
+%\subsection{RoadMatcher Plugin}
+%Zásuvný modul pro OpenJUMP ..
+
+\subsection{Open Street Map}
+
+OpenStreetMap je projekt sloužící k~tvorbě a vizualizaci geografických dat. Jedná se o \textit{open source} projekt, což znamená, že ho může kdokoli využívat a přispívat do něj.
+V OpenStreetMap existuje mnoho nástrojů pro~editaci prostorových dat a některé z~nich umožňují i manuální nebo poloautomatické spojování datasetů z různých zdrojů ('conflation').
+Bohužel tu však neexistuje žádný komplexnější nástroj jako je výše popsaný \textit{JCS}. Navíc většina těchto nástrojů je vytvořena pro~nějaký konkrétní účel jako např. 
+pro~spojování silničních sítí v~USA a ne vždy je proto jejich použití zcela obecné. Uživatel si tedy mnohdy musí poradit sám a použít několik různých nástrojů, aby dosáhl
+požadovaného výsledku. Dále uvádím nástroje, které lze pro~některé činnosti související s 'conflation' použít. 
+
+\subsubsection{JOSM conflation plugin}
+
+\textit{Java OpenStreetMap Editor JOSM} je desktopová aplikace umožnující editaci dat projektu OpenStreetMap. Jedním ze~zásuvných modulů pro~tuto aplikaci je \textit{conflation},
+který umožňuje spojování vektorových dat. Tento nástroj však je stále označen jako experimentální, což znamená, že ne vždy funguje zcela správně. Nástroj umožňuje zarovnat
+prvky jedné vrstvy tak, aby souhlasily s~prvky druhé vrstvy, která je označena za~referenční. 
+
+\label{josmpic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=350pt]{./pictures/josm.png}
+      \caption{JOSM conflation}
+      \label{fig:josm}
+  \end{figure} 
+
+V~prvním kroku je určena referenční a upravovaná vrstva. Poté je třeba v~obou těchto vrstvách označit prvky, které by si měly odpovídat. V~dalším kroku se provede automatická
+identifikace dvojic vybraných prvků z obou datasetů a nakonec se provede samotný proces zarovnání prvků (\textit{conflate}), kdy jsou prvky upravované vrstvy změněny tak, 
+aby odpovídaly prvkům vrtsvy referenční. Jedná se tedy o proces poloautomatický, jelikož nejdříve je třeba ručně identifikovat odpovídající si prvky a na~základě tohoto kroku 
+je provedena automatická úprava prvků.
+
+
+
+\subsubsection{Potlatch 2 merging tool}
+
+\textit{Potlatch 2 merging tool} je nástroj původně navržený pro~spojování vektorových dat cyklistických tras v rámci England Cycling Data Project\footnote{projekt pod záštitou
+britského ministerstva dopravy, který si klade za cíl umožnit dostupnost informací o síti cyklostezek  ve~Velké Británii prostřednictvím OpenStreetMap}. %% tou záštitou si nejsem jistá
+V~případě tohoto nástroje se jedná především o~proces přenosu atributů. Pokud máme v~mapě dva odpovídající si prvky, pomocí tohoto nástroje je můžeme označit za~odpovídající
+a jednoduše sloučit jejich atributy. Nutno však podotknout, že výběr odpovídajících si prvků musíme provést vždy ručně. 
+
+
+\subsection{Univerzitní projekty}
+
+Mimo výše uvedené nástroje existuje také několik projektů různých světových univerzit zabývajících se buď 'conflation' obecně nebo spojováním map silničních sítí. Možnosti
+využití těchto projektů pro~běžného uživatele se velmi různí. A ne vždy lze zcela volně tyto projekty vyzkoušet. Jedním z těchto projektů je i Conflation System MBP, který
+byl vyvinut na~katedře počítačů (\textit{Computer Science Department} na~Central Washington University v~USA. V~rámci tohoto projektu vznikl \textit{MBPConflate} software,
+který má přispět k~výzkumu v~oblasti 'conflation'. Program umožňuje automatické spojení map ('conflation'), poskytuje nástroje pro~následnou kontrolu kvality výsledné mapy.
+Je navržen tak, aby bylo snadné implementovat nové techniky a algoritmy v této oblasti.  
+
+\label{mbppic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=350pt]{./pictures/MBPconflate.png}
+      \caption{MBPConflate}
+      \label{fig:mbp}
+  \end{figure}
