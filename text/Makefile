@@ -4,7 +4,7 @@ all:
 	pdflatex $(FILE)
 
 clean:
-	rm -f *~
+	rm -f *~ *.aux *.log *.out
 
 distclean:
 	make clean
