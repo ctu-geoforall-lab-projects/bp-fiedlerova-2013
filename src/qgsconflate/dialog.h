@@ -7,12 +7,13 @@
 
 // QGis includes
 #include <QtGui>
-#include <qgis/qgisinterface.h>
-#include <qgis/qgsmaplayer.h>
-#include <qgis/qgsgeometry.h>
+#include <qgisinterface.h>
+#include <qgsmaplayer.h>
+#include <qgsgeometry.h>
 
 // Local includes
 #include "ui_dialog.h"
+#include "geoc.h"
 
 class Dialog : public QDialog, private Ui::Dialog
 {
@@ -37,7 +38,7 @@ public:
     /** Transfers qgis geometry to geos.
      *  @param theLayer Layer which geometry has to be transfered.
      */
-    void transferGeometrytoGeos( QgsVectorLayer *theLayer );
+    void transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short layer );
 
     /** Transfers geos geometry to qgis.
      */
@@ -59,7 +60,8 @@ private:
     QgisInterface *mIface;
     QgsVectorLayer *mRefLayer;
     QgsVectorLayer *mSubLayer;
-    std::vector <GEOSGeometry *> mGeosList;
+    TGeomLayer mGeosSub;
+    TGeomLayer mGeosRef;
 
 };
 

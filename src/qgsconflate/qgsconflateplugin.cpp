@@ -2,7 +2,7 @@
 #include <QAction>
 
 //QGis includes
-#include <qgis/qgisinterface.h>
+#include <qgisinterface.h>
 
 //Local includes
 #include "qgsconflateplugin.h"

@@ -1,4 +1,6 @@
 QGIS_DIR = /opt/Quantum-GIS
+OGR_API_DIR = /usr/include/gdal
+GEOC_DIR = /opt/geoc
 
 TEMPLATE = lib
 
@@ -8,7 +10,7 @@ QT += xml
 
 unix:LIBS += -L/$$QGIS_DIR/lib \
     -lqgis_core \
-    -lqgis_gui
+    -lqgis_gui \
 
 INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/plugins \
@@ -21,8 +23,13 @@ INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/app \
     $$QGIS_DIR/src/app/legend \
     $$QGIS_DIR/src/ui \
+    $$QGIS_DIR/build \
     $$QGIS_DIR/build/src/ui \
-    $$QGIS_DIR
+    $$QGIS_DIR/src/providers/ogr \
+    $$QGIS_DIR/src/providers/gdal \
+    $$QGIS_DIR \
+    $$OGR_API_DIR \
+    $$GEOC_DIR
 
 DEST = qgsconflateplugin.so
 

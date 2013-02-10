@@ -5,12 +5,15 @@
 #include <QMessageBox>
 
 // QGis includes
-#include <qgis/qgsmapcanvas.h>
-#include <qgis/qgsvectorlayer.h>
-#include <qgis/qgssinglesymbolrendererv2.h>
-#include <qgis/qgssymbolv2.h>
-#include <qgis/qgsmaplayerregistry.h>
+#include <qgsmapcanvas.h>
+#include <qgsvectorlayer.h>
+#include <qgsmaplayerregistry.h>
+#include <qgsogrprovider.h>
+#include <qgsvectorfilewriter.h>
+
+// GEOS includes
 #include <geos_c.h>
+#include <geos/export.h>
 
 
 Dialog::Dialog(QWidget *parent, Qt::WFlags fl, QgisInterface * iface) :
@@ -87,10 +90,10 @@ QgsVectorLayer* Dialog::selectedLayer(int index)
 bool Dialog::copyLayer()
 {
     // reference layer
-    mRefLayer = selectedLayer(0);
+    mSubLayer = selectedLayer(1);
 
     // stop if there is no reference layer
-    if( mRefLayer == NULL )
+    if( mSubLayer == NULL )
     {
         qDebug("No layer");
         QMessageBox::information(0,"Information","No Layer!", QMessageBox::Ok);
@@ -98,7 +101,42 @@ bool Dialog::copyLayer()
     }
 
     // new vector layer as copy of mRefLayer
-    QgsVectorLayer *myLayer = new QgsVectorLayer(mRefLayer->source(), mRefLayer->name()+"_copy", mRefLayer->providerType());
+    QMap<int, int> *oldToNewAttrIdxMap = new QMap<int, int>;
+
+    // uri of new vector layer
+    QString uri = "/home/desktop/"+mSubLayer->name()+"_copy.shp";
+    QString *error = NULL;
+    bool overwrite = false;
+
+    // create empty layer  -----> ERROR
+    QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, mSubLayer->pendingFields(), mSubLayer->wkbType(),
+                                               &(mSubLayer->crs()), overwrite, oldToNewAttrIdxMap, error);
+    if( ierror )
+    {
+        return false;
+    }
+
+    qDebug( "Empty vector layer created." );
+
+    //new layer
+    QgsVectorLayer *myLayer = new QgsVectorLayer(mSubLayer->source(), mSubLayer->name()+"_copy", mSubLayer->providerType());
+    qDebug( "New vector layer created." );
+
+    // copy features from subject layer to the new layer
+    QgsFeature myFeature;
+    while( mSubLayer->nextFeature(myFeature) )
+    {
+        // add feature
+        if ( myLayer->addFeature(myFeature, true) )
+        {
+            continue;
+        }
+        else
+        {
+            qDebug( "Unable to add feature." );
+        }
+
+    }
 
     // add layer if valid
     if(myLayer->isValid())
@@ -120,11 +158,20 @@ bool Dialog::copyLayer()
 } // bool Dialog::copyLayer()
 
 
-void Dialog::transferGeometrytoGeos( QgsVectorLayer *theLayer )
+void Dialog::transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short layer )
 {
     // empty geometry
     QgsGeometry *geom = NULL;
-    mGeosList.clear();
+
+    if ( layer == 0 )
+    {
+        mGeosRef.clear();
+    }
+    else
+    {
+        mGeosSub.clear();
+    }
+
 
     // transfer geometry of each feature from subject layer to geos
     QgsFeature myFeature;
@@ -135,10 +182,18 @@ void Dialog::transferGeometrytoGeos( QgsVectorLayer *theLayer )
         geom = myFeature.geometry();
 
         // transfer qgis geometry to geos
-        GEOSGeometry * geos = geom->asGeos();
+        MyGEOSGeom geos;
+        geos.setGEOSgeom( geom->asGeos() );
 
         // add geometry to the list of geos geometries
-        mGeosList.push_back(geos);
+        if (layer == 0) // reference layer
+        {
+            mGeosRef.push_back(geos);
+        }
+        else
+        {
+            mGeosSub.push_back(geos);
+        }
 
     }
 
@@ -156,14 +211,14 @@ void Dialog::transferGeometryFromGeos( )
     // change geometry in the layer according to GEOS geometry
     QgsFeature myFeature;
 
-    for( std::vector<GEOSGeometry *>::iterator it = mGeosList.begin(); mGeosList.end() != it; it++ )
+    for( TGeomLayer::iterator it = mGeosSub.begin(); mGeosSub.end() != it; it++ )
     {
         // next feature in the layer
         if ( mSubLayer->nextFeature(myFeature) )
         {
             // set new geometry to the feature from geos geometry
-            geom->fromGeos(*it);
-            mSubLayer->changeGeometry(myFeature.id(), geom);
+            geom->fromGeos( (*it).getGEOSGeom() );
+            mSubLayer->changeGeometry( myFeature.id(), geom );
         }
 
     }
@@ -175,8 +230,21 @@ void Dialog::vertexSnap()
 {
 
     //initGEOS(); ???
+    transferGeometrytoGeos( mSubLayer, 1 );
+    transferGeometrytoGeos( mRefLayer, 0 );
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
+    VertexSnapper vs;
+
+    // set geometries of layers to vertex snapper
+    vs.setRefGeometry( mGeosRef );
+    vs.setSubGeometry( mGeosSub );
+
+    // set tolerance distance
+    vs.setTolDistance( 1 );
+
+    // snap vertices from subject layer to the reference layer
+    vs.snap();
 
     //finishGEOS(); ???
 
@@ -188,6 +256,7 @@ void Dialog::on_okButton_clicked()
 
     if( copyLayer() )
     {
+        vertexSnap();
         qDebug("Layer was copied.");
     }
     else

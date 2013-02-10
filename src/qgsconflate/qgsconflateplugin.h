@@ -9,7 +9,7 @@
 #include <QAction>
 
 //Qt includes
-#include <qgis/qgisplugin.h>
+#include <qgisplugin.h>
 
 //Local includes
 #include "dialog.h"
@@ -20,6 +20,7 @@ class QgsConflatePlugin : public QObject, public QgisPlugin
     Q_OBJECT
 
     public:
+
         QgsConflatePlugin(QgisInterface *iface);
         ~QgsConflatePlugin();
 
@@ -27,9 +28,11 @@ class QgsConflatePlugin : public QObject, public QgisPlugin
         void unload();
 
     private slots:
+
         void showDialog();
 
     private:
+
         QgisInterface *mIface;
         QAction *mAction;
         Dialog *mDialog;
