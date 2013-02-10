@@ -1,17 +1,31 @@
 #ifndef VERTEXSNAPPER_H
 #define VERTEXSNAPPER_H
 
-// geos includes
-#include <geos_c.h>
-#include <geos/export.h>
+// GEOS includes
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/util/GeometryEditor.h>
 
 // std includes
 # include <vector>
 
+// local includes
+#include "mygeosgeom.h"
 
 
-typedef std::vector<GEOSGeometry *> TGeomLayer;
+using namespace std;
+using namespace geos;
+using namespace geos::geom;
+using namespace geos::geom::util;
 
+
+typedef std::vector< MyGEOSGeom > TGeomLayer;
+
+
+/** Class to snap vertices of one layer to the close vertices of the other layer. */
 
 class VertexSnapper
 {
@@ -48,19 +62,19 @@ public:
       @param g2 Geometry of the  second tested feature.
       @return true if g1 and g2 are within distance tolerance.
      */
-    void isClose(GEOSGeometry g1, GEOSGeometry g2);
+    bool isClose(MyGEOSGeom g1, MyGEOSGeom g2);
 
     /** Snap vertices of given geometry to the close vertices from given coordinate sequence.
       @param geom Pointer to the tested geometry.
       @param closeCoord Coordinate sequence with close point from the reference layer.
      */
-    void snapVertices( GEOSGeometry * geom, GEOSCoordSequence & closeCoord );
+    void snapVertices( MyGEOSGeom * geom, CoordinateSequence & closeCoord );
 
     /** Edit geometry according to the given coordinates.
       @param geom Pointer to the tested geometry.
       @param coord Coordinate sequence with new points.
      */
-    void editGeometry( GEOSGeometry * geom, GEOSCoordSequence & coord );
+    void editGeometry( MyGEOSGeom * geom, CoordinateSequence & coord );
 
 private:
 
