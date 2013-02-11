@@ -8,9 +8,12 @@ CONFIG += qt
 
 QT += xml
 
-unix:LIBS += -L/$$QGIS_DIR/lib \
+unix:LIBS += -L/usr/lib \
+    -L/$$QGIS_DIR/build/output/lib \
     -lqgis_core \
     -lqgis_gui \
+    -lproj \
+    -lgdal
 
 INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/plugins \

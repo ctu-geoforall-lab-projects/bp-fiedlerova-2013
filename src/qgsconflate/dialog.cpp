@@ -10,10 +10,13 @@
 #include <qgsmaplayerregistry.h>
 #include <qgsogrprovider.h>
 #include <qgsvectorfilewriter.h>
+#include <qgsnewvectorlayerdialog.h>
 
 // GEOS includes
 #include <geos_c.h>
 #include <geos/export.h>
+
+#include <iostream>
 
 
 Dialog::Dialog(QWidget *parent, Qt::WFlags fl, QgisInterface * iface) :
@@ -100,35 +103,131 @@ bool Dialog::copyLayer()
         return false;
     }
 
+    qDebug("BEFORE options");
+
     // new vector layer as copy of mRefLayer
     QMap<int, int> *oldToNewAttrIdxMap = new QMap<int, int>;
 
     // uri of new vector layer
-    QString uri = "/home/desktop/"+mSubLayer->name()+"_copy.shp";
-    QString *error = NULL;
+    QString uri = mSubLayer->source()+"_copy.shp";
+    QString *errorMessage = NULL;
     bool overwrite = false;
+    QMap <QString, QVariant> *options = new QMap<QString, QVariant>;
+    options->insert("fileEncoding", "utf-8");
+    options->insert("driverName", "ESRI Shapefile");
+    QgsFields fields = mSubLayer->dataProvider()->fields();
+    QGis::WkbType wkbType = mSubLayer->wkbType();
+    QgsCoordinateReferenceSystem srs = (mSubLayer->crs());
+
+
+
+    if( fields.isEmpty() )
+        qDebug("Fields are empty");
 
     // create empty layer  -----> ERROR
-    QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, mSubLayer->pendingFields(), mSubLayer->wkbType(),
-                                               &(mSubLayer->crs()), overwrite, oldToNewAttrIdxMap, error);
+    /*QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType,
+                                               &srs, overwrite, oldToNewAttrIdxMap, errorMessage, options);
     if( ierror )
     {
         return false;
+    }*/
+
+   // POKUS
+    QString encoding;
+    QString driverName = "ESRI Shapefile";
+    QStringList dsOptions, layerOptions;
+
+
+    if ( options )
+    {
+    if ( options->contains( "fileEncoding" ) )
+        encoding = options->value( "fileEncoding" ).toString();
+
+    if ( options->contains( "driverName" ) )
+        driverName = options->value( "driverName" ).toString();
+
+    if ( options->contains( "datasourceOptions" ) )
+        dsOptions << options->value( "datasourceOptions" ).toStringList();
+
+    if ( options->contains( "layerOptions" ) )
+        layerOptions << options->value( "layerOptions" ).toStringList();
     }
+
+    qDebug( "Options set." );
+
+    if ( oldToNewAttrIdxMap )
+        oldToNewAttrIdxMap->clear();
+    if ( errorMessage )
+        errorMessage->clear();
+
+    qDebug( "ErrorMessage cleared." );
+    if ( !overwrite )
+    {
+        QFileInfo fi( uri );
+        if ( fi.exists() )
+        {
+        if ( errorMessage )
+        *errorMessage += QObject::tr( "Unable to create the datasource. %1 exists and overwrite flag is false." ).arg( uri );
+
+        }
+    }
+
+    qDebug( "Overwrite checked." );
+
+    QgsVectorFileWriter *writer = new QgsVectorFileWriter(
+        uri, encoding, fields, wkbType,
+        &srs, driverName, dsOptions, layerOptions );
+
+    qDebug( "New writer created." );
+
+    QgsVectorFileWriter::WriterError error = writer->hasError();
+    if ( error )
+    {
+        if ( errorMessage )
+        *errorMessage += writer->errorMessage();
+
+        delete writer;
+
+    }
+
+    qDebug( "Writer error has no error." );
+
+    if ( oldToNewAttrIdxMap )
+    {
+        QMap<int, int> attrIdxMap = writer->attrIdxToOgrIdx();
+        for ( QMap<int, int>::const_iterator attrIt = attrIdxMap.begin(); attrIt != attrIdxMap.end(); ++attrIt )
+        {
+        oldToNewAttrIdxMap->insert( attrIt.key(), *attrIt );
+        }
+    }
+
+
+    // KONEC POKUSU
 
     qDebug( "Empty vector layer created." );
 
     //new layer
-    QgsVectorLayer *myLayer = new QgsVectorLayer(mSubLayer->source(), mSubLayer->name()+"_copy", mSubLayer->providerType());
+    QgsVectorLayer *myLayer = new QgsVectorLayer(uri, mSubLayer->name()+"_copy", mSubLayer->providerType(), "ogr");
     qDebug( "New vector layer created." );
+
+    myLayer->editFormInit();
+
+    // add attribute fields to the new layer
+    for( int i = 0; i < fields.size(); i++ )
+    {
+        myLayer->addAttribute( fields.field(i) );
+        myLayer->commitChanges();
+        qDebug( "Attribute added." );
+    }
 
     // copy features from subject layer to the new layer
     QgsFeature myFeature;
-    while( mSubLayer->nextFeature(myFeature) )
+    while( mSubLayer->dataProvider()->nextFeature(myFeature) )
     {
         // add feature
         if ( myLayer->addFeature(myFeature, true) )
         {
+            qDebug( "Feature added." );
             continue;
         }
         else
@@ -144,6 +243,7 @@ bool Dialog::copyLayer()
         qDebug("Layer is valid");
         // add new layer to the layer registry
         QgsMapLayerRegistry::instance()->addMapLayers( QList<QgsMapLayer *>() << myLayer);
+        delete myLayer;
         return true;
     }
     // invalid layer
@@ -183,7 +283,7 @@ void Dialog::transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short la
 
         // transfer qgis geometry to geos
         MyGEOSGeom geos;
-        geos.setGEOSgeom( geom->asGeos() );
+        //geos.setGEOSgeom( geom->asGeos() );
 
         // add geometry to the list of geos geometries
         if (layer == 0) // reference layer
@@ -217,7 +317,7 @@ void Dialog::transferGeometryFromGeos( )
         if ( mSubLayer->nextFeature(myFeature) )
         {
             // set new geometry to the feature from geos geometry
-            geom->fromGeos( (*it).getGEOSGeom() );
+            //geom->fromGeos( (*it).getGEOSGeom() );
             mSubLayer->changeGeometry( myFeature.id(), geom );
         }
 
@@ -256,7 +356,7 @@ void Dialog::on_okButton_clicked()
 
     if( copyLayer() )
     {
-        vertexSnap();
+        //vertexSnap();
         qDebug("Layer was copied.");
     }
     else
