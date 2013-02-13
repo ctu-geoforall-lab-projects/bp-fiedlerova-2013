@@ -119,90 +119,17 @@ bool Dialog::copyLayer()
     QGis::WkbType wkbType = mSubLayer->wkbType();
     QgsCoordinateReferenceSystem srs = (mSubLayer->crs());
 
-
-
     if( fields.isEmpty() )
         qDebug("Fields are empty");
 
-    // create empty layer  -----> ERROR
-    /*QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType,
+    // create empty layer
+    QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType,
                                                &srs, overwrite, oldToNewAttrIdxMap, errorMessage, options);
-    if( ierror )
+    if( !ierror )
     {
+        QMessageBox::warning(0,"Error","Error while creating layer.", QMessageBox::Ok);
         return false;
-    }*/
-
-   // POKUS
-    QString encoding;
-    QString driverName = "ESRI Shapefile";
-    QStringList dsOptions, layerOptions;
-
-
-    if ( options )
-    {
-    if ( options->contains( "fileEncoding" ) )
-        encoding = options->value( "fileEncoding" ).toString();
-
-    if ( options->contains( "driverName" ) )
-        driverName = options->value( "driverName" ).toString();
-
-    if ( options->contains( "datasourceOptions" ) )
-        dsOptions << options->value( "datasourceOptions" ).toStringList();
-
-    if ( options->contains( "layerOptions" ) )
-        layerOptions << options->value( "layerOptions" ).toStringList();
     }
-
-    qDebug( "Options set." );
-
-    if ( oldToNewAttrIdxMap )
-        oldToNewAttrIdxMap->clear();
-    if ( errorMessage )
-        errorMessage->clear();
-
-    qDebug( "ErrorMessage cleared." );
-    if ( !overwrite )
-    {
-        QFileInfo fi( uri );
-        if ( fi.exists() )
-        {
-        if ( errorMessage )
-        *errorMessage += QObject::tr( "Unable to create the datasource. %1 exists and overwrite flag is false." ).arg( uri );
-
-        }
-    }
-
-    qDebug( "Overwrite checked." );
-
-    QgsVectorFileWriter *writer = new QgsVectorFileWriter(
-        uri, encoding, fields, wkbType,
-        &srs, driverName, dsOptions, layerOptions );
-
-    qDebug( "New writer created." );
-
-    QgsVectorFileWriter::WriterError error = writer->hasError();
-    if ( error )
-    {
-        if ( errorMessage )
-        *errorMessage += writer->errorMessage();
-
-        delete writer;
-
-    }
-
-    qDebug( "Writer error has no error." );
-
-    if ( oldToNewAttrIdxMap )
-    {
-        QMap<int, int> attrIdxMap = writer->attrIdxToOgrIdx();
-        for ( QMap<int, int>::const_iterator attrIt = attrIdxMap.begin(); attrIt != attrIdxMap.end(); ++attrIt )
-        {
-        oldToNewAttrIdxMap->insert( attrIt.key(), *attrIt );
-        }
-    }
-
-
-    // KONEC POKUSU
 
     qDebug( "Empty vector layer created." );
 
@@ -222,7 +149,7 @@ bool Dialog::copyLayer()
 
     // copy features from subject layer to the new layer
     QgsFeature myFeature;
-    while( mSubLayer->dataProvider()->nextFeature(myFeature) )
+    while( mSubLayer->nextFeature(myFeature) )
     {
         // add feature
         if ( myLayer->addFeature(myFeature, true) )
