@@ -10,7 +10,9 @@
 #include <qgsmaplayerregistry.h>
 #include <qgsogrprovider.h>
 #include <qgsvectorfilewriter.h>
-#include <qgsnewvectorlayerdialog.h>
+#include <qgsvectorlayerimport.h>
+#include <qgsvectorlayerfeatureiterator.h>
+
 
 // GEOS includes
 #include <geos_c.h>
@@ -103,19 +105,17 @@ bool Dialog::copyLayer()
         return false;
     }
 
-    qDebug("BEFORE options");
-
     // new vector layer as copy of mRefLayer
     QMap<int, int> *oldToNewAttrIdxMap = new QMap<int, int>;
 
-    // uri of new vector layer
+    // parameters of new vector layer
     QString uri = mSubLayer->source()+"_copy.shp";
     QString *errorMessage = NULL;
     bool overwrite = false;
     QMap <QString, QVariant> *options = new QMap<QString, QVariant>;
     options->insert("fileEncoding", "utf-8");
     options->insert("driverName", "ESRI Shapefile");
-    QgsFields fields = mSubLayer->dataProvider()->fields();
+    QgsFields fields = mSubLayer->pendingFields(); //mSubLayer->dataProvider()->fields();
     QGis::WkbType wkbType = mSubLayer->wkbType();
     QgsCoordinateReferenceSystem srs = (mSubLayer->crs());
 
@@ -123,13 +123,14 @@ bool Dialog::copyLayer()
         qDebug("Fields are empty");
 
     // create empty layer
-    QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType,
-                                               &srs, overwrite, oldToNewAttrIdxMap, errorMessage, options);
-    if( !ierror )
+    //QgsVectorLayerImport::ImportError ierror =
+    QgsOgrProvider::createEmptyLayer(uri, fields, wkbType, &srs, overwrite, oldToNewAttrIdxMap, errorMessage,
+                                     options);
+    /*if( !ierror )
     {
-        QMessageBox::warning(0,"Error","Error while creating layer.", QMessageBox::Ok);
+        QMessageBox::warning(0,"Error", "Error while creating layer", QMessageBox::Ok);
         return false;
-    }
+    }*/
 
     qDebug( "Empty vector layer created." );
 
@@ -137,32 +138,26 @@ bool Dialog::copyLayer()
     QgsVectorLayer *myLayer = new QgsVectorLayer(uri, mSubLayer->name()+"_copy", mSubLayer->providerType(), "ogr");
     qDebug( "New vector layer created." );
 
-    myLayer->editFormInit();
-
-    // add attribute fields to the new layer
-    for( int i = 0; i < fields.size(); i++ )
-    {
-        myLayer->addAttribute( fields.field(i) );
-        myLayer->commitChanges();
-        qDebug( "Attribute added." );
-    }
 
     // copy features from subject layer to the new layer
     QgsFeature myFeature;
-    while( mSubLayer->nextFeature(myFeature) )
+    QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
+    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator(mSubLayer, request); // feature iterator
+    featureIt.rewind(); // reset iterator to the start position
+    QList<QgsFeature> features;
+    while( featureIt.nextFeature( myFeature ) )
     {
         // add feature
-        if ( myLayer->addFeature(myFeature, true) )
-        {
-            qDebug( "Feature added." );
-            continue;
-        }
-        else
-        {
-            qDebug( "Unable to add feature." );
-        }
+        features.push_back( myFeature );
 
     }
+
+    if(myLayer->dataProvider()->addFeatures(features))
+        qDebug( "Features added." );
+    else
+        qDebug( "Unable to add features." );
+
+   // myLayer->commitChanges();
 
     // add layer if valid
     if(myLayer->isValid())
@@ -170,13 +165,11 @@ bool Dialog::copyLayer()
         qDebug("Layer is valid");
         // add new layer to the layer registry
         QgsMapLayerRegistry::instance()->addMapLayers( QList<QgsMapLayer *>() << myLayer);
-        delete myLayer;
         return true;
     }
     // invalid layer
     else
     {
-        delete myLayer;
         qDebug("Layer is NOT valid");
     }
 
