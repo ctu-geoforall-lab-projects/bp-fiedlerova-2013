@@ -14,16 +14,13 @@
 
 // local includes
 #include "mygeosgeom.h"
+#include "geoc.h"
 
 
 using namespace std;
 using namespace geos;
 using namespace geos::geom;
 using namespace geos::geom::util;
-
-
-typedef std::vector< MyGEOSGeom > TGeomLayer;
-
 
 /** Class to snap vertices of one layer to the close vertices of the other layer. */
 
@@ -36,12 +33,12 @@ public:
     /** Set reference layer geometries.
       @param ref Vector of geometries in reference layer.
      */
-    void setRefGeometry(TGeomLayer ref){ refGeometry = ref; }
+    void setRefGeometry(TGeomLayer & ref){ refGeometry = ref; }
 
     /** Set subject layer geometries.
       @param ref Vector of geometries in subject layer.
      */
-    void setSubGeometry(TGeomLayer sub){ subGeometry = sub; }
+    void setSubGeometry(TGeomLayer & sub){ subGeometry = sub; }
 
     /** Set distance tolerance for snapping.
       @param tol Maximal distance for snapping.
@@ -51,7 +48,7 @@ public:
     /** Get new geometry of subject layer.
       @return Changed geometry of subject layer.
      */
-    TGeomLayer getNewGeometry(){ return newGeometry; }
+    TGeomLayer & getNewGeometry(){ return newGeometry; }
 
     /** Snap close vertices of subject layer to these of reference layer.
      */
@@ -62,19 +59,19 @@ public:
       @param g2 Geometry of the  second tested feature.
       @return true if g1 and g2 are within distance tolerance.
      */
-    bool isClose(MyGEOSGeom g1, MyGEOSGeom g2);
+    bool isClose(MyGEOSGeom & g1, MyGEOSGeom & g2);
 
     /** Snap vertices of given geometry to the close vertices from given coordinate sequence.
       @param geom Pointer to the tested geometry.
       @param closeCoord Coordinate sequence with close point from the reference layer.
      */
-    void snapVertices( MyGEOSGeom * geom, CoordinateSequence & closeCoord );
+    MyGEOSGeom& snapVertices( MyGEOSGeom & geom, CoordinateSequence & closeCoord );
 
     /** Edit geometry according to the given coordinates.
       @param geom Pointer to the tested geometry.
       @param coord Coordinate sequence with new points.
      */
-    void editGeometry( MyGEOSGeom * geom, CoordinateSequence & coord );
+    void editGeometry( MyGEOSGeom & geom, CoordinateSequence & coord );
 
 private:
 

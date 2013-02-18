@@ -1,48 +1,58 @@
 // local includes
 #include "vertexsnapper.h"
-#include "mygeometryeditoroperation.h"
 
 VertexSnapper::VertexSnapper()
 {
 
-    tolDistance = 0;
+    qDebug("ENTERING CONSTRUCTOR");
+
+    tolDistance = 100;
+    refGeometry.clear();
+    subGeometry.clear();
+    newGeometry.clear();
 
 }
 
 void VertexSnapper::snap()
 {
-    TGeomLayer::iterator sub_it = subGeometry.begin();
 
-    for ( ; subGeometry.end() != sub_it ; ++sub_it )
+    qDebug("ENTERING SNAP");
+
+    //TGeomLayer::iterator sub_it = subGeometry.begin();
+
+    for ( unsigned int i = 0; i < subGeometry.size(); i++ ) //; subGeometry.end() != sub_it ; ++sub_it )
     {
 
         // find close features from the reference layer
         CoordinateSequence *closeCoord = new CoordinateArraySequence();
 
-        TGeomLayer::iterator ref_it = refGeometry.begin();
-        for( ; refGeometry.end() != ref_it ; ++ref_it )
+        //TGeomLayer::iterator ref_it = refGeometry.begin();
+        for ( unsigned int j = 0; j < refGeometry.size(); j++) //; refGeometry.end() != ref_it ; ++ref_it )
         {
 
-            bool close = isClose(*sub_it, *ref_it);
+            bool close = isClose( subGeometry[i], refGeometry[j] );//isClose(*sub_it, *ref_it);
 
             if (close)
             {
                 // add close coordinates
-                closeCoord->add( (*ref_it).getGEOSGeom()->getCoordinates(), false, true );
+                closeCoord->add( refGeometry[j].getGEOSGeom()->getCoordinates(), false, true );//(*ref_it).getGEOSGeom()->getCoordinates(), false, true );
 
             }
 
         }
 
         // snap vertex
-        snapVertices( &(*sub_it) , *closeCoord );
+        newGeometry.push_back( snapVertices( subGeometry[i], *closeCoord) );//&(*sub_it) , *closeCoord );
 
     }
+
 }
 
 
-bool VertexSnapper::isClose(MyGEOSGeom g1, MyGEOSGeom g2)
+bool VertexSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
 {
+    qDebug("ENTERING ISCLOSE");
+
     // min distance between geometries is less than tolerance
     if ( g1.getGEOSGeom()->distance( g2.getGEOSGeom() ) < tolDistance )
     {
@@ -53,11 +63,13 @@ bool VertexSnapper::isClose(MyGEOSGeom g1, MyGEOSGeom g2)
 }
 
 
-void VertexSnapper::snapVertices(MyGEOSGeom *geom, CoordinateSequence &closeCoord)
+MyGEOSGeom& VertexSnapper::snapVertices(MyGEOSGeom &geom, CoordinateSequence &closeCoord)
 {
+    qDebug("ENTERING SNAP VERTICES");
+
     // tested geometry as coordination sequence
     CoordinateSequence* coord = new CoordinateArraySequence();
-    coord = geom->getGEOSGeom()->getCoordinates();
+    coord = geom.getGEOSGeom()->getCoordinates();
 
     // find closest point from closeCoord
     for ( unsigned int i = 0; i < coord->getSize(); i++)
@@ -92,20 +104,31 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, CoordinateSequence &closeCoor
     // edit geometry
     editGeometry( geom, *coord);
 
+    return geom;
 }
 
 
-void VertexSnapper::editGeometry( MyGEOSGeom *geom, CoordinateSequence &coord )
+void VertexSnapper::editGeometry( MyGEOSGeom &geom, CoordinateSequence &coord )
 {
     // edit geometry according to coord -> GeometryEditor and GeometryEditorOperation/interface classes ??????
 
-    MyGeometryEditorOperation myOp;
-    myOp.setCoordSeq(&coord);
+    qDebug("ENTERING EDIT GEOMETRY");
 
-    GeometryEditor *geomEdit = NULL;
-    Geometry *g = geom->getGEOSGeom();
+    MyGeometryEditorOperation myOp( &coord );
+
+    qDebug("Coordinates set.");
+
+    GeometryEditor geomEdit;
+    Geometry *g = geom.getGEOSGeom();
+    //geomEdit.reset( new GeometryEditor() );
+
+    if(geom.getGEOSGeom()->isValid())
+        qDebug("Geom set.");
 
     // return edited geometry
-    geom->setGEOSgeom( geomEdit->edit( g , &myOp ));
+    geom.setGEOSGeom( geomEdit.edit( g , &myOp ) );
+
+    if(geom.getGEOSGeom()->isValid() && !geom.getGEOSGeom()->equals(g))
+        qDebug("Geom is valid.");
 
 }

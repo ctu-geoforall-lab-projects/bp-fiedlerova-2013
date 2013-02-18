@@ -1,13 +1,16 @@
 #ifndef MYGEOMETRYEDITOROPERATION_H
 #define MYGEOMETRYEDITOROPERATION_H
 
-// local includes
-#include "mygeosgeom.h"
-
 // GEOS includes
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/util/CoordinateOperation.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+
+// local includes
+#include "geoc.h"
+
+#include <QtGui>
 
 using namespace std;
 using namespace geos;
@@ -21,14 +24,10 @@ class MyGeometryEditorOperation: public CoordinateOperation
 
     using CoordinateOperation::edit;
 
-private:
-
-    CoordinateSequence *mCoord;
-
 public:
 
     /// Constructor
-    MyGeometryEditorOperation(){}
+    MyGeometryEditorOperation( CoordinateSequence *coord ){ mCoord = coord; }
 
     /** Set private mCoord to given coord.
      */
@@ -39,8 +38,33 @@ public:
      @param geom Geometry to be edited.
      */
     CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geom)
-    { coordinates = mCoord; return mCoord; }
+    { //qDebug("entering EDIT"); coordinates = mCoord;
+        qDebug("setting coord"); //return mCoord;
+
+       long cSize = coordinates->size();
+
+        vector<Coordinate> *vc = new vector<Coordinate>( cSize );
+        // copy coordinates and change
+        for ( unsigned int i=0; i < cSize; ++i )
+        {
+
+            Coordinate coord=mCoord->getAt(i); //(0.0*k, 100.0*k );//
+
+            (*vc)[i] = coord;
+
+        }
+
+        CoordinateSequence *newCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
+
+        return newCoords;
+    }
+
+
+private:
+
+    CoordinateSequence *mCoord;
 
 };
+
 
 #endif // MYGEOMETRYEDITOROPERATION_H

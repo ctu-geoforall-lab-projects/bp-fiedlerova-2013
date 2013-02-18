@@ -4,18 +4,22 @@
 #
 #-------------------------------------------------
 
+DEFINES += GEOCLIBRARY
+
 TEMPLATE = lib
 
-DEFINES += GEOC_LIBRARY
-
 SOURCES += \
-    vertexsnapper.cpp
+    vertexsnapper.cpp \
+    geoc.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
     mygeosgeom.h \
     mygeometryeditoroperation.h
 
+DEST = geoclibrary.so
+
 unix:LIBS += -L/usr/lib/ \
 	-lgeos-3.3.3 \
 	-lgeos_c
+
