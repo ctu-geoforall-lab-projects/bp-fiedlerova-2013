@@ -12,10 +12,12 @@ QT += xml
 unix:LIBS += -L/usr/lib \
     -L/$$QGIS_DIR/build/output/lib \
     -L/$$QGIS_PLUGIN_DIR \
+    -L/$$GEOC_DIR \
     -lqgis_core \
     -lqgis_gui \
     -lproj \
-    -logrprovider
+    -logrprovider \
+    -lgeoc
 
 INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/plugins \

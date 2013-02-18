@@ -3,10 +3,9 @@
 
 // Qt includes
 #include <QDialog>
-#include <QColorDialog>
+#include <QtGui>
 
 // QGis includes
-#include <QtGui>
 #include <qgisinterface.h>
 #include <qgsmaplayer.h>
 #include <qgsgeometry.h>
@@ -28,9 +27,28 @@ public:
      *  @param index Index of the layer - 0 for reference, 1 for subject
      *  @return selected layer as QgsVectorLayer *
      */
-    QgsVectorLayer* selectedLayer(int index);
+    QgsVectorLayer* selectedLayer( int index );
 
-    /** Duplicate reference layer.
+    /** Create empty layer to the given uri.
+      * @param uri Uri of new empty layer.
+      * @true if creation was succesfull
+      */
+    bool createEmptyLayer( QString uri );
+
+    /** Creates new uri to according to given parameters.
+      * @param path Path to the directory where new file should be created ended by base name of new file.
+      * @param rank Number used for file name.
+      * @return new uri to create new file
+      */
+    QString newUri( QString path, int &rank);
+
+    /** Check if file (source) exists.
+      * @param source Path to the file.
+      * @return true if there is file at this source
+      */
+    bool fileExists( QString source );
+
+    /** Copy subject layer to the mNewLayer.
      *  @return true if copied layer is valid
      */
     bool copyLayer();
@@ -41,8 +59,9 @@ public:
     void transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short layer );
 
     /** Transfers geos geometry to qgis.
+      * @return true if transfering was succesfull
      */
-    void transferGeometryFromGeos( );
+    bool transferGeometryFromGeos( );
 
     /** Do something with geos geometry */
     void vertexSnap();
@@ -60,6 +79,7 @@ private:
     QgisInterface *mIface;
     QgsVectorLayer *mRefLayer;
     QgsVectorLayer *mSubLayer;
+    QgsVectorLayer *mNewLayer;
     TGeomLayer mGeosSub;
     TGeomLayer mGeosRef;
 
