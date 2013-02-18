@@ -4,6 +4,8 @@
 #
 #-------------------------------------------------
 
+TEMPLATE = lib
+
 DEFINES += GEOC_LIBRARY
 
 SOURCES += \
