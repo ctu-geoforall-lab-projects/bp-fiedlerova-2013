@@ -41,11 +41,11 @@ public:
     { //qDebug("entering EDIT"); coordinates = mCoord;
         qDebug("setting coord"); //return mCoord;
 
-       long cSize = coordinates->size();
+        size_t cSize = coordinates->size();
 
         vector<Coordinate> *vc = new vector<Coordinate>( cSize );
         // copy coordinates and change
-        for ( unsigned int i=0; i < cSize; ++i )
+        for ( size_t i=0; i < cSize; ++i )
         {
 
             Coordinate coord=mCoord->getAt(i); //(0.0*k, 100.0*k );//

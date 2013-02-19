@@ -9,8 +9,7 @@ DEFINES += GEOCLIBRARY
 TEMPLATE = lib
 
 SOURCES += \
-    vertexsnapper.cpp \
-    geoc.cpp
+    vertexsnapper.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
