@@ -10,9 +10,9 @@ CONFIG += qt
 QT += xml
 
 unix:LIBS += -L/usr/lib \
-    -L/$$QGIS_DIR/build/output/lib \
-    -L/$$QGIS_PLUGIN_DIR \
-    -L/$$GEOC_DIR \
+    -L$$QGIS_DIR/build/output/lib/qgis/plugins \
+    -L$$QGIS_PLUGIN_DIR \
+    -L$$GEOC_DIR \
     -lqgis_core \
     -lqgis_gui \
     -lproj \
