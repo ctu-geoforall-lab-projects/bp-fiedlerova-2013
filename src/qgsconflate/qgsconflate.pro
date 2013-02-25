@@ -10,7 +10,7 @@ CONFIG += qt
 QT += xml
 
 unix:LIBS += -L/usr/lib \
-    -L$$QGIS_DIR/build/output/lib/qgis/plugins \
+    -L$$QGIS_DIR/build/output/lib \
     -L$$QGIS_PLUGIN_DIR \
     -L$$GEOC_DIR \
     -lqgis_core \
@@ -46,11 +46,13 @@ DEFINES += GUI_EXPORT= \
 
 HEADERS += \
     dialog.h \
-    qgsconflateplugin.h
+    qgsconflateplugin.h \
+    qgsconflateprovider.h
 
 SOURCES += \
     dialog.cpp \
-    qgsconflateplugin.cpp
+    qgsconflateplugin.cpp \
+    qgsconflateprovider.cpp
 
 FORMS += \
     dialog.ui

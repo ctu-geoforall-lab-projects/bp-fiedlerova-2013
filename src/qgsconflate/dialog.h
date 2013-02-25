@@ -12,6 +12,7 @@
 
 // Local includes
 #include "ui_dialog.h"
+#include "qgsconflateprovider.h"
 #include "geoc.h"
 
 class Dialog : public QDialog, private Ui::Dialog
@@ -29,42 +30,6 @@ public:
      */
     QgsVectorLayer* selectedLayer( int index );
 
-    /** Create empty layer to the given uri.
-      * @param uri Uri of new empty layer.
-      * @true if creation was succesfull
-      */
-    bool createEmptyLayer( QString uri );
-
-    /** Creates new uri to according to given parameters.
-      * @param path Path to the directory where new file should be created ended by base name of new file.
-      * @param rank Number used for file name.
-      * @return new uri to create new file
-      */
-    QString newUri( QString path, int &rank);
-
-    /** Check if file (source) exists.
-      * @param source Path to the file.
-      * @return true if there is file at this source
-      */
-    bool fileExists( QString source );
-
-    /** Copy subject layer to the mNewLayer.
-     *  @return true if copied layer is valid
-     */
-    bool copyLayer();
-
-    /** Transfers qgis geometry to geos.
-     *  @param theLayer Layer which geometry has to be transfered.
-     */
-    void transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short layer );
-
-    /** Transfers geos geometry to qgis.
-      * @return true if transfering was succesfull
-     */
-    bool transferGeometryFromGeos( );
-
-    /** Do something with geos geometry */
-    void vertexSnap();
 
 private slots:
 
@@ -77,11 +42,8 @@ private slots:
 private:
 
     QgisInterface *mIface;
-    QgsVectorLayer *mRefLayer;
-    QgsVectorLayer *mSubLayer;
-    QgsVectorLayer *mNewLayer;
-    TGeomLayer mGeosSub;
-    TGeomLayer mGeosRef;
+    QgsConflateProvider* mConflate;
+
 
 };
 
