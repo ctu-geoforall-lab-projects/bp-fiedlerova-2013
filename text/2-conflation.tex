@@ -2,13 +2,14 @@
 \label{2-conflation}
 
 \section{Definice 'conflation'}
+\label{definice}
 
-\textit{Conflation} neboli \textit{map matching, map merging, rubber sheeting} lze do češtiny přeložit jako slučování map. Překlad tohoto pojmu však není vždy jasný, jelikož 
-se jím označuje více různých úloh, procesů či činností. Proto zde uvádím několik definic z různýc zdrojů.
+\textit{Conflation} neboli \textit{map matching, map merging, rubber sheeting} lze do~češtiny přeložit jako slučování či spojování map. Překlad tohoto pojmu však není vždy 
+jasný, jelikož se jím označuje více různých úloh, procesů či činností. Proto zde uvádím několik definic z~různýc zdrojů. 
 
 \begin{itemize}
  \item 'Conflation' je proces, jehož cílem je geometricky upravit (posunem, transformací) digitální data zobrazující stejné území (obvykle pořízená v~jiném čase) tak, aby byla 
-    vzájemně geograficky korektní a vzájemně se překrývaly. %% slovem korektní si nejsem jistá 
+    vzájemně geograficky korektní a~vzájemně se překrývaly. %% slovem korektní si nejsem jistá 
     
     (huic.com)
 
@@ -20,7 +21,7 @@ se jím označuje více různých úloh, procesů či činností. Proto zde uvá
    
     (Freitas, Afonso: Distributed Vector Based Spatial Data Conflation Services)
 
-  \item 'Conflation' je soubor funkcí a procedur, které zarovnávají prvky jedné GIS vrstvy k~prvkům jiné a následně převádí atributy mezi~těmito vrstvami.
+  \item 'Conflation' je soubor funkcí a~procedur, které zarovnávají prvky jedné GIS vrstvy k~prvkům jiné a~následně převádí atributy mezi~těmito vrstvami.
    
     (http://www.princegeorgescountymd.gov/Government/AgencyIndex/\newline OITC/GIS/glossary.asp)
 
@@ -29,52 +30,93 @@ se jím označuje více různých úloh, procesů či činností. Proto zde uvá
     
     (http://maps.unomaha.edu/Peterson/GIS/notes/GISAnal1.html,\newline http://www.gov.ns.ca/snsmr/land/standards/post/manual/appedxa1.asp)
 
-  \item Sada činností, které vzájemně přizpůsobují prvky dvou geografických datových vrstev a následně převádí atributy jedné vrstvy do~druhé. %% možná spíše zarovnávají než přizpůsobují
+  \item Sada činností, které vzájemně přizpůsobují prvky dvou geografických datových vrstev a~následně převádí atributy jedné vrstvy do~druhé. %% možná spíše zarovnávají než přizpůsobují
     
     (http://wiki.gis.com/wiki/index.php/GIS\_Glossary/C)
   
-  \item 'Conflation' prvků je proces kombinování geografických informací z~překrývajících se zdrojových dat tak, aby byla zachována přesnost dat, minimalizována nadbytečná data
-    a odstraněny konflikty mezi~daty. %% nebo rozdíly?
+  \item 'Conflation' prvků je proces kombinování geografických informací z~překrývajících se zdrojových dat, který zachovává přesnost dat, minimalizuje nadbytečná data
+    a~předchází konfliktům v~datech. %% nebo rozdíly?
     'Conflation' geoprostorových dat je spojení či sladění dvou různých prostorových datasetů zahrnujících stejné území.
     
     (Shekhar, Xiong: Encyclopedia of GIS)
 \end{itemize}
 
+\section{Historie} % asi ještě rozšířit, viz enc. of gis - geospatial conflation
+\label{historie}
 
-\section{Související pojmy}
+Až do 80.~let 20.~století bylo pořízení digitálních dat velmi drahé a~proto se často nestávalo, že by nějaká firma vlastnila více digitálních map jediného území. S~vývojem
+počítačů a~digitálních technologií se však tato data stávala stále dostupnějšími a~náhle vyvstala potřeba kombinovat data o~jednom území z~více zdrojů a~provádění aktualizace
+těchto dat. Jako první se k~takovému množství dat dostaly pochopitelně různé vládní instituce. Ačkoli první článek o~'conflation' vyšel už v~roce 1981 (\textit{M. White:
+The Theory of~Geographical Data Conflation}), k opravdovému rozvoji došlo až po~roce 1985. V~té době totiž vznikl projekt, jehož cílem bylo propojení mapových souborů organizací
+US~Census Bureau a US Geological Society. Vzhledem k~množství dat bylo nutné celý proces co nejvíce automatizovat. Použitý algoritmus, jehož hlavním autorem je Alan Saalfeld, 
+byl založen na~nalezení odpovídajících si prvků a~následné transformaci dat. S~narůstající dostupností dat a~zveřejněním této myšlenky přibývalo i~menších firem zabývajících
+se problémem kombinace mapových souborů z různých zdrojů. Původní algoritmy brali v~potaz pouze geometrickou podobnost prvků, později byly brány v~úvahu
+i~jejich topologické vztahy a~s~rozvojem GIS technologií pak i~podobnost atributů jednotlivých prvků. Dnes jde o~jeden z~aktuálních problémů řešených v~oblasti GIS.
+
+
+\section{Související pojmy} % slovníček dále používaných pojmů atd.
+\label{pojmy}
 
 adjustment, alignment, attribute transfer (přenos, převod atributů), geometry (geometrie - jako geometrický prvek), feature (prvek), feature collection (kolekce prvků),
 internal conflation (v rámci jednoho datasetu), matching (odpovídající si), reference dataset (referenční dataset), subject dataset (upravovaný dataset), topologie, ... 
 
+
 \section{Klasifikace 'conflation'}
+\label{klasifikace}
 
 \subsection{Dle typu vstupních vrstev}
 
 \begin{enumerate}
-  \item Imagery-to-Imagery
-  \item Vector-to-Imagery
-  \item Vector-to-Vector
+  \item \textbf{Imagery-to-Imagery, Raster-to-Raster}
+    \subitem Jedná se o~případ, kdy je úkolem na~sebe napasovat dva rastrové mapové soubory. Nejčastěji jde o~ortofoto a~naskenovanou analogovou mapu daného území. Tato úloha
+	      se využije, například pokud chceme porovnat starou mapu se~současným stavem reprezentovaným právě leteckým snímkem. Řešení tohoto problému vyžaduje poměrně 
+	      složité techniky pro~nalezení odpovídajících si objektů. Velmi důležitým prvkem je kvalita a rozlišení vstupních dat.
+  \item \textbf{Vector-to-Imagery, Vector-to-Raster}
+    \subitem Kombinace vektorových a~rastrových dat stejného území se využívá často ke~zpřesnění vektorových dat jejich napasováním na~ortofoto. Hlavní náplní této oblasti
+	      je vývoj algoritmů umožňující následující: % dopsat referenci na lit. - gis enc. 
+	      \begin{enumerate}
+	       \item Detekce charakteristických hran rastrového obrazu a~jejich porovnání s~vektorovými daty.
+	       \item Využití vektorových dat k~identifikaci hran v~rastru - tzv. \textit{Snakes algorithm}.
+	       \item Užití stereo obrazu, výškových dat a~znalostí silničních dat pro~porovnání vektorových a~rastrových dat. % ??????????
+	       \item Využití prostorových informací stejně jako dalších vlastností mapy (jako např. barev) k~rozpoznání odpovídajících si prvků.
+	      \end{enumerate}
+  \item \textbf{Vector-to-Vector}
+    \subitem Případem sloučení dvou vektorových datasetů se zabývá tato práce. Jednou ze~specifických a~velmi častých aplikací je navázání silničních sítí, dále aktualizace
+	      digitálních dat aj. Existuje mnoho různých algoritmů pro~slučování vektorových dat, přičemž základní přístupy k~řešení problému jsou následující: % dopsat referenci na lit. - gis enc. 
+	      \begin{enumerate}
+	       \item Sloučení dat za~pomoci algoritmů, které pracují na~základě porovnávání geometrických vlastností prvků.
+	       \item Algoritmy, které berou v~potaz podobnost tvarů prvků a~zároveň podobnost jejich atributů.
+	       \item Spojení vektorových dat s~neznámým souřadnicovým systémem na~základě rozložení významných bodových prvků (např. křižovatky cest).
+	      \end{enumerate}
+
 \end{enumerate}
 
 
 \subsection{Dle území zobrazovaného vstupními vrstvami}
 
 \begin{enumerate}
-  \item Vertikální - překrývající se datasety
-  \item Horizontální - sousedící datasety
+  \item \textbf{Horizontální} % - sousedící datasety
+    \subitem Za~\textit{horizontal conflation} se označují procesy, které zpracovávají data ze~sousedících území. Cílem je získat mapové soubory, jejichž hranice na~sebe
+	      dokonale navazují, a~to pokud možno bez~ztráty přesnosti.
+  \item \textbf{Vertikální} % - překrývající se datasety
+    \subitem Při~\textit{vertical conflation} obsahují vstupní data překrývající se území. Jde tedy o~dva či více souborů zobrazujících jediné území, třeba i~jen částečně.
+	      Může se jednat o~dvě verze té samé mapy nebo o~dva datasety s~nějakými společnými prvky a~vlastnostmi.
+	      Výsledkem celého procesu je jediný dataset, jehož přesnost není horší než přesnost původních dat a~obsahuje informace z~obou zdrojů, jde tedy o~vylepšenou, 
+	      obsahově bohatší mapu s~odpovídající přesností. 
 \end{enumerate}
 
 
 \section{Obecný postup}
+\label{postup}
 
 Obecný postup při~slučování vektorových map z~více zdrojů se skládá z~několika kroků, které jsou uvedeny níže. Jako u~většiny podobných operací je třeba nejdříve provést 
-přípravu dat a následně data zpracovat a upravit.
+přípravu dat a~následně data zpracovat a~upravit.
 
 \begin{enumerate}
   \item \textbf{Předzpracování dat}
-    \subitem Tento krok slouží k~zajištění kompatibility vstupních dat tak, aby bylo možné je porovnávat. Obvykle spočívá v~převedení vstupních datasetů do stejného 
-	      souřadnicového systému, zajištění stejných základních jednotek a dalších měnších úpravách. 
-  \item \textbf{Kontrola kvality dat a topologické správnosti vrstev}
+    \subitem Tento krok slouží k~zajištění kompatibility vstupních dat tak, aby bylo možné je porovnávat. Obvykle spočívá v~převedení vstupních datasetů do~stejného 
+	      souřadnicového systému, zajištění stejných základních jednotek a~dalších měnších úpravách. 
+  \item \textbf{Kontrola kvality dat a~topologické správnosti vrstev}
     \subitem Zde se kontroluje vnitřní konzistence dat každé vstupní vrstvy. V~tomto případě záleží především na~požadavcích zvoleného algoritmu pro~sloučení map. Může jít
 	      například o~odstranění topologických chyb v~dané vrstvě jako jsou nežádoucí drobné překryty či mezery mezi~polygony.
   \item \textbf{Vyhledání odpovídajících si prvků}
@@ -83,11 +125,22 @@ přípravu dat a následně data zpracovat a upravit.
   \item \textbf{Sloučení geometrických prvků a/nebo atributů}
       \subitem Po~rozpoznání odpovídajících si prvků je už možné upravit geometrii či atributy prvku z~jedné vrstvy s~přihlédnutím k~vlastnostem prvku z~jiné vrstvy. 
 		Při~procesu slučování různých datasetů lze převádět pouze atributové hodnoty mezi~odpovídajícími si prvky nebo pouze změnit geometrii prvku tak, aby odpovídala
-		geometrii prvku z~jiné vrstvy, která bývá označena za~referenční. Ve~složitějších úlohách už je možné převádět zároveň atributy i geometrii, a to nejen 
+		geometrii prvku z~jiné vrstvy, která bývá označena za~referenční. Ve~složitějších úlohách už je možné převádět zároveň atributy i~geometrii, a~to nejen 
 		jednosměrně (tedy z~vrstvy referenční do~vrstvy upravované), ale výsledkem může být vrstva, jejíž geometrie je kombinací geometrických vlastností obou 
 		vstupních vrstev.
   \item \textbf{Závěrečné úpravy}
-      \subitem Po~provedení automatického a někdy i manuálního sloučení datových vrstev je vhodné provést kontrolu výsledku. Často jsou potřeba ještě drobné úpravy, aby výsledná
-		data odpovídala počátečním požadavkům. Ne vždy jsou totiž při automatickém procesu určeny správně všechny odpovídající si prvky a některé algoritmy mohou
-		při úpravě geometrických vlastností narušit topologickou správnost dat.
+      \subitem Po~provedení automatického a~někdy i~manuálního sloučení datových vrstev je vhodné provést kontrolu výsledku. Často jsou potřeba ještě drobné úpravy, aby výsledná
+		data odpovídala počátečním požadavkům. Ne vždy jsou totiž při~automatickém procesu určeny správně všechny odpovídající si prvky a~některé algoritmy mohou
+		při~úpravě geometrických vlastností narušit topologickou správnost dat.
 \end{enumerate}
+
+
+\section{Využití - hlavní aplikace}
+\label{využití}
+
+\subsection{oblasti, obory}
+kartografie, GIS, výpočetní geometrie, letecká fotogrammetrie, vojenský výcvik a výzkum, krizový management, dopravní mapy - aktualizace dat, trh s nemovitostmi, ...
+
+\subsection{aplikace}
+zpřesnění map, aktualizace prostorových dat, georeferencování - záznam dat, detekce chyb, rozdílů, ...
+
