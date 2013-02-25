@@ -12,7 +12,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-static int parse_opt(int, const char **, QString &, QString &);
+static int parse_opt(int, const char **, QString &, QString &, QString &);
+static QgsVectorLayer *open_layer(QString, QString);
 
 int main(int argc, const char **argv)
 {
@@ -25,12 +26,8 @@ int main(int argc, const char **argv)
     // todo
     // ConflateProvider cProvider;
     
-    if (0 != parse_opt(argc, argv, input_ref, input_sub))
+    if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
         return EXIT_FAILURE;
-
-    output = input_ref + "_" + input_sub;
-    cout << "Input: " << input_ref.toStdString() << " " << input_sub.toStdString() <<
-        " -> " << output.toStdString()<< endl;
 
     QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/");
 
@@ -38,19 +35,15 @@ int main(int argc, const char **argv)
     // cProvider = new ConflateProvider();
 
     // load ref layer
-    refLayer = new QgsVectorLayer(input_ref, "input_ref", "ogr");
-    if (!refLayer || !refLayer->isValid()) {
-        cerr << "Unable to open " << input_ref.toStdString() << endl;
-        return EXIT_FAILURE;
-    }
-
+    refLayer = open_layer(input_ref, "input_ref");
+    if (!refLayer)
+        exit(EXIT_FAILURE);
+    
     // load second input layer
-    subLayer = new QgsVectorLayer(input_sub, "input_sub", "ogr");
-    if (!subLayer || !subLayer->isValid()) {
-        cerr << "Unable to open " << input_sub.toStdString() << endl;
-        return EXIT_FAILURE;
-    }
-        
+    subLayer = open_layer(input_sub, "input_sub");
+    if (!subLayer)
+        exit(EXIT_FAILURE);
+    
     // create output layer
     // cProvider->createEmptyLayer();
 
@@ -58,18 +51,32 @@ int main(int argc, const char **argv)
 
     // save 
     
-    return EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }
 
-int parse_opt(int argc, const char **argv, QString &input_ref, QString &input)
+int parse_opt(int argc, const char **argv, QString &input_ref, QString &input_sub, QString &output)
 {
-    if (argc != 3) {
-        cerr << "Invalid input: provide two vector maps" << endl;
+    if (argc != 4) {
+        cerr << "Usage: input_ref input_sub output" << endl;
         return -1;
     }
 
     input_ref = argv[1];
-    input     = argv[2];
+    input_sub = argv[2];
+    output    = argv[3];
     
     return 0;
+}
+
+QgsVectorLayer *open_layer(QString uri, QString basename)
+{
+    QgsVectorLayer *pLayer;
+    
+    pLayer = new QgsVectorLayer(uri, basename, "ogr");
+    if (!pLayer || !pLayer->isValid()) {
+        cerr << "Unable to open " << uri.toStdString() << endl;
+        return NULL;
+    }
+    
+    return pLayer;
 }
