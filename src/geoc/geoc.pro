@@ -16,9 +16,9 @@ HEADERS += geoc.h\
     mygeosgeom.h \
     mygeometryeditoroperation.h
 
-DEST = geoclibrary.so
+DEST = libgeoc.so
 
-unix:LIBS += -L/usr/lib/ \
-	-lgeos-3.3.3 \
+unix:LIBS += -L/usr/lib/ -L/usr/local/lib \
+        -lgeos \
 	-lgeos_c
 
