@@ -7,6 +7,8 @@
 #include <qgsvectorlayer.h>
 #include <qgsproviderregistry.h>
 
+#include "qgsconflateprovider.h"
+
 using std::string;
 using std::cout;
 using std::cerr;
@@ -23,16 +25,14 @@ int main(int argc, const char **argv)
     QgsVectorLayer *subLayer;
     QgsVectorLayer *newLayer;
     
-    // todo
-    // ConflateProvider cProvider;
+    QgsConflateProvider *cProvider;
     
     if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
         return EXIT_FAILURE;
 
     QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/");
 
-    // todo
-    // cProvider = new ConflateProvider();
+    cProvider = new QgsConflateProvider();
 
     // load ref layer
     refLayer = open_layer(input_ref, "input_ref");
@@ -44,12 +44,14 @@ int main(int argc, const char **argv)
     if (!subLayer)
         exit(EXIT_FAILURE);
     
+    cProvider->setRefVectorLayer(refLayer);
+    cProvider->setSubVectorLayer(subLayer);
+
     // create output layer
-    // cProvider->createEmptyLayer();
+    cProvider->copyLayer(output + ".shp");
 
     // do something ...
-
-    // save 
+    cProvider->vertexSnap();
     
     exit(EXIT_SUCCESS);
 }

@@ -40,7 +40,7 @@ bool QgsConflateProvider::createEmptyLayer( QString uri )
 
     // create empty layer
     QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType, &srs,
-                                                false, oldToNewAttrIdxMap, errorMessage, options);
+                                                true, oldToNewAttrIdxMap, errorMessage, options);
 
     // return false if error
     if( ierror )
@@ -84,7 +84,7 @@ bool QgsConflateProvider::fileExists( QString source )
 } // bool QgsConflateProvider::fileExists(QString source)
 
 
-bool QgsConflateProvider::copyLayer()
+bool QgsConflateProvider::copyLayer( QString uri )
 {
 
     // stop if there is no subject layer
@@ -96,7 +96,8 @@ bool QgsConflateProvider::copyLayer()
 
     // create empty layer
     int rank = 0;
-    QString uri = newUri( QgsProject::instance()->readPath( mSubLayer->name() ), rank ); //QgsProject::instance()->homePath(), rank);//mSubLayer->source()+"_copy.shp";
+    if (uri.isEmpty())
+        uri = newUri( QgsProject::instance()->readPath( mSubLayer->name() ), rank ); //QgsProject::instance()->homePath(), rank);//mSubLayer->source()+"_copy.shp";
 
     if ( !createEmptyLayer( uri ) )
     {
@@ -104,7 +105,8 @@ bool QgsConflateProvider::copyLayer()
     }
 
     //new layer
-    mNewLayer = new QgsVectorLayer(uri, mSubLayer->name()+"("+QString::number(rank)+")", mSubLayer->providerType(), "ogr");
+    mNewLayer = new QgsVectorLayer(uri,
+                                   mSubLayer->name()+"("+QString::number(rank)+")", mSubLayer->providerType(), "ogr");
     qDebug( "New vector layer created." );
 
 
@@ -150,19 +152,25 @@ bool QgsConflateProvider::copyLayer()
 
 } // bool QgsConflateProvider::copyLayer()
 
-void QgsConflateProvider::transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short layer )
+void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
 {
+    QgsVectorLayer *theLayer;
+    TGeomLayer *theGeosLayer;
+
     // empty geometry
     QgsGeometry *geom = NULL;
 
-    if ( layer == 0 )
+    if ( isRefLayer )
     {
-        mGeosRef.clear();
+        theLayer = mRefLayer;
+        theGeosLayer = &mGeosRef;
     }
     else
     {
-        mGeosSub.clear();
+        theLayer = mSubLayer;
+        theGeosLayer = &mGeosSub;
     }
+    theGeosLayer->clear();
 
     // transfer geometry of each feature from subject layer to geos
     QgsFeature myFeature;
@@ -177,21 +185,13 @@ void QgsConflateProvider::transferGeometrytoGeos( QgsVectorLayer *theLayer, unsi
 
         // transfer qgis geometry to geos (over wkt)
         MyGEOSGeom geos;
-        geos.setGEOSGeomFromWKT( geom->exportToWkt().toStdString() );
-        geos.setFeatureId( myFeature.id() );
+        //geos.setGEOSGeomFromWKT( geom->exportToWkt().toStdString() );
+        //geos.setFeatureId( myFeature.id() );
 
-        //geos.setGEOSgeom( geom->asGeos() );
+        //geos.setGEOSGeom( geom->asGeos() );
 
         // add geometry to the list of geos geometries
-        if (layer == 0) // reference layer
-        {
-            mGeosRef.push_back(geos);
-        }
-        else
-        {
-            mGeosSub.push_back(geos);
-        }
-
+        theGeosLayer->push_back(geos);
     }
 
     qDebug("GEOMETRY TRANSFERED");
@@ -251,8 +251,8 @@ void QgsConflateProvider::vertexSnap()
 {
 
     //initGEOS(); ???
-    transferGeometrytoGeos( mRefLayer, 0 );
-    transferGeometrytoGeos( mSubLayer, 1 );
+    transferGeometrytoGeos( true );
+    transferGeometrytoGeos( false );
     qDebug("GEOMETRY TRANSFERED IN VS");
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT

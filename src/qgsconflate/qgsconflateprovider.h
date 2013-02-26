@@ -2,8 +2,8 @@
 #define QGSCONFLATEPROVIDER_H
 
 // QGis includes
-#include <qgisinterface.h>
 #include <qgsmaplayer.h>
+#include <qgsvectorlayer.h>
 
 // Local includes
 #include "geoc.h"
@@ -47,12 +47,12 @@ public:
     /** Copy subject layer to the mNewLayer.
      *  @return true if copied layer is valid
      */
-    bool copyLayer();
+    bool copyLayer( QString uri = "");
 
     /** Transfers qgis geometry to geos.
      *  @param theLayer Layer which geometry has to be transfered.
      */
-    void transferGeometrytoGeos( QgsVectorLayer *theLayer, unsigned short layer );
+    void transferGeometrytoGeos( bool isRefLayer );
 
     /** Transfers geos geometry to qgis.
       * @return true if transfering was succesfull
