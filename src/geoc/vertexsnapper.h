@@ -13,9 +13,9 @@
 # include <vector>
 
 // local includes
-#include "mygeosgeom.h"
 #include "geoc.h"
 
+typedef std::vector< MyGEOSGeom > TGeomLayer;
 
 using namespace std;
 using namespace geos;
@@ -28,6 +28,9 @@ class VertexSnapper
 {
 
 public:
+
+    /** Default constructor.
+      */
     VertexSnapper();
 
     /** Set reference layer geometries.
@@ -65,13 +68,13 @@ public:
       @param geom Pointer to the tested geometry.
       @param closeCoord Coordinate sequence with close point from the reference layer.
      */
-    MyGEOSGeom& snapVertices( MyGEOSGeom & geom, CoordinateSequence & closeCoord );
+    MyGEOSGeom& snapVertices( MyGEOSGeom & geom, GEOSCoordSequence & closeCoord );
 
     /** Edit geometry according to the given coordinates.
       @param geom Pointer to the tested geometry.
       @param coord Coordinate sequence with new points.
      */
-    void editGeometry( MyGEOSGeom & geom, CoordinateSequence & coord );
+    void editGeometry( MyGEOSGeom & geom, GEOSCoordSequence & coord );
 
 private:
 

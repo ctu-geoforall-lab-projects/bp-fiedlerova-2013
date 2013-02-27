@@ -134,8 +134,6 @@ bool QgsConflateProvider::copyLayer( QString uri )
         qDebug( "Unable to add features." );
     }
 
-   // myLayer->commitChanges();
-
     // add layer if valid
     if( mNewLayer->isValid() )
     {
@@ -188,7 +186,7 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
         //geos.setGEOSGeomFromWKT( geom->exportToWkt().toStdString() );
         //geos.setFeatureId( myFeature.id() );
 
-        //geos.setGEOSGeom( geom->asGeos() );
+        geos.setGEOSGeom( geom->asGeos() );
 
         // add geometry to the list of geos geometries
         theGeosLayer->push_back(geos);
@@ -213,7 +211,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     }
 
     // change geometry in the layer according to GEOS geometry
-    QgsGeometry geom;
+    QgsGeometry *geom = NULL;
     QgsFeature myFeature;
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
     QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( mNewLayer, request ); // feature iterator
@@ -228,9 +226,9 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         qDebug("COUNTING");
 
         // get new geometry for the feature from geos geometry
-        geom.fromWkt( QString::fromStdString( (*it).getWKTGeom()) );
+        geom->fromGeos( (*it).getGEOSGeom() );
         // insert new geometry to the map of new geometries
-        geomMap.insert( myFeature.id(), geom );//(*it).getFeatureId(), geom );
+        geomMap.insert( myFeature.id(), *geom );//(*it).getFeatureId(), geom );
         it++;
 
     }
@@ -257,7 +255,6 @@ void QgsConflateProvider::vertexSnap()
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
-    // ERROR -> symbol lookup error: libqgsconflate.so.1.0.0: undefined symbol: _ZN13VertexSnapperC1Ev
     VertexSnapper vs = VertexSnapper();
     qDebug("VERTEX SNAPPER CREATED");
 
