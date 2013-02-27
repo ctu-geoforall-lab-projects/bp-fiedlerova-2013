@@ -37,7 +37,7 @@ public:
 
     /** Returns Geometry of this.
      */
-    const GEOSGeometry*  getGEOSGeom() { return geosGeom; }
+    GEOSGeometry*  getGEOSGeom() { return geosGeom; }
 
     /** Returns geometry of this in wkt.
       */
