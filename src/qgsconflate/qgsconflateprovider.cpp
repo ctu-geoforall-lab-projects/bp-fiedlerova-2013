@@ -18,8 +18,8 @@ QgsConflateProvider::QgsConflateProvider()
 
     mGeosSub.clear();
     mGeosRef.clear();
-}
 
+}
 
 bool QgsConflateProvider::createEmptyLayer( QString uri )
 {
@@ -49,7 +49,7 @@ bool QgsConflateProvider::createEmptyLayer( QString uri )
         return false;
     }
 
-    qDebug( "Empty vector layer as .shp created." );
+    qDebug( "QgsConflateProvider::createEmptyLayer: Empty vector layer as .shp created." );
     return true;
 
 } // bool QgsConflateProvider::createEmptyLayer()
@@ -90,7 +90,7 @@ bool QgsConflateProvider::copyLayer( QString uri )
     // stop if there is no subject layer
     if( mSubLayer == NULL )
     {
-        qDebug( "No layer in layer tree." );
+        qDebug( "QgsConflateProvider::copyLayer: No layer in layer tree." );
         return false;
     }
 
@@ -107,7 +107,7 @@ bool QgsConflateProvider::copyLayer( QString uri )
     //new layer
     mNewLayer = new QgsVectorLayer(uri,
                                    mSubLayer->name()+"("+QString::number(rank)+")", mSubLayer->providerType(), "ogr");
-    qDebug( "New vector layer created." );
+    qDebug( "QgsConflateProvider::copyLayer: New vector layer created." );
 
 
     // copy features from subject layer to the new layer
@@ -127,23 +127,23 @@ bool QgsConflateProvider::copyLayer( QString uri )
     // add features from list to the layer
     if( mNewLayer->dataProvider()->addFeatures(features) )
     {
-        qDebug( "Features added." );
+        qDebug( "QgsConflateProvider::copyLayer: Features added." );
     }
     else
     {
-        qDebug( "Unable to add features." );
+        qDebug( "QgsConflateProvider::copyLayer: Unable to add features." );
     }
 
     // add layer if valid
     if( mNewLayer->isValid() )
     {
-        qDebug( "Layer is valid." );
+        qDebug( "QgsConflateProvider::copyLayer: Layer is valid." );
         return true;
     }
     // invalid layer
     else
     {
-        qDebug( "Layer is NOT valid." );
+        qDebug( "QgsConflateProvider::copyLayer: Layer is NOT valid." );
     }
 
     return false;
@@ -152,47 +152,54 @@ bool QgsConflateProvider::copyLayer( QString uri )
 
 void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
 {
-    QgsVectorLayer *theLayer;
-    TGeomLayer *theGeosLayer;
+    qDebug("QgsConflateProvider::transferGeometrytoGeos: ENTERING");
 
-    // empty geometry
-    QgsGeometry *geom = NULL;
+    QgsVectorLayer *myLayer;
+    TGeomLayer *myGeosLayer;
 
     if ( isRefLayer )
     {
-        theLayer = mRefLayer;
-        theGeosLayer = &mGeosRef;
+        myLayer = mRefLayer;
+        myGeosLayer = &mGeosRef;
     }
     else
     {
-        theLayer = mSubLayer;
-        theGeosLayer = &mGeosSub;
+        myLayer = mSubLayer;
+        myGeosLayer = &mGeosSub;
     }
-    theGeosLayer->clear();
+
+    myGeosLayer->clear();
 
     // transfer geometry of each feature from subject layer to geos
     QgsFeature myFeature;
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
-    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( theLayer, request ); // feature iterator
+    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( myLayer, request ); // feature iterator
     featureIt.rewind(); // reset iterator to the start position
 
     while( featureIt.nextFeature( myFeature ) )
     {
+
         // geometry of the feature
-        geom = myFeature.geometry();
+        QgsGeometry *geom = myFeature.geometry();;
 
-        // transfer qgis geometry to geos (over wkt)
+        // transfer qgis geometry to geos
         MyGEOSGeom geos;
-        //geos.setGEOSGeomFromWKT( geom->exportToWkt().toStdString() );
-        //geos.setFeatureId( myFeature.id() );
 
+        //geos.setFeatureId( myFeature.id() );
         geos.setGEOSGeom( geom->asGeos() );
 
         // add geometry to the list of geos geometries
-        theGeosLayer->push_back(geos);
+        if( GEOSisEmpty( geos.getGEOSGeom() ) || !GEOSisValid( geos.getGEOSGeom() ))
+        {
+            qDebug("Something WRONG with geometry");
+        }
+
+        qDebug("G is OK");
+
+        myGeosLayer->push_back(geos);
     }
 
-    qDebug("GEOMETRY TRANSFERED");
+    qDebug("QgsConflateProvider::transferGeometrytoGeos: GEOMETRY TRANSFERED");
 
 } // bool QgsConflateProvider::transferGeometryToGeos()
 
@@ -223,10 +230,10 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     // next feature in the layer
     while ( featureIt.nextFeature( myFeature ) )
     {
-        qDebug("COUNTING");
-
         // get new geometry for the feature from geos geometry
-        geom->fromGeos( (*it).getGEOSGeom() );
+
+        GEOSGeometry * newGeom = GEOSGeom_clone( (*it).getGEOSGeom() );
+        geom->fromGeos( newGeom );
         // insert new geometry to the map of new geometries
         geomMap.insert( myFeature.id(), *geom );//(*it).getFeatureId(), geom );
         it++;
@@ -235,7 +242,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
 
     if( mNewLayer->dataProvider()->changeGeometryValues( geomMap ) )
     {
-        qDebug("GEOMETRY TRANSFERED BACK");
+        qDebug("QgsConflateProvider::transferGeometryFromGeos: GEOMETRY TRANSFERED BACK");
         return true;
     }
 
@@ -251,35 +258,32 @@ void QgsConflateProvider::vertexSnap()
     //initGEOS(); ???
     transferGeometrytoGeos( true );
     transferGeometrytoGeos( false );
-    qDebug("GEOMETRY TRANSFERED IN VS");
+    qDebug("QgsConflateProvider::vertexSnap: GEOMETRY TRANSFERED IN VS");
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
     VertexSnapper vs = VertexSnapper();
-    qDebug("VERTEX SNAPPER CREATED");
+    qDebug("QgsConflateProvider::vertexSnap: VERTEX SNAPPER CREATED");
 
     // set geometries of layers to vertex snapper
     vs.setRefGeometry( mGeosRef );
-    qDebug("SET REF GEOMETRY DONE");
     vs.setSubGeometry( mGeosSub );
-    qDebug("SET SUB GEOMETRY DONE");
 
     // set tolerance distance
     vs.setTolDistance( 100 );
-    qDebug("SET TOLERANCE DISTANCE DONE");
 
     // snap vertices from subject layer to the reference layer
     vs.snap();
-    qDebug("SNAP DONE");
+    qDebug("QgsConflateProvider::vertexSnap: SNAP DONE");
 
     // set new geometry
     mGeosSub = vs.getNewGeometry();
-    qDebug("SET NEW GEOMETRY DONE");
+    qDebug("QgsConflateProvider::vertexSnap: SET NEW GEOMETRY DONE");
 
     // transfer geometry back
     if ( transferGeometryFromGeos() )
     {
-        qDebug("SNAPPING DONE");
+        qDebug("QgsConflateProvider::vertexSnap: SNAPPING DONE");
     }
 
     //finishGEOS(); ???

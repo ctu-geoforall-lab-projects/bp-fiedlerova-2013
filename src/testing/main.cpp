@@ -17,14 +17,41 @@ using std::endl;
 static int parse_opt(int, const char **, QString &, QString &, QString &);
 static QgsVectorLayer *open_layer(QString, QString);
 
+void
+log_and_exit(const char *fmt, ...) {
+    va_list ap;
+    fprintf( stdout, "ERROR: ");
+
+    va_start (ap, fmt);
+    vfprintf( stdout, fmt, ap);
+    va_end(ap);
+    fprintf( stdout, "\n" );
+    exit(1);
+}
+
+void
+notice(const char *fmt, ...) {
+    va_list ap;
+
+    fprintf( stdout, "NOTICE: ");
+
+    va_start (ap, fmt);
+    vfprintf( stdout, fmt, ap);
+    va_end(ap);
+    fprintf( stdout, "\n" );
+}
+
 int main(int argc, const char **argv)
 {
+    initGEOS(notice, log_and_exit);
+
     QString input_ref, input_sub, output;
 
     QgsVectorLayer *refLayer;
     QgsVectorLayer *subLayer;
     QgsVectorLayer *newLayer;
     
+
     QgsConflateProvider *cProvider;
     
     if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
@@ -53,6 +80,8 @@ int main(int argc, const char **argv)
     // do something ...
     cProvider->vertexSnap();
     
+    finishGEOS();
+
     exit(EXIT_SUCCESS);
 }
 

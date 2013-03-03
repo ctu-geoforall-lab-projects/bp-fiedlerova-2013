@@ -4,7 +4,6 @@
 // GEOS includes
 #include <geos_c.h>
 
-
 using namespace std;
 
 
@@ -23,13 +22,13 @@ public:
      */
     MyGEOSGeom( GEOSGeometry *g, int fid = 0 ): geosGeom( g ), matched( NULL ), changed( false ), featureId( fid ) {}
 
+    /** Destructor
+      */
+    //~MyGEOSGeom() { if( geosGeom ){ GEOSGeom_destroy( geosGeom ); }  }
+
     /** Sets geometry of this to given Geometry.
      */
     void setGEOSGeom( GEOSGeometry *g ) { geosGeom = g; }
-
-    /** Sets geometry of this to given WKTGeometry.
-     */
-    //void setGEOSGeomFromWKT( std::string wkt ) {  geosGeom = geos::io::WKTReader().read( wkt ); }
 
     /** Sets matching geometry to this.
      */
@@ -37,11 +36,7 @@ public:
 
     /** Returns Geometry of this.
      */
-    GEOSGeometry*  getGEOSGeom() { return geosGeom; }
-
-    /** Returns geometry of this in wkt.
-      */
-    //std::string getWKTGeom() { return geos::io::WKTWriter().write( geosGeom );}
+    const GEOSGeometry*  getGEOSGeom() const { return geosGeom; }
 
     /** Sets id of feature with this geometry.
      */
