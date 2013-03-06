@@ -21,6 +21,13 @@ QgsConflateProvider::QgsConflateProvider()
 
 }
 
+/*QgsConflateProvider::~QgsConflateProvider()
+{
+    if(mRefLayer) delete mRefLayer;
+    if(mSubLayer) delete mSubLayer;
+    if(mNewLayer) delete mNewLayer;
+}*/
+
 bool QgsConflateProvider::createEmptyLayer( QString uri )
 {
 
@@ -46,10 +53,14 @@ bool QgsConflateProvider::createEmptyLayer( QString uri )
     if( ierror )
     {
         QMessageBox::warning(0,"Error", "Error while creating layer", QMessageBox::Ok);
+        delete options;
+        delete oldToNewAttrIdxMap;
         return false;
     }
 
     qDebug( "QgsConflateProvider::createEmptyLayer: Empty vector layer as .shp created." );
+    delete options;
+    delete oldToNewAttrIdxMap;
     return true;
 
 } // bool QgsConflateProvider::createEmptyLayer()
@@ -171,31 +182,24 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
     myGeosLayer->clear();
 
     // transfer geometry of each feature from subject layer to geos
-    QgsFeature myFeature;
+
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
     QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( myLayer, request ); // feature iterator
     featureIt.rewind(); // reset iterator to the start position
 
-    while( featureIt.nextFeature( myFeature ) )
-    {
+    QgsFeature myFeature;
 
+    while( featureIt.nextFeature(myFeature) )
+    {
         // geometry of the feature
-        QgsGeometry *geom = myFeature.geometry();;
+        QgsGeometry *geom = myFeature.geometry();
 
         // transfer qgis geometry to geos
         MyGEOSGeom geos;
-
-        //geos.setFeatureId( myFeature.id() );
-        geos.setGEOSGeom( geom->asGeos() );
+        geos.setFeatureId( myFeature.id() );
+        geos.setGEOSGeom( GEOSGeom_clone(geom->asGeos()) );
 
         // add geometry to the list of geos geometries
-        if( GEOSisEmpty( geos.getGEOSGeom() ) || !GEOSisValid( geos.getGEOSGeom() ))
-        {
-            qDebug("Something WRONG with geometry");
-        }
-
-        qDebug("G is OK");
-
         myGeosLayer->push_back(geos);
     }
 
@@ -218,7 +222,6 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     }
 
     // change geometry in the layer according to GEOS geometry
-    QgsGeometry *geom = NULL;
     QgsFeature myFeature;
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
     QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( mNewLayer, request ); // feature iterator
@@ -231,12 +234,15 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     while ( featureIt.nextFeature( myFeature ) )
     {
         // get new geometry for the feature from geos geometry
-
+        QgsGeometry *geom = new QgsGeometry();
         GEOSGeometry * newGeom = GEOSGeom_clone( (*it).getGEOSGeom() );
         geom->fromGeos( newGeom );
+
         // insert new geometry to the map of new geometries
         geomMap.insert( myFeature.id(), *geom );//(*it).getFeatureId(), geom );
         it++;
+
+        delete geom;
 
     }
 
