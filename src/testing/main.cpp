@@ -17,8 +17,7 @@ using std::endl;
 static int parse_opt(int, const char **, QString &, QString &, QString &);
 static QgsVectorLayer *open_layer(QString, QString);
 
-void
-log_and_exit(const char *fmt, ...) {
+void log_and_exit(const char *fmt, ...) {
     va_list ap;
     fprintf( stdout, "ERROR: ");
 
@@ -29,8 +28,7 @@ log_and_exit(const char *fmt, ...) {
     exit(1);
 }
 
-void
-notice(const char *fmt, ...) {
+void notice(const char *fmt, ...) {
     va_list ap;
 
     fprintf( stdout, "NOTICE: ");
@@ -51,7 +49,6 @@ int main(int argc, const char **argv)
     QgsVectorLayer *subLayer;
     QgsVectorLayer *newLayer;
     
-
     QgsConflateProvider *cProvider;
     
     if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
