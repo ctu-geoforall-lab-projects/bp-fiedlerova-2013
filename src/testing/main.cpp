@@ -54,7 +54,7 @@ int main(int argc, const char **argv)
     if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
         return EXIT_FAILURE;
 
-    QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/");
+    QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/"); // some memory error here
 
     cProvider = new QgsConflateProvider();
 
@@ -70,6 +70,7 @@ int main(int argc, const char **argv)
     
     cProvider->setRefVectorLayer(refLayer);
     cProvider->setSubVectorLayer(subLayer);
+    cProvider->setTolDistance(0.01);
 
     // create output layer
     cProvider->copyLayer(output + ".shp");
@@ -78,6 +79,8 @@ int main(int argc, const char **argv)
     cProvider->vertexSnap();
     
     finishGEOS();
+
+    delete cProvider;
 
     exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@ VertexSnapper::VertexSnapper()
 
     qDebug("VertexSnapper::VertexSnapper: ENTERING CONSTRUCTOR");
 
-    tolDistance = 1;
+    tolDistance = 0;
     refGeometry.clear();
     subGeometry.clear();
     newGeometry.clear();
@@ -20,7 +20,6 @@ void VertexSnapper::snap()
 
     for ( unsigned int i = 0; i < subGeometry.size(); i++ )
     {
-
         // find close features from the reference layer
 
         // vectors of coordinates of close Geometries
@@ -29,38 +28,21 @@ void VertexSnapper::snap()
 
         qDebug("VertexSnapper::snap: Vectors with coordinates created");
 
-        //TGeomLayer::iterator ref_it = refGeometry.begin();
         for ( unsigned int j = 0; j < refGeometry.size(); j++)
         {
-            // some needed parameters from refGeometry
-            /*unsigned int size, dim;
-            GEOSCoordSeq_getSize( GEOSGeom_getCoordSeq( refGeometry[j].getGEOSGeom() ), &size );
-            GEOSCoordSeq_getDimensions( GEOSGeom_getCoordSeq( refGeometry[j].getGEOSGeom() ), &dim );*/
 
             bool close = isClose( subGeometry[i].getGEOSGeom(), refGeometry[j].getGEOSGeom() );
             qDebug("VertexSnapper::snap: isClose checked.");
 
             if (close)
             {
-
                 // add close coordinates
                 //closeCoord->add( refGeometry[j].getGEOSGeom()->getCoordinates(), false, true );//(*ref_it).getGEOSGeom()->getCoordinates(), false, true );
 
                 // get points from geometry
-                const GEOSCoordSequence *s = GEOSGeom_getCoordSeq( refGeometry[j].getGEOSGeom() ); // NOTE: Only linestring or point is possible
-                qDebug("VertexSnapper::snap: CoordSeq created.");
+                //GEOSGeometry* points = GEOSGeom_extractUniquePoints( refGeometry[j].getGEOSGeom() );
+                const GEOSCoordSequence *s = GEOSGeom_getCoordSeq( refGeometry[j].getGEOSGeom() ); // NOTE: Only linestring or points is possible
                 GEOSCoordSequence *coords = GEOSCoordSeq_clone( s );
-                /*GEOSCoordSequence *coords = GEOSCoordSeq_create( size, dim );
-
-                for ( unsigned int m = 0; m < size; m++ )
-                {
-                    double x, y;
-                    GEOSCoordSeq_getX( s, m, &x);
-                    GEOSCoordSeq_getY( s, m, &y);
-
-                    GEOSCoordSeq_setX( coords, m, x );
-                    GEOSCoordSeq_setY( coords, m, y );
-                }*/
 
                 qDebug("VertexSnapper::snap: GEOSCoordSequence cloned from refGeometry");
 
@@ -80,30 +62,29 @@ void VertexSnapper::snap()
                     qDebug("VertexSnapper::snap: Close coordinates x, y added to vector");
                 }
 
+                GEOSCoordSeq_destroy(coords);
+
             }
 
         }
 
         // create sequence with close points
-        GEOSCoordSequence *closeCoord = GEOSCoordSeq_create( closeCoordX.size(), 2 );
+        int dim = GEOSGeom_getDimensions( refGeometry[0].getGEOSGeom() );
+        GEOSCoordSequence *closeCoord = GEOSCoordSeq_create( closeCoordX.size(), dim );
         qDebug("VertexSnapper::snap: GEOSCoordSequence closeCoord created");
 
         for( unsigned int l = 0; l < closeCoordX.size(); l++)
         {
             GEOSCoordSeq_setX(closeCoord, l, closeCoordX[l]);
-            GEOSCoordSeq_setY(closeCoord, l, closeCoordX[l]);
+            GEOSCoordSeq_setY(closeCoord, l, closeCoordY[l]);
         }
 
         // snap vertex
         snapVertices( &subGeometry[i], closeCoord);
         newGeometry.push_back( subGeometry[i] );
 
-    }
+        GEOSCoordSeq_destroy(closeCoord);
 
-    for(unsigned int i = 0; i < newGeometry.size(); i++)
-    {
-        if(newGeometry[i].getGEOSGeom() == subGeometry[i].getGEOSGeom())
-            qDebug("VertexSnapper::snap: Nothing changed");
     }
 
 } // void VertexSnapper::snap()
@@ -114,7 +95,7 @@ bool VertexSnapper::isClose( const GEOSGeometry * g1, const GEOSGeometry * g2)
     qDebug("VertexSnapper::isClose: ENTERING ISCLOSE");
 
     // distance
-    double dist = tolDistance;
+    double dist;
     GEOSDistance( g1, g2, &dist );
     qDebug("VertexSnapper::isClose: Distance computed");
 
@@ -134,35 +115,14 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, GEOSCoordSequence *closeCoord
     qDebug("VertexSnapper::snapVertices: ENTERING SNAP VERTICES");
 
     // tested geometry as coordination sequence
+    //GEOSGeometry* points = GEOSGeom_extractUniquePoints( geom->getGEOSGeom() );
     const GEOSCoordSequence *s = GEOSGeom_getCoordSeq( geom->getGEOSGeom() );
     GEOSCoordSequence *coord =  GEOSCoordSeq_clone( s );
 
-    /*unsigned int size, dim;
-    GEOSCoordSeq_getSize( s, &size );
-    GEOSCoordSeq_getDimensions( s, &dim );
-    GEOSCoordSequence *coord = GEOSCoordSeq_create( size, dim );
-
-    for ( unsigned int m = 0; m < size; m++ )
-    {
-        double x, y;
-        GEOSCoordSeq_getX( s, m, &x);
-        GEOSCoordSeq_getY( s, m, &y);
-
-        GEOSCoordSeq_setX( coord, m, x );
-        GEOSCoordSeq_setY( coord, m, y );
-    }*/
-
     qDebug("VertexSnapper::snapVertices: GEOSCoordSequence cloned from geom Geometry");
 
-
-    //first point from closePoints
-    double x0, y0;
-    GEOSCoordSeq_getX( closeCoord, 0, &x0);
-    GEOSCoordSeq_getY( closeCoord, 0, &y0);
-    GEOSCoordSequence *point0 = GEOSCoordSeq_create( 1, 3 );
-    GEOSCoordSeq_setX( point0, 0, x0);
-    GEOSCoordSeq_setY( point0, 0, y0);
-    GEOSGeometry * pointGeom0 = GEOSGeom_createPoint( point0 );
+    // get dimension of geometry
+    int dim = GEOSGeom_getDimensions( geom->getGEOSGeom() );
 
     // get number of points
     unsigned int cSize;
@@ -178,14 +138,13 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, GEOSCoordSequence *closeCoord
         double x, y;
         GEOSCoordSeq_getX( coord, i, &x);
         GEOSCoordSeq_getY( coord, i, &y);
-        GEOSCoordSequence *point = GEOSCoordSeq_create( 1, 3 );
+        GEOSCoordSequence *point = GEOSCoordSeq_create( 1, dim );
         GEOSCoordSeq_setX( point, 0, x);
         GEOSCoordSeq_setY( point, 0, y);
         GEOSGeometry * pointGeom = GEOSGeom_createPoint( point );
 
         // minimal distance
-        double minDist;// = coord->getAt(i).distance( closeCoord.getAt(0) );
-        GEOSDistance( pointGeom0, pointGeom, &minDist );
+        double minDist = tolDistance;// = coord->getAt(i).distance( closeCoord.getAt(0) );
 
         unsigned int indMin = 0;
         bool isMin = false;
@@ -194,9 +153,9 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, GEOSCoordSequence *closeCoord
         {
             // get point from coordinate sequence
             double xx, yy;
-            GEOSCoordSeq_getX( coord, j, &xx);
-            GEOSCoordSeq_getY( coord, j, &yy);
-            GEOSCoordSequence *pointj = GEOSCoordSeq_create( 1, 3 );
+            GEOSCoordSeq_getX( closeCoord, j, &xx);
+            GEOSCoordSeq_getY( closeCoord, j, &yy);
+            GEOSCoordSequence *pointj = GEOSCoordSeq_create( 1, dim );
             GEOSCoordSeq_setX( pointj, 0, xx);
             GEOSCoordSeq_setY( pointj, 0, yy);
             GEOSGeometry * pointGeomj = GEOSGeom_createPoint( pointj );
@@ -204,13 +163,14 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, GEOSCoordSequence *closeCoord
             // compute distance between two tested points
             double dist =  GEOSDistance( pointGeomj, pointGeom, &minDist ); //coord->getAt(i).distance( closeCoord.getAt(j) );
 
-            if( dist <= minDist && dist <= tolDistance)
+            if( dist <= minDist )
             {
                 minDist = dist;
                 indMin = j;
                 isMin = true;
             }
 
+            GEOSGeom_destroy(pointGeomj);
         }
 
         // set new coordinate to the closest point if there is some
@@ -224,10 +184,17 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, GEOSCoordSequence *closeCoord
             //coord->setAt( closeCoord.getAt(indMin), i );
         }
 
+        //GEOSCoordSeq_destroy(point);
+        GEOSGeom_destroy(pointGeom);
+
     }
 
     // edit geometry
     editGeometry( geom, coord);
+
+    //GEOSCoordSeq_destroy(coord);
+    //GEOSCoordSeq_destroy(point0);
+    //GEOSGeom_destroy(pointGeom0);
 
 } // MyGEOSGeom& VertexSnapper::snapVertices(MyGEOSGeom &geom, CoordinateSequence &closeCoord)
 
@@ -240,7 +207,7 @@ void VertexSnapper::editGeometry( MyGEOSGeom *geom, GEOSCoordSequence *coord )
 
     // new geometry
     GEOSGeometry *newGeom = NULL;
-    GEOSGeometry * ring = NULL;
+    GEOSGeometry *ring = NULL;
 
     // change geometry according to its type  // NOTE: improve this according to http://trac.osgeo.org/geos/browser/trunk/tests/geostest/geostest.c - fineGrainedReconstructionTest
     int type = GEOSGeomTypeId( geom->getGEOSGeom() );
@@ -289,6 +256,9 @@ void VertexSnapper::editGeometry( MyGEOSGeom *geom, GEOSCoordSequence *coord )
 
     if( GEOSisValid( geom->getGEOSGeom() ) )
         qDebug("VertexSnapper::editGeometry: Geom is valid.");
+
+
+    //GEOSGeom_destroy(newGeom);
 
 
 } // void VertexSnapper::editGeometry( MyGEOSGeom &geom, CoordinateSequence &coord )
