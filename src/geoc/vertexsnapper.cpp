@@ -213,32 +213,32 @@ void VertexSnapper::editGeometry( MyGEOSGeom *geom, GEOSCoordSequence *coord )
     int type = GEOSGeomTypeId( geom->getGEOSGeom() );
     switch ( type )
     {
-        case 0: // points
+        case GEOS_POINT:
             newGeom = GEOSGeom_createPoint( coord );
             break;
-        case 1: // linestring
+        case GEOS_LINESTRING:
             newGeom = GEOSGeom_createLineString( coord );
             break;
-        case 2: // linearring
+        case GEOS_LINEARRING:
             newGeom = GEOSGeom_createLinearRing( coord );
             break;
-        case 3: // polygon
+        case GEOS_POLYGON:
             ring = GEOSGeom_createLinearRing( coord ); // NOTE: Fails if polygon has holes
             newGeom = GEOSGeom_createPolygon( ring, NULL, 0 );
             break;
-        case 4: // multipoint
+        case GEOS_MULTIPOINT:
             newGeom = GEOSGeom_createEmptyCollection(4);
             qDebug("VertexSnapper::editGeometry: Multi geometry is not supported yet.");
             break;
-        case 5: // multilinestring
+        case GEOS_MULTILINESTRING:
             newGeom = GEOSGeom_createEmptyCollection(5);
             qDebug("VertexSnapper::editGeometry: Multi geometry is not supported yet.");
             break;
-        case 6: // multipolygon
+        case GEOS_MULTIPOLYGON:
             newGeom = GEOSGeom_createEmptyCollection(6);
             qDebug("VertexSnapper::editGeometry: Multi geometry is not supported yet.");
             break;
-        case 7: // geom. collection
+        case GEOS_GEOMETRYCOLLECTION:
             newGeom = GEOSGeom_createEmptyCollection(7);
             qDebug("VertexSnapper::editGeometry: Multi geometry is not supported yet.");
             break;
