@@ -19,6 +19,8 @@ QgsConflateProvider::QgsConflateProvider()
     mGeosSub.clear();
     mGeosRef.clear();
 
+    tolDistance = 0;
+
 }
 
 /*QgsConflateProvider::~QgsConflateProvider()
@@ -47,7 +49,7 @@ bool QgsConflateProvider::createEmptyLayer( QString uri )
 
     // create empty layer
     QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType, &srs,
-                                                true, oldToNewAttrIdxMap, errorMessage, options);
+                                                true, oldToNewAttrIdxMap, errorMessage, options); // some memory error here
 
     // return false if error
     if( ierror )
@@ -197,10 +199,11 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
         // transfer qgis geometry to geos
         MyGEOSGeom geos;
         geos.setFeatureId( myFeature.id() );
-        geos.setGEOSGeom( GEOSGeom_clone(geom->asGeos()) );
+        geos.setGEOSGeom( GEOSGeom_clone(geom->asGeos()) ); // some memory error here
 
         // add geometry to the list of geos geometries
         myGeosLayer->push_back(geos);
+
     }
 
     qDebug("QgsConflateProvider::transferGeometrytoGeos: GEOMETRY TRANSFERED");
@@ -260,7 +263,6 @@ bool QgsConflateProvider::transferGeometryFromGeos()
 
 void QgsConflateProvider::vertexSnap()
 {
-
     //initGEOS(); ???
     transferGeometrytoGeos( true );
     transferGeometrytoGeos( false );
@@ -276,7 +278,7 @@ void QgsConflateProvider::vertexSnap()
     vs.setSubGeometry( mGeosSub );
 
     // set tolerance distance
-    vs.setTolDistance( 100 );
+    vs.setTolDistance( tolDistance );
 
     // snap vertices from subject layer to the reference layer
     vs.snap();

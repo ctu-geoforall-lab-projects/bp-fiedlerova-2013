@@ -90,12 +90,13 @@ QgsVectorLayer* Dialog::selectedLayer(int index)
 void Dialog::on_okButton_clicked()
 {
 
+    mConflate->setTolDistance( this->mSpinBoxDist->value() );
     mConflate->setRefVectorLayer( selectedLayer(0) );
     mConflate->setSubVectorLayer( selectedLayer(1) );
 
     if( mConflate->copyLayer() )
     {
-        qDebug( "Layer was copied." );
+        qDebug( "Dialog::onokButtonclicked: Layer was copied." );
 
         mConflate->vertexSnap();
         QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();
@@ -107,7 +108,7 @@ void Dialog::on_okButton_clicked()
     }
     else
     {
-        qDebug( "No layer was copied." );
+        qDebug( "Dialog::on_okButton_clicked: No layer was copied." );
         QMessageBox::information(0,"Information","No Layer was copied!", QMessageBox::Ok);
     }
 

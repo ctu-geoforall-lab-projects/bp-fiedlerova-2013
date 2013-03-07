@@ -12,6 +12,7 @@ class QgsConflateProvider
 {
 public:
     QgsConflateProvider();
+    //~QgsConflateProvider();
 
     /** Sets reference layer mRefLayer.
       */
@@ -62,6 +63,10 @@ public:
     /** Do something with geos geometry */
     void vertexSnap();
 
+    /** Set distance tolerance for snapping.
+      */
+    void setTolDistance( double dist ){ tolDistance = dist; }
+
 private:
 
     QgsVectorLayer *mRefLayer;
@@ -69,6 +74,7 @@ private:
     QgsVectorLayer *mNewLayer;
     TGeomLayer mGeosSub;
     TGeomLayer mGeosRef;
+    double tolDistance;
 };
 
 #endif // QGSCONFLATEPROVIDER_H
