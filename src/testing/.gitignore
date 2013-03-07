@@ -1,2 +1,8 @@
 geoc_testing
 qgis.db
+Makefile
+*.shp
+*.prj
+*.qpj
+*.dbf
+*.shx
