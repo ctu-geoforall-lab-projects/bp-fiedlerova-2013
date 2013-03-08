@@ -41,8 +41,8 @@ void VertexSnapper::snap()
 
                 // get points from geometry
                 //GEOSGeometry* points = GEOSGeom_extractUniquePoints( refGeometry[j].getGEOSGeom() );
-                const GEOSCoordSequence *s = GEOSGeom_getCoordSeq( refGeometry[j].getGEOSGeom() ); // NOTE: Only linestring or points is possible
-                GEOSCoordSequence *coords = GEOSCoordSeq_clone( s );
+                const GEOSCoordSequence *coords = GEOSGeom_getCoordSeq( refGeometry[j].getGEOSGeom() ); // NOTE: Only linestring or points is possible
+                //GEOSCoordSequence *coords = GEOSCoordSeq_clone( s );
 
                 qDebug("VertexSnapper::snap: GEOSCoordSequence cloned from refGeometry");
 
@@ -62,7 +62,7 @@ void VertexSnapper::snap()
                     qDebug("VertexSnapper::snap: Close coordinates x, y added to vector");
                 }
 
-                GEOSCoordSeq_destroy(coords);
+                //GEOSCoordSeq_destroy(coords);
 
             }
 

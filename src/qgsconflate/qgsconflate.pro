@@ -1,6 +1,6 @@
 QGIS_DIR = /opt/Quantum-GIS
 OGR_API_DIR = /usr/include/gdal
-GEOC_DIR = /opt/geoc
+GEOC_DIR = /opt/geoc_cpp
 QGIS_PLUGIN_DIR = /opt/qgis_plugins
 
 TEMPLATE = lib
@@ -18,7 +18,7 @@ unix:LIBS += -L/usr/lib \
     -lqgis_gui \
     -lproj \
     -logrprovider \
-    -lgeoc
+    -lgeoc_cpp
 
 INCLUDEPATH += $$QGIS_DIR/src/ui \
     $$QGIS_DIR/src/plugins \
