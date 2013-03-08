@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'dialog.ui'
 **
-** Created: Wed Feb 27 19:52:53 2013
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Fri Mar 8 10:47:17 2013
+**      by: Qt User Interface Compiler version 4.6.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -16,6 +16,7 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QComboBox>
 #include <QtGui/QDialog>
+#include <QtGui/QDoubleSpinBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
@@ -35,6 +36,9 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLabel *mlabelSub;
     QComboBox *mcbSubjects;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *mlabelDist;
+    QDoubleSpinBox *mSpinBoxDist;
     QSpacerItem *verticalSpacer;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
@@ -78,6 +82,22 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_3);
 
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        mlabelDist = new QLabel(Dialog);
+        mlabelDist->setObjectName(QString::fromUtf8("mlabelDist"));
+
+        horizontalLayout_4->addWidget(mlabelDist);
+
+        mSpinBoxDist = new QDoubleSpinBox(Dialog);
+        mSpinBoxDist->setObjectName(QString::fromUtf8("mSpinBoxDist"));
+        mSpinBoxDist->setDecimals(4);
+
+        horizontalLayout_4->addWidget(mSpinBoxDist);
+
+
+        verticalLayout->addLayout(horizontalLayout_4);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -112,6 +132,7 @@ public:
         Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", 0, QApplication::UnicodeUTF8));
         mlabelRef->setText(QApplication::translate("Dialog", "Reference Layer", 0, QApplication::UnicodeUTF8));
         mlabelSub->setText(QApplication::translate("Dialog", "Subject Layer", 0, QApplication::UnicodeUTF8));
+        mlabelDist->setText(QApplication::translate("Dialog", "Distance tolerance", 0, QApplication::UnicodeUTF8));
         okButton->setText(QApplication::translate("Dialog", "OK", 0, QApplication::UnicodeUTF8));
         closeButton->setText(QApplication::translate("Dialog", "Close", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
