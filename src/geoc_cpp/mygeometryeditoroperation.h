@@ -38,20 +38,15 @@ public:
      @param geom Geometry to be edited.
      */
     CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geom)
-    { //qDebug("entering EDIT"); coordinates = mCoord;
-        qDebug("setting coord"); //return mCoord;
-
-        size_t cSize = coordinates->size();
+    {
+        long cSize = coordinates->size();
 
         vector<Coordinate> *vc = new vector<Coordinate>( cSize );
         // copy coordinates and change
-        for ( size_t i=0; i < cSize; ++i )
+        for ( unsigned int i=0; i < cSize; ++i )
         {
-
-            Coordinate coord=mCoord->getAt(i); //(0.0*k, 100.0*k );//
-
+            Coordinate coord = mCoord->getAt(i);
             (*vc)[i] = coord;
-
         }
 
         CoordinateSequence *newCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc);

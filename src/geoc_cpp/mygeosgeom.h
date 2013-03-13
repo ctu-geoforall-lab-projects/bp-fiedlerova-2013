@@ -9,9 +9,6 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 
-// local includes
-#include "geoc.h"
-
 using namespace std;
 using namespace geos;
 using namespace geos::geom;
@@ -25,25 +22,33 @@ class MyGEOSGeom
 
 public:
 
+    /** Default constructor
+     */
+    MyGEOSGeom(): geosGeom( NULL ), matched( NULL ), changed( false ), featureId( 0 ) {}
+
     /** Constructor
      */
-    MyGEOSGeom(): geos( NULL ), changed( false ), featureId( 0 ) {}
+    MyGEOSGeom( Geometry *g, int fid = 0 ): geosGeom( g ), matched( NULL ), changed( false ), featureId( fid ) {}
 
     /** Sets geometry of this to given Geometry.
      */
-    void setGEOSGeom( Geometry *g ) { geos = g; }
+    void setGEOSGeom( Geometry *g ) { geosGeom = g; }
 
     /** Sets geometry of this to given WKTGeometry.
      */
-    void setGEOSGeomFromWKT( std::string wkt ) {  geos = geos::io::WKTReader().read( wkt ); }
+    void setGEOSGeomFromWKT( std::string wkt ) {  geosGeom = geos::io::WKTReader().read( wkt ); }
+
+    /** Sets matching geometry to this.
+     */
+    void setMatchingGeom( MyGEOSGeom *m ) { matched = m; }
 
     /** Returns Geometry of this.
      */
-    Geometry*  getGEOSGeom() { return geos; }
+    Geometry*  getGEOSGeom() { return geosGeom; }
 
     /** Returns geometry of this in wkt.
       */
-    std::string getWKTGeom() { return geos::io::WKTWriter().write( geos );}
+    std::string getWKTGeom() { return geos::io::WKTWriter().write( geosGeom );}
 
     /** Sets id of feature with this geometry.
      */
@@ -64,11 +69,13 @@ public:
 
 private:
 
-    Geometry * geos;
+    Geometry * geosGeom;
+    MyGEOSGeom * matched;
     bool changed;
     int featureId;
 
 };
+
 
 typedef std::vector< MyGEOSGeom > TGeomLayer;
 
