@@ -20,24 +20,22 @@ public:
 
     /** Constructor
       */
-    MatchingGeometry( TGeomLayer *l1, TGeomLayer *l2, double tol = 1 ): geometrySet1(l1), geometrySet2(l2), tolDistance(tol) {}
+    MatchingGeometry( TGeomLayer *l, double tol = 1 ): geometrySet(l), tolDistance(tol) {}
 
     /** Set given dist to tolDistance.
       */
     void setTolDistance( double dist ){ tolDistance = dist; }
 
-    /** Set geometrySet1/2.
+    /** Set geometrySet where to find corresponding features.
       * @param geometrySet Vector of geometries to be set.
-      * @param isFirst In case of true geometry is set to geometrySet1 otherwise to geometrySet2.
       */
-    void setGeometrySet( TGeomLayer * geometrySet, bool isFirst );
+    void setGeometrySet( TGeomLayer * geomSet );
 
-    /** Find geometries from vector 1 or 2 within tolerance distance to given geometry.
+    /** Find geometries from vector within tolerance distance to given geometry.
       * @param geom Tested geometry.
-      * @param isFirst In case of true search for close geometries in geometrySet1 otherwise in geometrySet2.
-      * @param set Vector with close geometries.
+      * @param geomSet Vector with close geometries.
       */
-    void closeGeometries( TGeomLayer * set, const Geometry *geom, bool isFirst );
+    void closeGeometries( const Geometry *geom );
 
     /** Test whether two geometries are within tolerance distance.
       @param g1 Geometry of the first tested feature.
@@ -50,13 +48,13 @@ public:
       * @param geom Geometry to be buffered.
       * @param buffer Buffer of geometry.
       */
-    void buffer( Geometry *buffer, const Geometry *geom );
+    Geometry * buffer( Geometry *geom );
 
     /** Create boundary of given Geometry
       * @param geom Geometry which boundary has to be created.
       * @param boundary Boundary of geometry.
       */
-    void boundary( Geometry *boundary, const Geometry *geom );
+    Geometry * boundary( Geometry *geom );
 
     /** Return true if geomA contains geomB.
       * @param geomA Geometry predicted to be outside.
@@ -65,17 +63,16 @@ public:
       */
     bool contains( const Geometry *geomA, const Geometry *geomB );
 
-    /** Sets matching geometry to given geometry.
+    /** Sets matching geometry from geometrySet to given geometry.
       * @param geom MyGEOSGeom to which we want to set matching geometry.
-      * @param isFirst In case of true search for matching geometry in geometrySet1 otherwise in geometrySet2.
       * @return True if some matching geometry was found.
       */
-    bool setMatch( MyGEOSGeom *geom, bool isFirst );
+    bool setMatch( MyGEOSGeom *geom );
 
 private:
 
-    TGeomLayer* geometrySet1;
-    TGeomLayer* geometrySet2;
+    TGeomLayer* geometrySet;
+    TGeomLayer closeSet;
     double tolDistance;
 };
 

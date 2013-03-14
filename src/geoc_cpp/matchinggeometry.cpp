@@ -3,48 +3,35 @@
 MatchingGeometry::MatchingGeometry()
 {
     tolDistance = 1;
-    geometrySet1 = NULL;
-    geometrySet2 = NULL;
+    geometrySet = NULL;
+
 }
 
-void MatchingGeometry::setGeometrySet( TGeomLayer * geometrySet, bool isFirst )
+void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 {
     qDebug("MatchingGeometry::setGeometrySet: ENTERING ");
 
     // set the right geometrySet
-    if ( isFirst )
-    {
-        geometrySet1 = geometrySet;
-    }
-    else
-    {
-        geometrySet2 = geometrySet;
-    }
+    geometrySet = geomSet;
 
 } // void MatchingGeometry::setGeometrySet( TGeomLayer geometrySet, bool isFirst )
 
 
-void  MatchingGeometry::closeGeometries( TGeomLayer * closeSet, const Geometry *geom, bool isFirst )
+void  MatchingGeometry::closeGeometries( const Geometry *geom)
 {
-    qDebug("MatchingGeometry::isClose: ENTERING ");
-
-    // set set :)
-    TGeomLayer *geometrySet = geometrySet2;
-
-    if( isFirst )
-    {
-        geometrySet = geometrySet1;
-    }
+    qDebug("MatchingGeometry::closeGeometries: ENTERING ");
 
     // find close geometries
-    closeSet->clear();
     unsigned long size = geometrySet->size();
+    closeSet.clear();
+
     for ( unsigned long i = 0; i < size; i++ )
     {
         // test wether geometry from set is within given tolerance distance from tested geometry
         if ( isClose( geometrySet->at(i).getGEOSGeom(), geom ) )
         {
-            closeSet->push_back( geometrySet->at(i) );
+            closeSet.push_back( geometrySet->at(i) );
+
         }
 
     }
@@ -69,22 +56,22 @@ bool MatchingGeometry::isClose( const Geometry * g1, const Geometry * g2 )
 } // bool MatchingGeometry::isClose( const Geometry * g1, const Geometry * g2 )
 
 
-void MatchingGeometry::buffer( Geometry *buffer, const Geometry *geom )
+Geometry* MatchingGeometry::buffer( Geometry *geom )
 {
     qDebug("MatchingGeometry::buffer: ENTERING ");
 
     // buffer
-    buffer = geom->buffer( tolDistance );
+    return geom->buffer( tolDistance );
 
 } // void MatchingGeometry::buffer( Geometry *buffer, const Geometry *geom )
 
 
-void MatchingGeometry::boundary( Geometry *boundary, const Geometry *geom )
+Geometry* MatchingGeometry::boundary( Geometry *geom )
 {
     qDebug("MatchingGeometry::boundary: ENTERING ");
 
     // boundary of geom
-    boundary = geom->getBoundary();
+    return geom->getBoundary();
 
 } // void MatchingGeometry::boundary( Geometry *boundary, const Geometry *geom )
 
@@ -98,42 +85,35 @@ bool MatchingGeometry::contains( const Geometry *geomA, const Geometry *geomB )
 } // bool MatchingGeometry::contains( const Geometry *geomA, const Geometry *geomB )
 
 
-bool MatchingGeometry::setMatch( MyGEOSGeom *geom, bool isFirst )
+bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
 {
     qDebug("ENTERING MatchingGeometry::setMatch");
 
     // find close geometries
-    TGeomLayer *closeG = NULL;
-    closeGeometries( closeG, geom->getGEOSGeom(), isFirst );
-    unsigned int size = closeG->size();
+    closeGeometries( geom->getGEOSGeom() );
+    unsigned int csSize = closeSet.size();
 
     // compute buffers
-    Geometry *bufferA = NULL;
-    Geometry *boundaryA = NULL;
-    Geometry *bufferBoundaryA = NULL;
-    buffer( bufferA, geom->getGEOSGeom() );
-    boundary( boundaryA, geom->getGEOSGeom() );
-    buffer( bufferBoundaryA, boundaryA );
+    Geometry *bufferA = buffer( geom->getGEOSGeom() );
+    Geometry *boundaryA = boundary( geom->getGEOSGeom() );
+    Geometry *bufferBoundaryA = buffer( boundaryA );
 
     // find matching geometry
-    for ( unsigned int i = 0; i < size; i++ )
+    for ( unsigned int i = 0; i < csSize; i++ )
     {
-        const Geometry *geomB = closeG->at(i).getGEOSGeom();
-        Geometry *bufferB = NULL;
-        buffer( bufferB, geom->getGEOSGeom() );
+        const Geometry *geomB = closeSet[i].getGEOSGeom();
+        Geometry *bufferB = buffer( geom->getGEOSGeom() );
 
         // if buffer of one contains the other it is on a good way
         if ( contains( bufferA, geomB ) && contains( bufferB, geom->getGEOSGeom() ) )
         {
-            Geometry *boundaryB = NULL;
-            Geometry *bufferBoundaryB = NULL;
-            boundary( boundaryB, geom->getGEOSGeom() );
-            buffer( bufferBoundaryB, boundaryB );
+            Geometry *boundaryB = boundary( geom->getGEOSGeom() );
+            Geometry *bufferBoundaryB = buffer( boundaryB );
 
             // if boundary buffer of one contains boundary of the other -> geometries are similar
             if ( contains( bufferBoundaryA, boundaryB ) && contains( bufferBoundaryB, boundaryA ) )
             {
-                geom->setMatchingGeom( &(closeG->at(i)) );
+                geom->setMatchingGeom( &closeSet[i] );
                 return true;
             }
         }

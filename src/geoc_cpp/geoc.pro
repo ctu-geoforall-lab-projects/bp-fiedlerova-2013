@@ -11,17 +11,23 @@ TEMPLATE = lib
 SOURCES += \
     vertexsnapper.cpp \
     matchinggeometry.cpp \
-    affinetransformation.cpp
+    affinetransformation.cpp \
+    triangulation.cpp \
+    completeconflation.cpp \
+    featuresnapper.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
     mygeosgeom.h \
     mygeometryeditoroperation.h \
     matchinggeometry.h \
-    affinetransformation.h
+    affinetransformation.h \
+    triangulation.h \
+    completeconflation.h \
+    featuresnapper.h
 
 
-unix:LIBS += -L/usr/lib/ \
-	-lgeos-3.3.3 \
+unix:LIBS += -L/usr/local/lib \
+        -lgeos-3.3.7 \
+        -lgeos \
 	-lgeos_c
-

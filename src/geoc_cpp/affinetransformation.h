@@ -4,8 +4,9 @@
 // local includes
 #include "geoc.h"
 
-
 using namespace std;
+
+/** Class providing funstions for affine transformation */
 
 class AffineTransformation
 {
@@ -18,15 +19,15 @@ public:
 
     /** Set identical points - vertices of triangle in the first system.
       */
-    void setIdenticPoints1( CoordinateSequence * points ){ identicPoints1 = points; }
+    void setIdenticPoints1( const CoordinateSequence * points ){ identicPoints1 = points; }
 
     /** Set identical points - vertices of triangle in the second system.
       */
-    void setIdenticPoints2( CoordinateSequence * points ){ identicPoints2 = points; }
+    void setIdenticPoints2( const CoordinateSequence * points ){ identicPoints2 = points; }
 
     /** Set geometry of layer to be transformed.
       */
-    void setTransfSet( TGeomLayer * set){ transfSet = set; }
+    void setTransfSet( CoordinateSequence * set){ transfSet = set; }
 
     /** Computes determinant ( 2 x area of identical points triangle ).
       */
@@ -61,9 +62,9 @@ public:
 
 private:
 
-    CoordinateSequence *identicPoints1; // type? // for 2D transformation 3 identical points
-    CoordinateSequence *identicPoints2;
-    TGeomLayer *transfSet; // set of geometries to be transformed
+    const CoordinateSequence *identicPoints1; // type? // for 2D transformation 3 identical points
+    const CoordinateSequence *identicPoints2;
+    CoordinateSequence *transfSet; // set of points to be transformed  // Maybe just a vector of points??????
 
 };
 

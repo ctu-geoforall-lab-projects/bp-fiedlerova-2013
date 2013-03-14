@@ -6,6 +6,9 @@
 #include "mygeometryeditoroperation.h"
 #include "affinetransformation.h"
 #include "matchinggeometry.h"
+#include "triangulation.h"
+#include "completeconflation.h"
+#include "featuresnapper.h"
 
 #include  <QtGui>
 

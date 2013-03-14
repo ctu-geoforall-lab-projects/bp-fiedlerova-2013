@@ -134,28 +134,28 @@ void AffineTransformation::affineTransf2D()
 
     for ( unsigned long i = 0; i < tSize; i++ )
     {
-        CoordinateSequence * points = transfSet->at(i).getGEOSGeom()->getCoordinates();
+        //CoordinateSequence * points = transfSet->at(i).getGEOSGeom()->getCoordinates();
 
-        unsigned int cSize = points->getSize();
+        //unsigned int cSize = points->getSize();
 
         // transform each point from geometry - coordinate sequence
-        for ( unsigned int j = 0; j < cSize; j++ )
-        {
+        //for ( unsigned int j = 0; j < cSize; j++ )
+        //{
             // get point coordinates
-            double x = points->getX(j);
-            double y = points->getY(j);
+            double x = transfSet->getX(i);
+            double y = transfSet->getY(i);
 
             // transform point
             transformPoint2D(&x, &y);
 
             // setX, setY ??
 
-        }
+        //}
 
         // set new geometry
-        Geometry *g = NULL;
+        /*Geometry *g = NULL;
         editGeometry( g, points );
-        transfSet->at(i).setGEOSGeom( g );
+        transfSet->at(i).setGEOSGeom( g );*/
 
     }
 
@@ -166,6 +166,6 @@ void AffineTransformation::editGeometry( Geometry *g, const CoordinateSequence *
 {
     qDebug("AffineTransformation::editGeometry: ENTERING");
 
-    // something as editGeometry() at VertexSnapper
+    // something as editGeometry() at VertexSnapper or maybe coordinatefilter
 
 } // void AffineTransformation::editGeometry( Geometry *g, const CoordinateSequence *coord)

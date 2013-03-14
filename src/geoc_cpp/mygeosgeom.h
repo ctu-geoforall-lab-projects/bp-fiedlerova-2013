@@ -42,6 +42,10 @@ public:
      */
     void setMatchingGeom( MyGEOSGeom *m ) { matched = m; }
 
+    /** Returns matching geometry
+      */
+    MyGEOSGeom* getMatched() { return matched; }
+
     /** Returns Geometry of this.
      */
     Geometry*  getGEOSGeom() { return geosGeom; }
