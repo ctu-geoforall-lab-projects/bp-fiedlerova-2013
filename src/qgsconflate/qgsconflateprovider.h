@@ -60,8 +60,11 @@ public:
      */
     bool transferGeometryFromGeos( );
 
-    /** Do something with geos geometry */
+    /** Snap vertices */
     void vertexSnap();
+
+    /** Snap features */
+    void featureSnap();
 
     /** Set distance tolerance for snapping.
       */
@@ -74,6 +77,7 @@ private:
     QgsVectorLayer *mNewLayer;
     TGeomLayer mGeosSub;
     TGeomLayer mGeosRef;
+    TGeomLayer mGeosNew;
     double tolDistance;
 };
 

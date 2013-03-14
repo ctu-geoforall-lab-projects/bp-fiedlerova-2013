@@ -250,9 +250,8 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         // get new geometry if it is changed
         if ( (*it).isChanged() )
         {
-            geom->fromWkt( QString::fromStdString((*it).getWKTGeom()) );
             // insert new geometry to the map of geometries
-            geomMap.insert( fid, *geom );//(*it).getFeatureId(), geom );
+            geomMap.insert( fid, *(geom->fromWkt( QString::fromStdString((*it).getWKTGeom()) )) );//(*it).getFeatureId(), geom );
             qDebug("QgsConflateProvider::transferGeometryFromGeos: new geometry inserted");
         }
 
@@ -309,3 +308,39 @@ void QgsConflateProvider::vertexSnap()
     }
 
 } // void QgsConflateProvider::vertexSnap()
+
+void QgsConflateProvider::featureSnap()
+{
+    // transfer ref and sub geometry
+    bool isRef = true;
+    transferGeometrytoGeos( isRef );
+    transferGeometrytoGeos( !isRef );
+    qDebug("QgsConflateProvider::featureSnap: GEOMETRY TRANSFERED IN VS");
+
+    // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
+
+    FeatureSnapper fs = FeatureSnapper();
+    qDebug("QgsConflateProvider::featureSnap: FEATURE SNAPPER CREATED");
+
+    // set geometries of layers to vertex snapper
+    fs.setRefGeometry( mGeosRef );
+    fs.setSubGeometry( mGeosSub );
+
+    // set tolerance distance
+    fs.setTolDistance( tolDistance );
+
+    // snap vertices from subject layer to the reference layer
+    fs.snap();
+    qDebug("QgsConflateProvider::featureSnap: SNAP DONE");
+
+    // set new geometry
+    mGeosNew = fs.getNewGeometry();
+    qDebug("QgsConflateProvider::featureSnap: SET NEW GEOMETRY DONE");
+
+    // transfer geometry back
+    if ( transferGeometryFromGeos() )
+    {
+        qDebug("QgsConflateProvider::featuerSnap: SNAPPING DONE");
+    }
+
+} // void QgsConflateProvider::featureSnap()

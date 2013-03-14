@@ -98,7 +98,19 @@ void Dialog::on_okButton_clicked()
     {
         qDebug( "Dialog::onokButtonclicked: Layer was copied." );
 
-        mConflate->vertexSnap();
+        if ( mrbSnapVertex->isChecked() )
+        {
+            mConflate->vertexSnap();
+        }
+        else if ( mrbSnapFeature->isChecked() )
+        {
+            mConflate->featureSnap();
+        }
+        else if ( mrbConflate->isChecked() )
+        {
+            //mConflate->conflate();
+        }
+
         QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();
 
         // add new layer to the layer registry
@@ -108,8 +120,8 @@ void Dialog::on_okButton_clicked()
     }
     else
     {
-        qDebug( "Dialog::on_okButton_clicked: No layer was copied." );
-        QMessageBox::information(0,"Information","No Layer was copied!", QMessageBox::Ok);
+        qDebug( "Dialog::on_okButton_clicked: Unable to copy subject layer for conflation." );
+        QMessageBox::information(0,"Information","Unable to copy subject layer for conflation.", QMessageBox::Ok);
     }
 
 } // void Dialog::on_okButton_clicked()
