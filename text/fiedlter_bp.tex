@@ -1,121 +1,312 @@
-\documentclass[12pt, oneside,a4paper]{report}
+% Soubory musí být v kódování, které je nastaveno v příkazu \usepackage[...]{inputenc}
+
+ \documentclass[%
+% draft,        % Testovací překlad
+  12pt,         % Velikost základního písma je 12 bodů
+  a4paper,      % Formát papíru je A4
+  twoside,      % Jednostranný tisk
+% Z následujicich voleb lze použít jen jednu:
+% dvipdfm       % výstup bude zpracován programem 'dvipdfm' do PDF
+% dvips	        % výstup bude zpracován programem 'dvips' do PS
+ pdftex	        % překlad bude proveden programem 'pdftex' do PDF
+]{report}       % Dokument třídy 'zpráva'
+%
+
 \usepackage[czech, english]{babel}
-\usepackage[T1]{fontenc} % pouzije EC fonty
-\usepackage[utf8]{inputenc}
 
-\usepackage{graphicx}
-\usepackage{wrapfig}        % pro obtékání textu kolem obrázk? a tabulek 
+\usepackage[utf8]	% Kódování zdrojových souborů je UTF8
+	{inputenc}      % Balíček pro nastavení kódování zdrojových souborů
+\usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
+                                % Nutné pro vložení log školy a fakulty při
+                                % volbě 'vutstyle' balíčku 'thesis'
 
-\newcommand\TypeOfWork{Bakalářská práce}  \typeout{Bakalarska prace}
-
-\newcommand\StudProgram{Geodézie a Kartografie, strukturovaný, Bakalářský}
-\newcommand\StudBranch{Geoinformatika}
-
-\newcommand\WorkTitle{Vector-to-vector conflation}
-\newcommand\FirstandFamilyName{Tereza Fiedlerová}
-\newcommand\Supervisor{Ing. Martin Landa}
+\usepackage{wrapfig}        % pro obtékání textu kolem obrázků a tabulek 
+%\usepackage{indentfirst}   % pro odsazení prvního odstavce 
+\usepackage{cmap}           % pro správné mapování znaků v pdf na Unicode
+\usepackage[T1]{fontenc}    % totéž  
 
 \usepackage[
-pdftitle={\WorkTitle},
-pdfauthor={\FirstandFamilyName},
-bookmarks=true,
-colorlinks=true,
-breaklinks=true,
-urlcolor=red,
-citecolor=blue,
-linkcolor=blue,
-unicode=true,
-]{hyperref}
+    nohyperlinks    % Nebudou tvořeny hypertextové odkazy do seznamu zkratek
+]{acronym}          % pro sazby zkratek a symbolů
+                    % Nutné pro použití prostředí 'seznamzkratek'
+                    % při volbě 'cvutstyle' balíčku 'thesiscvut'
 
+\usepackage[
+    unicode,                % záložky a informace budou v kódování unicode
+    breaklinks=true,        % hypertextové odkazy mohou obsahovat zalomení řádku
+    hypertexnames=false,    % názvy hypertextových odkazů nezávisle na názvech TeXu
+    colorlinks=true,        % kolem odkazů nebude rámeček, odkazy budou barvou:
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+]{hyperref}         % pro sazbu hypertextových odkazů
+                    % Nutné pro použití příkazu 'nastavenipdf'
+                    % při volbě 'cvutstyle' balíčku 'thesiscvut'
+
+\usepackage{url}        %zalamovani radku v internetovem odkazu
+\usepackage{fancyhdr}   %zahlavi, zapati
+\usepackage[%
+cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
+% Z následujících voleb lze použít pouze jednu
+%   diploma         % sazba diplomové práce
+    bachelor        % sazba bakalářské práce
+%   semestral       % sazba zprávy semestrálního projektu
+]{thesiscvut}       % Balíček pro sazbu studentských prací
+
+\newif\ifweb
+\ifx\ifHtml\undefined % Mimo HTML.
+    \webfalse
+\else % V HTML.
+    \webtrue
+\fi 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% Definice informací o dokumentu  %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Název práce
+\nazev{Zásuvný modul QGIS pro slučování vektorových dat}{QGIS plugin for vector conflation}
+
+%% Jméno a příjmení autora
+%% Příjmení bude na českých stranách samo vysázeno VELKÝMI písmeny
+\autor{Tereza}{Fiedlerová}
+
+%% Jméno a příjmení vedoucího práce včetně titulů
+\garant{Ing. Martin Landa}
+
+%% Označení oboru studia
+\oborstudia{Geoinformatika}{}
+
+%% Označení ústavu
+\ustav{Katedra mapování a kartografie}{}
+
+%% Rok obhajoby
+\rok{2013}
+
+%Mesic obhajoby
+\mesic{červen}
+
+%% Místo obhajoby
+%% Na titulních stránkách bude automaticky vysázeno VELKÝMI písmeny
+\misto{Praha}
+
+%% Abstrakt
+\abstrakt	{Abstrakt v~češtině}%
+			{Abstract in English}
+
+%% Klíčová slova
+\klicovaslova	{Klíčová slova v~češtině}%
+				{Keywords in English}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Nastavení polí ve Vlastnostech dokumentu PDF
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Při vloženém balíčku 'hyperref' 
+%% lze použít příkaz '\nastavenipdf'
+\nastavenipdf
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Definice standardní přípony pro vkládané obrázky
+%% Při převodu programu 'dvipdfm' nebo při překladu programem
+%% 'pdftex' lze vkládat bitmapové obrázky.
+%%\DeclareGraphicsExtensions{.png}
+%% Při převodu programem 'dvips' lze vkládat pouze obrázky 'eps'
+%\DeclareGraphicsExtensions{.eps}
+
+%%% Začátek dokumentu
 \begin{document}
+\catcode`\-=12  % pro vypnuti aktivniho znaku '-' pouzivaneho napr. v \cline 
 
-\selectlanguage{czech}
+% aktivace záhlaví
+\zahlavi
 
-\iflanguage{czech}{
-	 \typeout{************************************************}
-	 \typeout{Zvoleny jazyk: cestina}
-	 \typeout{Typ prace: \TypeOfWork}
-	 \typeout{Studijni program: \StudProgram}
-	 \typeout{Obor: \StudBranch}
-	 \typeout{Jmeno: \FirstandFamilyName}
-	 \typeout{Nazev prace: \WorkTitle}
-	 \typeout{Vedouci prace: \Supervisor}
-	 \typeout{***************************************************}
-	 \newcommand\Department{Katedra mapování a kartografie}
-	 \newcommand\Faculty{Fakulta stavební}
-	 \newcommand\University{České vysoké učení technické v Praze}
-	 \newcommand\labelSupervisor{Vedoucí práce}
-	 \newcommand\labelStudProgram{Studijní program}
-	 \newcommand\labelStudBranch{Obor}
+% předefinování vzhledu záhlaví
+\renewcommand{\chaptermark}[1]{%
+	\markboth{\MakeUppercase
+	{%
+	\thechapter.%
+	\ #1}}{}}
+
+% Vysázení přebalu práce
+\vytvorobalku
+
+% Vysázení titulní stránky práce
+\vytvortitulku
+
+% Vysázení listu zadani
+\stranka{}%
+	{\sffamily\Huge\centering\ ZDE VLOŽIT LIST ZADÁNÍ}%
+	{\sffamily\centering Z~důvodu správného číslování stránek}
+
+% Vysázení stránky s abstraktem
+\vytvorabstrakt
+
+% Vysázení prohlaseni o samostatnosti
+\vytvorprohlaseni
+
+% Vysázení poděkování
+\stranka{%nahore
+       }{%uprostred
+       }{%dole
+       \sffamily
+	\begin{flushleft}
+		\large
+		\MakeUppercase{Poděkování}
+	\end{flushleft}
+	\vspace{1em}
+		%\noindent
+	\par\hspace{2ex}
+	{Chtěla bych poděkovat vedoucímu ............... práce za připomínky a pomoc při zpracování této práce. Dále bych chtěla poděkovat \dots}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%    Titulni stranka / Title page 
+% Vysázení obsahu
+\obsah
 
-%\coverpagestarts
+\include{1-uvod}
+\include{2-conflation}
+\include{3-nastroje}
+\include{4-nevim}
+\include{5-geoc}
 
-%\begin{titlepage}
-% F
-%\end{titlepage}
+% Vysázení seznamu obrázků
+%\seznamobrazku
 
+% Vysázení seznamu tabulek
+%\seznamtabulek
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%   Prohlaseni / Declaration 
+% Začátek příloh
+\prilohy
 
-%\declaration{V Doksích dne \today}
+% Vysázení seznamu příloh
+\seznampriloh
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%    Abstract 
+% Vložení souboru 'text/prilohy' s přílohami
+%\include{text/prilohy}
 
-%\abstractpage
-%\begin{abstract}
-%This bachelor's project deals with the problem of ...
-
-%\vglue60mm
-
-%\noindent{\Huge \textbf{Abstrakt}}
-%\vskip 2.75\baselineskip
-
-%\noindent
-%Tato bakalářská práce se zabývá problémem ...
-%\end{abstract}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Obsah / Table of Contents 
-
-%\tableofcontents
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Seznam obrazku / List of Figures 
-
-%\listoffigures
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Seznam tabulek / List of Tables
-
-%\listoftables
-
-
-%**************************************************************
-
-%\mainbodystarts
-
-\normalfont
-%\parskip=0.2\baselineskip plus 0.2\baselineskip minus 0.1\baselineskip
-
-%**************************************************************
-
-
-\cleardoublepage\include{1-uvod}
-\cleardoublepage\include{2-conflation}
-\cleardoublepage\include{3-nastroje}
-\cleardoublepage\include{4-nevim}
-\cleardoublepage\include{5-geoc}
-
-
-%**************************************************************
-
-%\bibliographystyle{abbrv}
-%\bibliography{literatura}
-
-\appendix
-
-%\cleardoublepage\include{priloha-prirucka}
-
+% Konec dokumentu
 \end{document}
+
+% 
+% \documentclass[11pt,twoside,a4paper]{report}
+% \usepackage[czech, english]{babel}
+% \usepackage[T1]{fontenc} % pouzije EC fonty
+% \usepackage[utf8]{inputenc}
+% 
+% \usepackage{graphicx}
+% \usepackage{wrapfig}        % pro obtékání textu kolem obrázk? a tabulek 
+% 
+% \newcommand\TypeOfWork{Bakalářská práce}  \typeout{Bakalarska prace}
+% 
+% \newcommand\StudProgram{Geodézie a Kartografie, strukturovaný, Bakalářský}
+% \newcommand\StudBranch{Geoinformatika}
+% 
+% \newcommand\WorkTitle{Vector-to-vector conflation}
+% \newcommand\FirstandFamilyName{Tereza Fiedlerová}
+% \newcommand\Supervisor{Ing. Martin Landa}
+% 
+% \usepackage[
+% pdftitle={\WorkTitle},
+% pdfauthor={\FirstandFamilyName},
+% bookmarks=true,
+% colorlinks=true,
+% breaklinks=true,
+% urlcolor=red,
+% citecolor=blue,
+% linkcolor=blue,
+% unicode=true,
+% ]{hyperref}
+% 
+% \begin{document}
+% 
+% \selectlanguage{czech}
+% 
+% \iflanguage{czech}{
+% 	 \typeout{************************************************}
+% 	 \typeout{Zvoleny jazyk: cestina}
+% 	 \typeout{Typ prace: \TypeOfWork}
+% 	 \typeout{Studijni program: \StudProgram}
+% 	 \typeout{Obor: \StudBranch}
+% 	 \typeout{Jmeno: \FirstandFamilyName}
+% 	 \typeout{Nazev prace: \WorkTitle}
+% 	 \typeout{Vedouci prace: \Supervisor}
+% 	 \typeout{***************************************************}
+% 	 \newcommand\Department{Katedra mapování a kartografie}
+% 	 \newcommand\Faculty{Fakulta stavební}
+% 	 \newcommand\University{České vysoké učení technické v Praze}
+% 	 \newcommand\labelSupervisor{Vedoucí práce}
+% 	 \newcommand\labelStudProgram{Studijní program}
+% 	 \newcommand\labelStudBranch{Obor}
+% }
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%    Titulni stranka / Title page 
+% 
+% %\coverpagestarts
+% 
+% %\begin{titlepage}
+% % F
+% %\end{titlepage}
+% 
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%   Prohlaseni / Declaration 
+% 
+% %\declaration{V Doksích dne \today}
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%    Abstract 
+% 
+% %\abstractpage
+% %\begin{abstract}
+% %This bachelor's project deals with the problem of ...
+% 
+% %\vglue60mm
+% 
+% %\noindent{\Huge \textbf{Abstrakt}}
+% %\vskip 2.75\baselineskip
+% 
+% %\noindent
+% %Tato bakalářská práce se zabývá problémem ...
+% %\end{abstract}
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Obsah / Table of Contents 
+% 
+% %\tableofcontents
+% 
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Seznam obrazku / List of Figures 
+% 
+% %\listoffigures
+% 
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Seznam tabulek / List of Tables
+% 
+% %\listoftables
+% 
+% 
+% %**************************************************************
+% 
+% %\mainbodystarts
+% 
+% \normalfont
+% %\parskip=0.2\baselineskip plus 0.2\baselineskip minus 0.1\baselineskip
+% 
+% %**************************************************************
+% 
+% 
+% \cleardoublepage\include{1-uvod}
+% \cleardoublepage\include{2-conflation}
+% \cleardoublepage\include{3-nastroje}
+% \cleardoublepage\include{4-nevim}
+% \cleardoublepage\include{5-geoc}
+% 
+% 
+% %**************************************************************
+% 
+% %\bibliographystyle{abbrv}
+% %\bibliography{literatura}
+% 
+% \appendix
+% 
+% %\cleardoublepage\include{priloha-prirucka}
+% 
+% \end{document}

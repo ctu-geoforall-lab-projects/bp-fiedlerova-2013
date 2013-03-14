@@ -1,0 +1,11 @@
+\chapter{Problémy a jejich řešení}
+\label{6-problemy}
+
+\section{Použití knihovny GEOS}
+
+Jako poměrně zásadní problém se ukázalo použití knihovny \textit{GEOS}. Přestože tato knihovna je napsána v~jazyku C++, obsahuje \textit{wrapper} v~podobě C~API. Hlavním
+důvodem toho je zajištění vyšší stability. Při~použití C~API totiž není nutné vlastní aplikaci, která ho používá, při~každé změně v~knihovně \textit{GEOS} překompilovat.
+Proto většina programů využívajících \textit{GEOS} a~mezi nimi i~Quantum GIS používají právě C~API. Nicméně to má i~své nevýhody. V~C~API bohužel zatím není implementována
+veškerá funkcionalita C++~API. Některé chybějící funkce lze obejít aplikací sice složitějšího postupu, nicméně výsledek je obdobný jako při~použití C++~API. Avšak jiná
+funkcionalita je pro~uživatele C~API zcela nedostupná. Po~dlouhých úvahách bylo proto v~knihovně \textit{GEOC} přistoupeno k~využití C++~API i~s~rizikem, že bude při~každé
+změně nutné vše překompilovat.  
