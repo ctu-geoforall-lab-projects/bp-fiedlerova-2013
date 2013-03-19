@@ -14,17 +14,18 @@ SOURCES += \
     affinetransformation.cpp \
     triangulation.cpp \
     completeconflation.cpp \
-    featuresnapper.cpp
+    featuresnapper.cpp \
+    vertexgeometryoperation.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
     mygeosgeom.h \
-    mygeometryeditoroperation.h \
     matchinggeometry.h \
     affinetransformation.h \
     triangulation.h \
     completeconflation.h \
-    featuresnapper.h
+    featuresnapper.h \
+    vertexgeometryeditoroperation.h
 
 
 unix:LIBS += -L/usr/local/lib \

@@ -9,7 +9,6 @@ MatchingGeometry::MatchingGeometry()
 
 void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 {
-    qDebug("MatchingGeometry::setGeometrySet: ENTERING ");
 
     // set the right geometrySet
     geometrySet = geomSet;
@@ -19,18 +18,20 @@ void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 
 void  MatchingGeometry::closeGeometries( const Geometry *geom)
 {
-    qDebug("MatchingGeometry::closeGeometries: ENTERING ");
+
+    TGeomLayer::iterator setIt = geometrySet->begin();
 
     // find close geometries
-    unsigned long size = geometrySet->size();
+    //unsigned long size = geometrySet->size();
     closeSet.clear();
 
-    for ( unsigned long i = 0; i < size; i++ )
+    //for ( unsigned long i = 0; i < size; i++ )
+    for( ; setIt != geometrySet->end(); setIt++ )
     {
         // test wether geometry from set is within given tolerance distance from tested geometry
-        if ( isClose( geometrySet->at(i).getGEOSGeom(), geom ) )
+        if ( isClose( (*setIt).getGEOSGeom(), geom ) ) //geometrySet->at(i).getGEOSGeom(), geom ) )
         {
-            closeSet.push_back( geometrySet->at(i) );
+            closeSet.push_back( *setIt );//geometrySet->at(i) );
 
         }
 
@@ -41,12 +42,11 @@ void  MatchingGeometry::closeGeometries( const Geometry *geom)
 
 bool MatchingGeometry::isClose( const Geometry * g1, const Geometry * g2 )
 {
-    qDebug("MatchingGeometry::isClose: ENTERING ");
 
     double dist = g1->distance( g2 );
 
     // test distance between g1 and g2 and tolerance distance
-    if( dist < tolDistance )
+    if( dist <= tolDistance )
     {
         return true;
     }
@@ -58,8 +58,6 @@ bool MatchingGeometry::isClose( const Geometry * g1, const Geometry * g2 )
 
 Geometry* MatchingGeometry::buffer( Geometry *geom )
 {
-    qDebug("MatchingGeometry::buffer: ENTERING ");
-
     // buffer
     return geom->buffer( tolDistance );
 
@@ -68,8 +66,6 @@ Geometry* MatchingGeometry::buffer( Geometry *geom )
 
 Geometry* MatchingGeometry::boundary( Geometry *geom )
 {
-    qDebug("MatchingGeometry::boundary: ENTERING ");
-
     // boundary of geom
     return geom->getBoundary();
 
@@ -78,7 +74,6 @@ Geometry* MatchingGeometry::boundary( Geometry *geom )
 
 bool MatchingGeometry::contains( const Geometry *geomA, const Geometry *geomB )
 {
-    qDebug("ENTERING MatchingGeometry::contain");
 
     return geomA->contains( geomB );
 
@@ -87,11 +82,11 @@ bool MatchingGeometry::contains( const Geometry *geomA, const Geometry *geomB )
 
 bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
 {
-    qDebug("ENTERING MatchingGeometry::setMatch");
 
     // find close geometries
     closeGeometries( geom->getGEOSGeom() );
-    unsigned int csSize = closeSet.size();
+  //  unsigned int csSize = closeSet.size();
+    TGeomLayer::iterator closeIt = closeSet.begin();
 
     // compute buffers
     Geometry *bufferA = buffer( geom->getGEOSGeom() );
@@ -99,9 +94,10 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
     Geometry *bufferBoundaryA = buffer( boundaryA );
 
     // find matching geometry
-    for ( unsigned int i = 0; i < csSize; i++ )
+    //for ( unsigned int i = 0; i < csSize; i++ )
+    for ( ; closeIt != closeSet.end(); closeIt++ )
     {
-        const Geometry *geomB = closeSet[i].getGEOSGeom();
+        const Geometry *geomB = (*closeIt).getGEOSGeom(); //closeSet[i].getGEOSGeom();
         Geometry *bufferB = buffer( geom->getGEOSGeom() );
 
         // if buffer of one contains the other it is on a good way
@@ -113,7 +109,8 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
             // if boundary buffer of one contains boundary of the other -> geometries are similar
             if ( contains( bufferBoundaryA, boundaryB ) && contains( bufferBoundaryB, boundaryA ) )
             {
-                geom->setMatchingGeom( &closeSet[i] );
+                geom->setChanged(true);
+                geom->setMatchingGeom( &*closeIt );//&closeSet[i] );  // FINDS ONLY FIRST MATCHING GEOMETRIES, WHAT ABOUT ELSE????????????
                 return true;
             }
         }

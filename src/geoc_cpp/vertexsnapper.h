@@ -12,6 +12,8 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
+#include <geos/operation/distance/DistanceOp.h>
+#include <geos/geom/Envelope.h>
 
 // std includes
 # include <vector>
@@ -25,6 +27,7 @@ using namespace std;
 using namespace geos;
 using namespace geos::geom;
 using namespace geos::geom::util;
+using namespace geos::operation::distance;
 
 /** Class to snap vertices of one layer to the close vertices of the other layer. */
 
@@ -73,12 +76,6 @@ public:
       @param closeCoord Coordinate sequence with close point from the reference layer.
      */
     void snapVertices( MyGEOSGeom * geom, CoordinateSequence * closeCoord );
-
-    /** Edit geometry according to the given coordinates.
-      @param geom Pointer to the tested geometry.
-      @param coord Coordinate sequence with new points.
-     */
-    void editGeometry( MyGEOSGeom * geom, CoordinateSequence * coord );
 
 private:
 

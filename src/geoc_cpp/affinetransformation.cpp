@@ -162,10 +162,16 @@ void AffineTransformation::affineTransf2D()
 } // void AffineTransformation::affineTransf2D()
 
 
-void AffineTransformation::editGeometry( Geometry *g, const CoordinateSequence *coord)
+void AffineTransformation::editGeometry( Geometry *g, CoordinateSequence *coord)
 {
     qDebug("AffineTransformation::editGeometry: ENTERING");
 
-    // something as editGeometry() at VertexSnapper or maybe coordinatefilter
+    // edit geometry  <-- USE IT DIFFERENTLY THAN IN VERTEXSNAPPER !!!
+    VertexGeometryEditorOperation myOp;
+
+    GeometryEditor geomEdit( g->getFactory() );
+
+    // set geometry to edited one
+    geomEdit.edit( g , &myOp );
 
 } // void AffineTransformation::editGeometry( Geometry *g, const CoordinateSequence *coord)

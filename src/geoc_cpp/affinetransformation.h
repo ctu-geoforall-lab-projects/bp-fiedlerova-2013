@@ -49,7 +49,7 @@ public:
       * @param g Geometry to be edited.
       * @param coord Coordinate sequence with new coordinates for geometry.
       */
-    void editGeometry( Geometry *g, const CoordinateSequence *coord);
+    void editGeometry( Geometry *g, CoordinateSequence *coord);
 
     /** Computes elements of 3D affine transformation
       */

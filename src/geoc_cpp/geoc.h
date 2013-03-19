@@ -3,7 +3,7 @@
 
 #include "mygeosgeom.h"
 #include "vertexsnapper.h"
-#include "mygeometryeditoroperation.h"
+#include "vertexgeometryeditoroperation.h"
 #include "affinetransformation.h"
 #include "matchinggeometry.h"
 #include "triangulation.h"
