@@ -54,6 +54,8 @@ cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
 %   semestral       % sazba zprávy semestrálního projektu
 ]{thesiscvut}       % Balíček pro sazbu studentských prací
 
+\usepackage{enumitem} % pro nastavení číslování
+
 \newif\ifweb
 \ifx\ifHtml\undefined % Mimo HTML.
     \webfalse
@@ -170,6 +172,12 @@ cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
 \include{4-nevim}
 \include{5-geoc}
 \include{6-problemy}
+
+% Literatura
+\nocite{*}
+\def\refname{Literatura}
+\bibliographystyle{abbrv}
+\bibliography{literatura}
 
 % Vysázení seznamu obrázků
 %\seznamobrazku
