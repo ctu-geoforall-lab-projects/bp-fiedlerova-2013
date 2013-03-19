@@ -1,0 +1,25 @@
+Algorithms used in GEOC library
+
+
+Vertex Snapper
+
+The inputs for this algorithm are two vector layers (reference and subject layer) and distance tolerance, which determines if two points are close or not.
+
+For each feature from subject layer all close features from reference layer are found. Close means the feature which is within tolerance distance to the tested feature. Points from these close features are extracted. Then we try to find the closest point from close points in reference layer to each vertex in the tested feature. If the distance between the closest point and the tested vertex is less than tolerance, the tested vertex is moved to the position of these close point. This is repeated for each feature in subject layer and each vertex in this feature.
+
+The result is new layer which is a copy of subject layer with moved vertices.
+
+
+Conflation Algorithm
+
+The inputs for this algorithm are same as below.
+
+The first step is to find matching features. For this we use the principle of Hausdorff distance, but it is not necessary to compute it directly but buffers (with size of distance tolerance) are used as equal criterium. The criterium is as follows.
+
+Two features A nad B are corresponding if:
+1) Buffer of A contains B and buffer of B contains A
+2) Buffer of boundary of A contains boundary of B and buffer of boundary of B contains boundary of A
+
+After matching features are found, corresponding points from these two features are used as vertices of triangular network. The Delaunay triangulation is used for TIN construction. The other points from subject layer that have no equivalent in the reference layer are transformed using local affine transformation. Local means inside each triangle.
+
+The result is new layer with all transformed features from subject layer.
