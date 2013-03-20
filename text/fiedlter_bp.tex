@@ -1,27 +1,29 @@
-% Soubory musí být v kódování, které je nastaveno v příkazu \usepackage[...]{inputenc}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%													%%
+%% 	BAKALÁŘSKÁ PRÁCE - Zásuvný modul QGIS pro slučování vektorových map 				%%
+%% 				 Tereza Fiedlerová							%%
+%%													%%
+%% pro formátování využita šablona: http://geo3.fsv.cvut.cz/kurzy/mod/resource/view.php?id=775 	%%
+%%													%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
- \documentclass[%
-% draft,        % Testovací překlad
+\documentclass[%
   12pt,         % Velikost základního písma je 12 bodů
   a4paper,      % Formát papíru je A4
-  twoside,      % Jednostranný tisk
-% Z následujicich voleb lze použít jen jednu:
-% dvipdfm       % výstup bude zpracován programem 'dvipdfm' do PDF
-% dvips	        % výstup bude zpracován programem 'dvips' do PS
- pdftex	        % překlad bude proveden programem 'pdftex' do PDF
+  twoside,      % Oboustranný tisk
+  pdftex        % překlad bude proveden programem 'pdftex' do PDF
 ]{report}       % Dokument třídy 'zpráva'
 %
 
-\usepackage[czech, english]{babel}
+\usepackage[czech, english]{babel} % použití češtiny, angličtiny
 
 \usepackage[utf8]	% Kódování zdrojových souborů je UTF8
 	{inputenc}      % Balíček pro nastavení kódování zdrojových souborů
+
 \usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
-                                % Nutné pro vložení log školy a fakulty při
-                                % volbě 'vutstyle' balíčku 'thesis'
 
 \usepackage{wrapfig}        % pro obtékání textu kolem obrázků a tabulek 
-%\usepackage{indentfirst}   % pro odsazení prvního odstavce 
+
 \usepackage{cmap}           % pro správné mapování znaků v pdf na Unicode
 \usepackage[T1]{fontenc}    % totéž  
 
@@ -45,13 +47,12 @@
                     % při volbě 'cvutstyle' balíčku 'thesiscvut'
 
 \usepackage{url}        %zalamovani radku v internetovem odkazu
+
 \usepackage{fancyhdr}   %zahlavi, zapati
+
 \usepackage[%
-cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
-% Z následujících voleb lze použít pouze jednu
-%   diploma         % sazba diplomové práce
-    bachelor        % sazba bakalářské práce
-%   semestral       % sazba zprávy semestrálního projektu
+  cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
+  bachelor            % sazba bakalářské práce
 ]{thesiscvut}       % Balíček pro sazbu studentských prací
 
 \usepackage{enumitem} % pro nastavení číslování
@@ -71,7 +72,6 @@ cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
 \nazev{Zásuvný modul QGIS pro slučování vektorových dat}{QGIS plugin for vector conflation}
 
 %% Jméno a příjmení autora
-%% Příjmení bude na českých stranách samo vysázeno VELKÝMI písmeny
 \autor{Tereza}{Fiedlerová}
 
 %% Jméno a příjmení vedoucího práce včetně titulů
@@ -90,7 +90,6 @@ cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
 \mesic{červen}
 
 %% Místo obhajoby
-%% Na titulních stránkách bude automaticky vysázeno VELKÝMI písmeny
 \misto{Praha}
 
 %% Abstrakt
@@ -109,13 +108,6 @@ cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
 %% lze použít příkaz '\nastavenipdf'
 \nastavenipdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Definice standardní přípony pro vkládané obrázky
-%% Při převodu programu 'dvipdfm' nebo při překladu programem
-%% 'pdftex' lze vkládat bitmapové obrázky.
-%%\DeclareGraphicsExtensions{.png}
-%% Při převodu programem 'dvips' lze vkládat pouze obrázky 'eps'
-%\DeclareGraphicsExtensions{.eps}
 
 %%% Začátek dokumentu
 \begin{document}

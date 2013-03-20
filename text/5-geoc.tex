@@ -1,4 +1,4 @@
-\chapter{GEOC}
+\chapter{Knihovna GEOC}
 \label{5-geoc}
 
 \section{Tvorba knihovny GEOC}
@@ -13,7 +13,7 @@
 
 Nejjednodušším způsobem kombinace dvou vektorových vrstev je pouhé přichycení blízkých vrcholů cílové vrstvy k~vrstvě referenční. Postup je následující:
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
  \item Na~počátku je třeba určit vzdálenostní toleranci, tedy maximální vzdálenost mezi~dvěma body, kdy ještě bude provedeno jejich přichycení.
  \item Ke~každému prvku ze~zpracovávané vrstvy nalezneme nejbližší prvky z~vrstvy referenční. To jsou prvky, jejichž nejkratší vzdálenost od~zpracovávaného prvku není větší
 	než vzdálenostní tolerance.
@@ -32,7 +32,7 @@ Nejjednodušším způsobem kombinace dvou vektorových vrstev je pouhé přichy
 
 Nejčastější používaný postup při~spojování vektorových map je následující:
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
  \item Nejprve je třeba nalézt odpovídající si prvky v~obou překrývajících se vrstvách. Kritéria pro~určení odpovídajících si prvků mohou být velmi odlišná. Existuje mnoho
 	algoritmů řešících tuto problematiku, přičemž postupy se mohou různit podle toho, zda je úkolem vyhledání odpovídajících si bodů, polygonů či linií. Kritéria a~postup
 	použitý v~knihovně \textit{GEOC} je popsán níže.
@@ -48,7 +48,7 @@ V~knihovně \textit{GEOC} je pro nalezení odpovídajících si prvků využito 
 vzdálenost, přičemž tato vzdálenost není počítána přímo. Splnění podmínky, že dané prvky nejsou od~sebe dále, než je daná Hausdorffova vzdálenost, se testuje pomocí obalových
 zón jednotlivých prvků následujícím způsobem.
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
  \item Máme dva prvky A a~B ze~dvou různých překrývajících se vrstev.
  \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, že si prvky odpovídají 
 	a~pokračuje se dalším krokem. V~opačném případě si prvky neodpovídají.

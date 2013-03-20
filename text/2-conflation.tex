@@ -7,26 +7,26 @@
 \textit{Conflation} neboli \textit{map matching, map merging, rubber sheeting} lze do~češtiny přeložit jako slučování či spojování map. Překlad tohoto pojmu však není vždy 
 jasný, jelikož se jím označuje více různých úloh, procesů či činností. Proto zde uvádím několik definic z~různýc zdrojů. 
 
-\begin{itemize}
- \item 'Conflation' je proces, jehož cílem je geometricky upravit (posunem, transformací) digitální data zobrazující stejné území (obvykle pořízená v~jiném čase) tak, aby byla 
+\begin{itemize}[leftmargin=*]
+ \item Proces, jehož cílem je geometricky upravit (posunem, transformací) digitální data zobrazující stejné území (obvykle pořízená v~jiném čase) tak, aby byla 
     vzájemně geograficky korektní a~vzájemně se překrývaly. %% slovem korektní si nejsem jistá 
     
     (huic.com)
 
-  \item 'Conflation' je proces sjednocení dvou rozdílných datasetů.
+  \item Proces sjednocení dvou rozdílných datasetů.
     
     (Blasby, Davis, Kim, Ramsey: GIS Conflation Using Open Source Tools)
 
-  \item 'Conflation' se zabývá kombinováním dat z~různých zdrojů. Jedná se o~jeden z~aktuálních problémů v~GIS.
+  \item Zabývá se kombinováním dat z~různých zdrojů. Jedná se o~jeden z~aktuálních problémů v~GIS.
    
     (Freitas, Afonso: Distributed Vector Based Spatial Data Conflation Services)
 
-  \item 'Conflation' je soubor funkcí a~procedur, které zarovnávají prvky jedné GIS vrstvy k~prvkům jiné a~následně převádí atributy mezi~těmito vrstvami.
+  \item Soubor funkcí a~procedur, které zarovnávají prvky jedné GIS vrstvy k~prvkům jiné a~následně převádí atributy mezi~těmito vrstvami.
    
     (http://www.princegeorgescountymd.gov/Government/AgencyIndex/\newline OITC/GIS/glossary.asp)
 
-  \item 'Conflation' je proces sladění poloh odpovídajících si prvků v~různých datových vrstvách. 'Conflation' funkce provádějí toto sladění tak, aby se odpovídající si prvky
-    přesně překrývaly. 
+  \item Proces sladění poloh odpovídajících si prvků v~různých datových vrstvách. Funkce pro spojení map (\textit{conflation}) provádějí toto sladění tak, aby se 
+    odpovídající si prvky přesně překrývaly. 
     
     (http://maps.unomaha.edu/Peterson/GIS/notes/GISAnal1.html,\newline http://www.gov.ns.ca/snsmr/land/standards/post/manual/appedxa1.asp)
 
@@ -34,11 +34,12 @@ jasný, jelikož se jím označuje více různých úloh, procesů či činnost�
     
     (http://wiki.gis.com/wiki/index.php/GIS\_Glossary/C)
   
-  \item 'Conflation' prvků je proces kombinování geografických informací z~překrývajících se zdrojových dat, který zachovává přesnost dat, minimalizuje nadbytečná data
-    a~předchází konfliktům v~datech. %% nebo rozdíly?
-    'Conflation' geoprostorových dat je spojení či sladění dvou různých prostorových datasetů zahrnujících stejné území.
+  \item \textit{Feature conflation} je proces kombinování geografických informací z~překrývajících se zdrojových dat, který zachovává přesnost dat, minimalizuje nadbytečná 
+    data a~předchází konfliktům v~datech. %% nebo rozdíly?
+    \textit{Conflation of geospatial data} (geoprostorových dat) je spojení či sladění dvou různých prostorových datasetů zahrnujících stejné území.
     
-    (Shekhar, Xiong: Encyclopedia of GIS)
+    \citation{gisencyclopedia} (Shekhar, Xiong: Encyclopedia of GIS)
+
 \end{itemize}
 
 \section{Historie} % asi ještě rozšířit, viz enc. of gis - geospatial conflation
@@ -46,10 +47,14 @@ jasný, jelikož se jím označuje více různých úloh, procesů či činnost�
 
 Až do 80.~let 20.~století bylo pořízení digitálních dat velmi drahé a~proto se často nestávalo, že by nějaká firma vlastnila více digitálních map jediného území. S~vývojem
 počítačů a~digitálních technologií se však tato data stávala stále dostupnějšími a~náhle vyvstala potřeba kombinovat data o~jednom území z~více zdrojů a~provádění aktualizace
-těchto dat. Jako první se k~takovému množství dat dostaly pochopitelně různé vládní instituce. Ačkoli první článek o~'conflation' vyšel už v~roce 1981 (\textit{M. White:
-The Theory of~Geographical Data Conflation}), k opravdovému rozvoji došlo až po~roce 1985. V~té době totiž vznikl projekt, jehož cílem bylo propojení mapových souborů organizací
-US~Census Bureau a US Geological Society. Vzhledem k~množství dat bylo nutné celý proces co nejvíce automatizovat. Použitý algoritmus, jehož hlavním autorem je Alan Saalfeld, 
-byl založen na~nalezení odpovídajících si prvků a~následné transformaci dat. S~narůstající dostupností dat a~zveřejněním této myšlenky přibývalo i~menších firem zabývajících
+těchto dat. 
+
+Jako první se k~takovému množství dat dostaly pochopitelně různé vládní instituce. Ačkoli první článek o~problematice spojování geografických dat z~více zdrojů vyšel už v~roce
+ 1981 (\textit{M. White: The~Theory of~Geographical Data Conflation}), k opravdovému rozvoji došlo až po~roce 1985. V~té době totiž vznikl projekt, jehož cílem bylo propojení 
+mapových souborů organizací US~Census Bureau a US Geological Society. Vzhledem k~množství dat bylo nutné celý proces co nejvíce automatizovat. Použitý algoritmus, jehož 
+hlavním autorem je Alan Saalfeld, byl založen na~nalezení odpovídajících si prvků a~následné transformaci dat. 
+
+S~narůstající dostupností dat a~zveřejněním této myšlenky přibývalo i~menších firem zabývajících
 se problémem kombinace mapových souborů z různých zdrojů. Původní algoritmy brali v~potaz pouze geometrickou podobnost prvků, později byly brány v~úvahu
 i~jejich topologické vztahy a~s~rozvojem GIS technologií pak i~podobnost atributů jednotlivých prvků. Dnes jde o~jeden z~aktuálních problémů řešených v~oblasti GIS.
 
@@ -66,7 +71,7 @@ internal conflation (v rámci jednoho datasetu), matching (odpovídající si), 
 
 \subsection{Dle typu vstupních vrstev}
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
   \item \textbf{Imagery-to-Imagery, Raster-to-Raster}
     \subitem Jedná se o~případ, kdy je úkolem na~sebe napasovat dva rastrové mapové soubory. Nejčastěji jde o~ortofoto a~naskenovanou analogovou mapu daného území. Tato úloha
 	      se využije, například pokud chceme porovnat starou mapu se~současným stavem reprezentovaným právě leteckým snímkem. Řešení tohoto problému vyžaduje poměrně 
@@ -74,7 +79,7 @@ internal conflation (v rámci jednoho datasetu), matching (odpovídající si), 
   \item \textbf{Vector-to-Imagery, Vector-to-Raster}
     \subitem Kombinace vektorových a~rastrových dat stejného území se využívá často ke~zpřesnění vektorových dat jejich napasováním na~ortofoto. Hlavní náplní této oblasti
 	      je vývoj algoritmů umožňující následující: % dopsat referenci na lit. - gis enc. 
-	      \begin{enumerate}
+	      \begin{enumerate}[leftmargin=*]
 	       \item Detekce charakteristických hran rastrového obrazu a~jejich porovnání s~vektorovými daty.
 	       \item Využití vektorových dat k~identifikaci hran v~rastru - tzv. \textit{Snakes algorithm}.
 	       \item Užití stereo obrazu, výškových dat a~znalostí silničních dat pro~porovnání vektorových a~rastrových dat. % ??????????
@@ -83,7 +88,7 @@ internal conflation (v rámci jednoho datasetu), matching (odpovídající si), 
   \item \textbf{Vector-to-Vector}
     \subitem Případem sloučení dvou vektorových datasetů se zabývá tato práce. Jednou ze~specifických a~velmi častých aplikací je navázání silničních sítí, dále aktualizace
 	      digitálních dat aj. Existuje mnoho různých algoritmů pro~slučování vektorových dat, přičemž základní přístupy k~řešení problému jsou následující: % dopsat referenci na lit. - gis enc. 
-	      \begin{enumerate}
+	      \begin{enumerate}[leftmargin=*]
 	       \item Sloučení dat za~pomoci algoritmů, které pracují na~základě porovnávání geometrických vlastností prvků.
 	       \item Algoritmy, které berou v~potaz podobnost tvarů prvků a~zároveň podobnost jejich atributů.
 	       \item Spojení vektorových dat s~neznámým souřadnicovým systémem na~základě rozložení významných bodových prvků (např. křižovatky cest).
@@ -94,7 +99,7 @@ internal conflation (v rámci jednoho datasetu), matching (odpovídající si), 
 
 \subsection{Dle území zobrazovaného vstupními vrstvami}
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
   \item \textbf{Horizontální} % - sousedící datasety
     \subitem Za~\textit{horizontal conflation} se označují procesy, které zpracovávají data ze~sousedících území. Cílem je získat mapové soubory, jejichž hranice na~sebe
 	      dokonale navazují, a~to pokud možno bez~ztráty přesnosti.
@@ -112,7 +117,7 @@ internal conflation (v rámci jednoho datasetu), matching (odpovídající si), 
 Obecný postup při~slučování vektorových map z~více zdrojů se skládá z~několika kroků, které jsou uvedeny níže. Jako u~většiny podobných operací je třeba nejdříve provést 
 přípravu dat a~následně data zpracovat a~upravit.
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
   \item \textbf{Předzpracování dat}
     \subitem Tento krok slouží k~zajištění kompatibility vstupních dat tak, aby bylo možné je porovnávat. Obvykle spočívá v~převedení vstupních datasetů do~stejného 
 	      souřadnicového systému, zajištění stejných základních jednotek a~dalších měnších úpravách. 

@@ -144,7 +144,7 @@ Pro~odstraňování překrytů či mezer neexistuje exaktní algoritmus, ale jso
 
 Následující výčet podává přehled nejčastějších úloh, které je možné s~tímto nástrojem řešit.
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
  \item Jako \textit{Coverage Cleaning} je  označován proces hledání a~odstraňování topologických chyb - mezer a~překrytů v~rámci jedné vektorové mapy tvořené polygony či 
 	multipolygony. Detekce nežádoucích mezer mezi~polygony je založena na~rozpoznání blízkých liniových segmentů, kde blízkost je určena zvolenou vzdálenostní tolerancí. 
 
@@ -170,7 +170,7 @@ Následující výčet podává přehled nejčastějších úloh, které je mož
 Zásuvné moduly ze skupiny \textit{QA - Quality Assurance} umožňují najít geometrické rozdíly a~nesrovnalosti mezi~datasety, ale také v~rámci jediného datasetu. Funkce zde
 obsažené neslouží k~opravě či propojení vrstev, ale pouze k~identifikaci geometrických rozdílů.
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
  \item \textit{Find Misaligned Segments} - slouží k~nalezení segmentů ze~dvou datasetů, které by si v~rámci dané tolerance měli odpovídat, ale je mezi~nimi mezera či překryt. 
  \item \textit{Find Overlaps} - najde překrývající se prvky ze~dvou datasetů.
  \item \textit{Find Coverage Gaps} - umožňuje nalézt mezery mezi~polygony jednoho datasetu, které jsou užší než zadaná vzdálenostní tolerance a~zároveň je mezi~hranami polygonů,
@@ -185,7 +185,7 @@ obsažené neslouží k~opravě či propojení vrstev, ale pouze k~identifikaci 
 
 Další zásuvné moduly zařazené do~skupiny s~názvem \textit{Conflate} slouží k~samotnému spojování vektorových map a~navázání dvou sousedních map.
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
  \item \textit{Vertex Snapper} - identifikuje a~napojí k~sobě blízké uzlové body, vrcholy ze~dvou překrývajících se datasetů. Při~použití této funkce je nutné označit, 
 	která vrstva je referenční (s~body z této vrstvy se nebude hýbat).
  \item \textit{Coverage Alignment} - zarovná geometrii jednoho datasetu k~jinému referenčnímu datasetu v~místech, kde se překrývají nebo spolu sousedí. Na~rozdíl 
@@ -197,7 +197,7 @@ Další zásuvné moduly zařazené do~skupiny s~názvem \textit{Conflate} slou�
 
 Skupina označena jako \textit{Clean} obsahuje funkce k k~opravě nepřesností nalezených pomocí funkcí skupiny \textit{QA} v~rámci jednoho datasetu.
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
  \item \textit{Remove Coverage Gaps} - odstraní mezery mezi~polygony jedné vrstvy dle~zadané tolerance.
  \item \textit{Remove Short Segments} - tato funkce by měla dokázat odstranit liniové segmenty kratší než daná tolerance tak, aby co nejméně porušila topologii vrstvy. 
       Zatím však umožňuje pouze odstranění krátkých izolovaných segmentů.
@@ -206,7 +206,7 @@ Skupina označena jako \textit{Clean} obsahuje funkce k k~opravě nepřesností 
 
 Poslední skupina zásuvných modulů je nazvána \textit{Roads}. Zabývá se spojováním vektorových map silniční sítě.
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
  \item \textit{RoadMatcherToolboxPlugin} - umožňuje vytvořit vrstvu s~rozdíly mezi~silnicemi ze~dvou vrstev a~na~základě těchto rozdílů a~identifikovaných společných prvků 
 	jednu z~těchto vrstev navázat na~druhou referenční tak, aby si odpovídaly.
 \end{itemize}
