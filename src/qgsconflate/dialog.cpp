@@ -87,7 +87,7 @@ QgsVectorLayer* Dialog::selectedLayer(int index)
 } // QgsVectorLayer* Dialog::selectedLayer(int index)
 
 
-void Dialog::on_okButton_clicked()
+void Dialog::on_processButton_clicked()
 {
     // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
@@ -106,6 +106,7 @@ void Dialog::on_okButton_clicked()
         else if ( mrbSnapFeature->isChecked() )
         {
             mConflate->featureSnap();
+
         }
         else if ( mrbConflate->isChecked() )
         {
@@ -114,10 +115,20 @@ void Dialog::on_okButton_clicked()
 
         QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();
 
-        // add new layer to the layer registry
-        QgsMapLayerRegistry::instance()->addMapLayers( QList<QgsMapLayer *>() << myLayer);
+        if ( myLayer && myLayer->isValid())
+        {
+            // add new layer to the layer registry
+            QgsMapLayerRegistry::instance()->addMapLayers( QList<QgsMapLayer *>() << myLayer);
+        }
+        else
+        {
+            QMessageBox::information(0,"Information","New layer was created but cannot be added to the layer tree"
+                                     "because it is not valid. Please add it manually.", QMessageBox::Ok);
+        }
 
-        this->close();
+        // set protocol
+        mProtocol = mConflate->getProtocol();
+        this->mTextEdit->setPlainText(mProtocol);
     }
     else
     {

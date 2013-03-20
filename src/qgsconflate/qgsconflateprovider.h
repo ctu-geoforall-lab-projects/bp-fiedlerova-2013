@@ -74,6 +74,14 @@ public:
       */
     void setTolDistance( double dist ){ tolDistance = dist; }
 
+    /** Get text protocol about computation
+      */
+    QString getProtocol() { return mProtocol; }
+
+    /** Write protocol about computation and given invalid geometries.
+      */
+    void writeProtocol( const vector<int> &invalids );
+
 private:
 
     QgsVectorLayer *mRefLayer;
@@ -83,6 +91,7 @@ private:
     TGeomLayer mGeosRef;
     TGeomLayer mGeosNew;
     double tolDistance;
+    QString mProtocol;
 };
 
 #endif // QGSCONFLATEPROVIDER_H

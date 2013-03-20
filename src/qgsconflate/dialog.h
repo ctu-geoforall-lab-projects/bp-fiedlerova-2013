@@ -34,7 +34,7 @@ public:
 private slots:
 
     /** Copy reference layer. */
-    void on_okButton_clicked();
+    void on_processButton_clicked();
 
     /** Close dialog. */
     void on_closeButton_clicked();
@@ -43,6 +43,7 @@ private:
 
     QgisInterface *mIface;
     QgsConflateProvider* mConflate;
+    QString mProtocol;
 
 
 };

@@ -295,6 +295,10 @@ void QgsConflateProvider::vertexSnap()
     // set new geometry
     mGeosNew = vs.getNewGeometry();
 
+    // get ids of invalid geometries and write them to the protocol
+    vector<int> invalids = vs.getInvalidGeometries();
+    writeProtocol(invalids);
+
     // transfer geometry back
     if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
     {
@@ -335,3 +339,29 @@ void QgsConflateProvider::featureSnap()
     }
 
 } // void QgsConflateProvider::featureSnap()
+
+
+void QgsConflateProvider::writeProtocol( const vector<int> &invalids )
+{
+    mProtocol.clear();
+
+    // some general informations
+    mProtocol = "Conflation protocol\n\nreference layer: "+mRefLayer->name()+"\nsubject layer: "+mSubLayer->name()+
+            "\nnumber of processed feature: "+QString::number(mGeosNew.size())+"\nnumber of invalid features: "+  // note: number of processed feature is not exactly right
+            QString::number(invalids.size())+"\n\nids of invalid features (needs to be repaired manually): ";
+
+    // add list of invalid features
+    for ( size_t i = 0; i < invalids.size(); i++ )
+    {
+        mProtocol.append( "\n"+QString::number(invalids[i]) );
+    }
+
+    if ( invalids.size() > 10 )
+    {
+        mProtocol.append("\n\nNOTE: The high number of invalid features can be caused by too large tolerance distance or by combining "
+                         "two layers with very different precision. Please try conflation again with different settings.");
+    }
+
+    mProtocol.append("\n\nend of protocol");
+
+} // void QgsConflateProvider::writeProtocol( const vector<int> &invalids ) const
