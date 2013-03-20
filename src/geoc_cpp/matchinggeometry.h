@@ -3,9 +3,18 @@
 
 // Geos includes
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Envelope.h>
+#include <geos/index/strtree/STRtree.h>
 
 // local includes
 #include "geoc.h"
+
+using namespace std;
+using namespace geos;
+using namespace geos::geom;
+using namespace geos::index;
+using namespace geos::index::strtree;
+
 
 /** Class providing methods for match (indicate corresponding) geometries from two datasets. */
 
@@ -21,6 +30,10 @@ public:
     /** Constructor
       */
     MatchingGeometry( TGeomLayer *l, double tol = 1 ): geometrySet(l), tolDistance(tol) {}
+
+    /** Destructor
+      */
+    ~MatchingGeometry();
 
     /** Set given dist to tolDistance.
       */
@@ -69,11 +82,17 @@ public:
       */
     bool setMatch( MyGEOSGeom *geom );
 
+    /** Build spatial index
+      */
+    void buildIndex();
+
 private:
 
     TGeomLayer* geometrySet;
-    TGeomLayer closeSet;
+    vector<Geometry*> closeSet;
     double tolDistance;
+    SpatialIndex *index;
+
 };
 
 #endif // MATCHINGGEOMETRY_H

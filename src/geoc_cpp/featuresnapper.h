@@ -4,13 +4,19 @@
 // std includes
 # include <vector>
 
+// geos includes
+#include <geos/geom/Envelope.h>
+#include <geos/index/strtree/STRtree.h>
+
 // local includes
 #include "geoc.h"
 
-typedef std::vector< MyGEOSGeom > TGeomLayer;
-
 using namespace std;
 using namespace geos;
+using namespace geos::geom;
+using namespace geos::index;
+using namespace geos::index::strtree;
+
 
 /** Class to snap features of one layer to the close features of the other layer. */
 
@@ -22,6 +28,10 @@ public:
     /** Default constructor.
       */
     FeatureSnapper();
+
+    /**
+      */
+    ~FeatureSnapper();
 
     /** Set reference layer geometries.
       @param ref Vector of geometries in reference layer.
@@ -64,12 +74,17 @@ public:
      */
     void editGeometry( MyGEOSGeom * geom );
 
+    /** Build spatial index.
+      */
+    void buildIndex();
+
 private:
 
     TGeomLayer refGeometry;
     TGeomLayer subGeometry;
     TGeomLayer newGeometry;
     double tolDistance;
+    SpatialIndex *index;
 
 };
 

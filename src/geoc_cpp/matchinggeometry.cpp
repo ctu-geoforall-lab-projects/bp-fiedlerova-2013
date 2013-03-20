@@ -2,37 +2,69 @@
 
 MatchingGeometry::MatchingGeometry()
 {
+    index = 0;
     tolDistance = 1;
     geometrySet = NULL;
 
 }
 
+MatchingGeometry::~MatchingGeometry()
+{
+    delete index;
+}
+
+
+void MatchingGeometry::buildIndex()
+{
+    // create new index
+    delete index;
+    index = new STRtree();
+
+    // add envelopes of geometries to index
+    size_t gSize = geometrySet->size();
+    for ( size_t i = 0; i < gSize; i++ )
+    {
+        const Geometry* g = geometrySet->at(i).getGEOSGeom();
+        const Envelope* env = g->getEnvelopeInternal();
+        index->insert(env, (void*)g );
+    }
+
+} // void VertexSnapper::buildIndex()
+
+
 void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 {
-
     // set the right geometrySet
     geometrySet = geomSet;
 
 } // void MatchingGeometry::setGeometrySet( TGeomLayer geometrySet, bool isFirst )
 
 
-void  MatchingGeometry::closeGeometries( const Geometry *geom)
+void  MatchingGeometry::closeGeometries( const Geometry *geom )
 {
+    // create spatial index
+    buildIndex();
 
-    TGeomLayer::iterator setIt = geometrySet->begin();
-
-    // find close geometries
-    //unsigned long size = geometrySet->size();
+    // reset close geometries
     closeSet.clear();
 
-    //for ( unsigned long i = 0; i < size; i++ )
-    for( ; setIt != geometrySet->end(); setIt++ )
-    {
-        // test wether geometry from set is within given tolerance distance from tested geometry
-        if ( isClose( (*setIt).getGEOSGeom(), geom ) ) //geometrySet->at(i).getGEOSGeom(), geom ) )
-        {
-            closeSet.push_back( *setIt );//geometrySet->at(i) );
+    // use spatial index
+    vector<void*> results;
+    index->query( geom->getEnvelopeInternal(), results );
+    size_t rSize = results.size();
 
+    // get close geometries
+    for ( size_t j = 0; j < rSize; j++ )
+    {
+        // get envelope of tested feature
+        Geometry *searchGeom = static_cast<Geometry*>( results[j] );
+        Envelope subEnv = *( geom->getEnvelopeInternal() );
+        //subEnv.expandBy(tolDistance); // expand envelope with tolerance distance - not necessary in this case
+
+        if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
+        {
+            // add geometry to close features
+            closeSet.push_back( searchGeom );
         }
 
     }
@@ -85,8 +117,7 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
 
     // find close geometries
     closeGeometries( geom->getGEOSGeom() );
-  //  unsigned int csSize = closeSet.size();
-    TGeomLayer::iterator closeIt = closeSet.begin();
+    unsigned int csSize = closeSet.size();
 
     // compute buffers
     Geometry *bufferA = buffer( geom->getGEOSGeom() );
@@ -94,10 +125,9 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
     Geometry *bufferBoundaryA = buffer( boundaryA );
 
     // find matching geometry
-    //for ( unsigned int i = 0; i < csSize; i++ )
-    for ( ; closeIt != closeSet.end(); closeIt++ )
+    for ( unsigned int i = 0; i < csSize; i++ )
     {
-        const Geometry *geomB = (*closeIt).getGEOSGeom(); //closeSet[i].getGEOSGeom();
+        const Geometry *geomB = closeSet[i];
         Geometry *bufferB = buffer( geom->getGEOSGeom() );
 
         // if buffer of one contains the other it is on a good way
@@ -110,7 +140,7 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
             if ( contains( bufferBoundaryA, boundaryB ) && contains( bufferBoundaryB, boundaryA ) )
             {
                 geom->setChanged(true);
-                geom->setMatchingGeom( &*closeIt );//&closeSet[i] );  // FINDS ONLY FIRST MATCHING GEOMETRIES, WHAT ABOUT ELSE????????????
+                geom->setMatchingGeom( closeSet[i] );  // FINDS ONLY FIRST MATCHING GEOMETRIES, WHAT ABOUT ELSE????????????
                 return true;
             }
         }

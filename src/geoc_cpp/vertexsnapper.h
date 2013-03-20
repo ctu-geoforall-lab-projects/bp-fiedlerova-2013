@@ -14,6 +14,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/geom/Envelope.h>
+#include <geos/index/strtree/STRtree.h>
 
 // std includes
 # include <vector>
@@ -28,6 +29,8 @@ using namespace geos;
 using namespace geos::geom;
 using namespace geos::geom::util;
 using namespace geos::operation::distance;
+using namespace geos::index;
+using namespace geos::index::strtree;
 
 /** Class to snap vertices of one layer to the close vertices of the other layer. */
 
@@ -39,6 +42,10 @@ public:
     /** Default constructor.
       */
     VertexSnapper();
+
+    /** Destructor.
+      */
+    ~VertexSnapper();
 
     /** Set reference layer geometries.
       @param ref Vector of geometries in reference layer.
@@ -77,12 +84,22 @@ public:
      */
     void snapVertices( MyGEOSGeom * geom, CoordinateSequence * closeCoord );
 
+    /** Build spatial index.
+      */
+    void buildIndex();
+
+    /** Get list of invalid geometries.
+      */
+    vector<int> getInvalidGeometries() { return invalids; }
+
 private:
 
     TGeomLayer refGeometry;
     TGeomLayer subGeometry;
     TGeomLayer newGeometry;
     double tolDistance;
+    SpatialIndex* index;
+    vector<int> invalids;
 
 };
 

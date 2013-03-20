@@ -40,11 +40,11 @@ public:
 
     /** Sets matching geometry to this.
      */
-    void setMatchingGeom( MyGEOSGeom *m ) { matched = m; }
+    void setMatchingGeom( Geometry *m ) { matched = m; }
 
     /** Returns matching geometry
       */
-    MyGEOSGeom* getMatched() { return matched; }
+    Geometry* getMatched() { return matched; }
 
     /** Returns Geometry of this.
      */
@@ -74,7 +74,7 @@ public:
 private:
 
     Geometry * geosGeom;
-    MyGEOSGeom * matched;
+    Geometry * matched;
     bool changed;
     int featureId;
 

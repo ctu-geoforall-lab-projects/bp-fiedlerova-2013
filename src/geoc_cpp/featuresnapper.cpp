@@ -2,42 +2,77 @@
 
 FeatureSnapper::FeatureSnapper()
 {
+    index = NULL;
 
-}
+} // constructor
+
+FeatureSnapper::~FeatureSnapper()
+{
+    delete index;
+
+} // destructor
+
+
+void FeatureSnapper::buildIndex()
+{
+    // create new index
+    //delete index;
+    index = new STRtree();
+
+    // add envelopes of geometries to index
+    size_t gSize = refGeometry.size();
+    for ( size_t i = 0; i < gSize; i++ )
+    {
+        const Geometry* g = refGeometry[i].getGEOSGeom();
+        const Envelope* env = g->getEnvelopeInternal();
+        index->insert(env, (void*)g );
+    }
+
+} // void FeatureSnapper::buildIndex()
+
 
 void FeatureSnapper::snap()
 {
+    // build spatial index
+    buildIndex();
+
     newGeometry = subGeometry;
 
     // try to snap each feature from subject layer
-    //unsigned int sSize = newGeometry.size();
-    //unsigned int rSize = refGeometry.size();
-    TGeomLayer::iterator newIt;
-    TGeomLayer::iterator refIt;
+    unsigned int sSize = newGeometry.size();
 
-    //for ( unsigned int i = 0; i < sSize; i++ )
-    for (newIt = newGeometry.begin(); newIt != newGeometry.end(); newIt++ )
+    for ( size_t i = 0; i < sSize; i++ )
     {
         TGeomLayer closeFeat;
 
+        // use spatial index
+        vector<void*> results;
+        index->query( newGeometry[i].getGEOSGeom()->getEnvelopeInternal(), results );
+        size_t rSize = results.size();
+
         // find close features from the ref geometry
-        //for ( unsigned int j = 0; j < rSize; j++ )
-        for (refIt = refGeometry.begin(); refIt != refGeometry.end(); refIt++ )
+        for ( size_t j = 0; j < rSize; j++  )
         {
-            // check if features are close
-            if( isClose( *refIt, *newIt ) )// refGeometry[j], newGeometry[i] ) )
+            // get envelope of tested feature
+            Geometry *searchGeom = static_cast<Geometry*>( results[j] );
+            Envelope subEnv = *( newGeometry[i].getGEOSGeom()->getEnvelopeInternal() );
+            subEnv.expandBy( tolDistance ); // expand envelope with tolerance distance
+
+            if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
             {
-                closeFeat.push_back( *refIt ); //refGeometry[j] );
+                // add coordinates from close features
+                closeFeat.push_back( MyGEOSGeom(searchGeom) );
             }
         }
 
         // snap feature to the corresponding feature from ref layer
         if (closeFeat.size() > 0)
         {
-            snapFeatures( &*newIt, &closeFeat ); //&newGeometry[i], &closeFeat );
+            snapFeatures( &newGeometry[i], &closeFeat );
         }
 
     }
+
 
 } // void FeatureSnapper::snap()
 
@@ -51,12 +86,12 @@ bool FeatureSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
     }
 
     return false;
+
 } // bool FeatureSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
 
 
 void FeatureSnapper::snapFeatures( MyGEOSGeom * geom, TGeomLayer *closeFeatures )
 {
-
     // initialize geometry matcher
     MatchingGeometry matcher;
     matcher.setGeometrySet( closeFeatures );
@@ -74,12 +109,12 @@ void FeatureSnapper::snapFeatures( MyGEOSGeom * geom, TGeomLayer *closeFeatures 
 void FeatureSnapper::editGeometry( MyGEOSGeom * geom )
 {
     // change geometry to the geometry of coressponding feature
-    geom->setGEOSGeom( geom->getMatched()->getGEOSGeom() );
+    geom->setGEOSGeom( geom->getMatched() );
     geom->setChanged( true );
 
-    if ( geom->getGEOSGeom()->isValid() )
+    if ( !geom->getGEOSGeom()->isValid() )
     {
-        qDebug("FeatureSnapper::editGeometry: geom is valid ");
+        qDebug("FeatureSnapper::editGeometry: geom is not valid ");
     }
 
 } // void FeatureSnapper::editGeometry( MyGEOSGeom * geom )

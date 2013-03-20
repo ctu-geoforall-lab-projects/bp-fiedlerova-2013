@@ -20,12 +20,13 @@ QgsConflateProvider::QgsConflateProvider()
 
 }
 
-/*QgsConflateProvider::~QgsConflateProvider()
+QgsConflateProvider::~QgsConflateProvider()
 {
-    if(mRefLayer) delete mRefLayer;
+    /*if(mRefLayer) delete mRefLayer;
     if(mSubLayer) delete mSubLayer;
     if(mNewLayer) delete mNewLayer;
-}*/
+*/
+}
 
 bool QgsConflateProvider::createEmptyLayer( QString uri )
 {
@@ -161,7 +162,6 @@ bool QgsConflateProvider::copyLayer( QString uri )
 
 void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
 {
-    qDebug("QgsConflateProvider::transferGeometrytoGeos: ENTERING");
 
     QgsVectorLayer *myLayer;
     TGeomLayer *myGeosLayer;
@@ -212,8 +212,6 @@ bool QgsConflateProvider::transferGeometryFromGeos()
 {
     // AFTER DOING SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
-    qDebug("QgsConflateProvider::transferGeometryFromGeos: ENTERING");
-
     // some tests
     int caps = mNewLayer->dataProvider()->capabilities();
 
@@ -252,7 +250,6 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         {
             // insert new geometry to the map of geometries
             geomMap.insert( fid, *(geom->fromWkt( QString::fromStdString((*it).getWKTGeom()) )) );//(*it).getFeatureId(), geom );
-            qDebug("QgsConflateProvider::transferGeometryFromGeos: new geometry inserted");
         }
 
         it++;
@@ -279,12 +276,10 @@ void QgsConflateProvider::vertexSnap()
     bool isRef = true;
     transferGeometrytoGeos( isRef );
     transferGeometrytoGeos( !isRef );
-    qDebug("QgsConflateProvider::vertexSnap: GEOMETRY TRANSFERED IN VS");
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
     VertexSnapper vs = VertexSnapper();
-    qDebug("QgsConflateProvider::vertexSnap: VERTEX SNAPPER CREATED");
 
     // set geometries of layers to vertex snapper
     vs.setRefGeometry( mGeosRef );
@@ -299,10 +294,9 @@ void QgsConflateProvider::vertexSnap()
 
     // set new geometry
     mGeosNew = vs.getNewGeometry();
-    qDebug("QgsConflateProvider::vertexSnap: SET NEW GEOMETRY DONE");
 
     // transfer geometry back
-    if ( transferGeometryFromGeos() )
+    if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
     {
         qDebug("QgsConflateProvider::vertexSnap: SNAPPING DONE");
     }
@@ -315,12 +309,10 @@ void QgsConflateProvider::featureSnap()
     bool isRef = true;
     transferGeometrytoGeos( isRef );
     transferGeometrytoGeos( !isRef );
-    qDebug("QgsConflateProvider::featureSnap: GEOMETRY TRANSFERED IN VS");
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
     FeatureSnapper fs = FeatureSnapper();
-    qDebug("QgsConflateProvider::featureSnap: FEATURE SNAPPER CREATED");
 
     // set geometries of layers to vertex snapper
     fs.setRefGeometry( mGeosRef );
@@ -335,10 +327,9 @@ void QgsConflateProvider::featureSnap()
 
     // set new geometry
     mGeosNew = fs.getNewGeometry();
-    qDebug("QgsConflateProvider::featureSnap: SET NEW GEOMETRY DONE");
 
     // transfer geometry back
-    if ( transferGeometryFromGeos() )
+    if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
     {
         qDebug("QgsConflateProvider::featuerSnap: SNAPPING DONE");
     }

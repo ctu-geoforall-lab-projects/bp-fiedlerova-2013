@@ -89,10 +89,11 @@ QgsVectorLayer* Dialog::selectedLayer(int index)
 
 void Dialog::on_okButton_clicked()
 {
-
+    // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
     mConflate->setRefVectorLayer( selectedLayer(0) );
     mConflate->setSubVectorLayer( selectedLayer(1) );
+
 
     if( mConflate->copyLayer() )
     {

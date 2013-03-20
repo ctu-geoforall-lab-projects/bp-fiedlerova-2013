@@ -12,7 +12,7 @@ class QgsConflateProvider
 {
 public:
     QgsConflateProvider();
-    //~QgsConflateProvider();
+    ~QgsConflateProvider();
 
     /** Sets reference layer mRefLayer.
       */
@@ -25,6 +25,10 @@ public:
     /** Return new layer - modified subject layer.
       */
     QgsVectorLayer* getNewVectorLayer(){ return mNewLayer; }
+
+    /** Return number of features to be processed
+      */
+    long getFNumber(){ return mGeosSub.size(); }
 
     /** Create empty layer to the given uri.
       * @param uri Uri of new empty layer.
