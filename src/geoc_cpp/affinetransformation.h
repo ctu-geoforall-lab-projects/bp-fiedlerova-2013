@@ -6,7 +6,7 @@
 
 using namespace std;
 
-/** Class providing funstions for affine transformation */
+/** Class providing functions for affine transformation of point from system 1 to system 2. */
 
 class AffineTransformation
 {
@@ -18,16 +18,14 @@ public:
     AffineTransformation();
 
     /** Set identical points - vertices of triangle in the first system.
+      * @param points Identical points from original system.
       */
     void setIdenticPoints1( const CoordinateSequence * points ){ identicPoints1 = points; }
 
     /** Set identical points - vertices of triangle in the second system.
+      * @param points Identical points from new system.
       */
     void setIdenticPoints2( const CoordinateSequence * points ){ identicPoints2 = points; }
-
-    /** Set geometry of layer to be transformed.
-      */
-    void setTransfSet( CoordinateSequence * set){ transfSet = set; }
 
     /** Computes determinant ( 2 x area of identical points triangle ).
       */
@@ -37,34 +35,16 @@ public:
       */
     void computeParameters2D( const double det, double &a1, double &a2, double &b1, double &b2);
 
-    /** Transform only one point with given coordinates.
+    /** Transform point from system 1 to system 2.
+      * @param point Point to be transformed.
       */
-    void transformPoint2D( double *x, double *y);
-
-    /** Computes 2D affine transformation on set of transformed point.
-      */
-    void affineTransf2D();
-
-    /** Edit geometry according to given coordinates.
-      * @param g Geometry to be edited.
-      * @param coord Coordinate sequence with new coordinates for geometry.
-      */
-    void editGeometry( Geometry *g, CoordinateSequence *coord);
-
-    /** Computes elements of 3D affine transformation
-      */
-    //void computeParameters3D( const double det, double &a1, double &a2, double &b1, double &b2, ...);
-
-    /** Computes 3D affine transformation.
-      */
-    //void affineTransf3D(); // Do I need it?
+    void transformPoint2D( Coordinate *point );
 
 
 private:
 
-    const CoordinateSequence *identicPoints1; // type? // for 2D transformation 3 identical points
+    const CoordinateSequence *identicPoints1; // for 2D transformation 3 identical points
     const CoordinateSequence *identicPoints2;
-    CoordinateSequence *transfSet; // set of points to be transformed  // Maybe just a vector of points??????
 
 };
 

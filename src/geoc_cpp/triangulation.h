@@ -6,6 +6,7 @@
 
 // geos includes
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
+#include <geos/geom/GeometryCollection.h>
 
 using namespace geos;
 using namespace triangulate;
@@ -30,7 +31,7 @@ public:
     /** Get triangles.
       * @return GeometryCollection of triangles represented as polygons.
       */
-    std::auto_ptr<GeometryCollection> getTriangles();
+    GeometryCollection* getTriangles();
 
 private:
     CoordinateSequence * vertices;

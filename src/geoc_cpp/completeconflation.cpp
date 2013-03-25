@@ -1,16 +1,49 @@
 #include "completeconflation.h"
 
+#include <iostream>
+
+CompleteConflation::CompleteConflation()
+{
+    tolDistance = 0;
+    matchingPoints = NULL;
+    matchingPointsRef = NULL;
+    ttin = NULL;
+
+} // default constructor
+
+
+CompleteConflation::CompleteConflation( TGeomLayer &ref, TGeomLayer &sub, double tol )
+{
+    refLayer = ref;
+    subLayer = sub;
+    tolDistance = tol;
+    matchingPoints = NULL;
+    matchingPointsRef = NULL;
+    ttin = NULL;
+
+} // constructor
+
+
+CompleteConflation::~CompleteConflation()
+{
+   // delete matchingPoints;
+   // delete matchingPointsRef;
+    //delete ttin;
+
+} // destructor
+
+
 void CompleteConflation::findMatchingFeatures()
 {
     // create new matcher
-    MatchingGeometry matcher(refLayer, tolDistance);
+    MatchingGeometry matcher(&refLayer, tolDistance);
 
     // copy geometries from subject layer to the new one
-    newLayer = *subLayer;
+    newLayer = subLayer;
 
     // set matching feature to each feature from new layer
-    unsigned int size = newLayer.size();
-    for ( unsigned int i = 0; i < size; i++ )
+    size_t size = newLayer.size();
+    for ( size_t i = 0; i < size; i++ )
     {
         matcher.setMatch( &newLayer[i] );
     }
@@ -20,108 +53,202 @@ void CompleteConflation::findMatchingFeatures()
 
 void CompleteConflation::chooseMatchingPoints()
 {
+    matchingPoints = new CoordinateArraySequence();
+    matchingPointsRef = new CoordinateArraySequence();
 
-    //matchingPoints,Ref = resultOfThisFunction;
-
-} // void CompleteConflation::chooseMatchingPoints()
-
-
-void CompleteConflation::createTIN()
-{
-    // initialize tin maker
-    Triangulation tinMaker;
-    tinMaker.setTINVertices( matchingPoints );
-
-    // create tin
-    tin = (tinMaker.getTriangles()).get();
-
-
-    // IS THIS NECCESSARY?????????????
-    // initialize tin maker
-    Triangulation tinMaker2;
-    tinMaker2.setTINVertices( matchingPointsRef );
-
-    // create tin
-    tinRef = (tinMaker2.getTriangles()).get();
-
-} // void CompleteConflation::createTIN()
-
-
-bool CompleteConflation::isInside( const Coordinate *point, const CoordinateSequence *triangle  ) const
-{
-    GeometryFactory f;
-    Geometry *g = f.createLinearRing( triangle->clone() );
-
-    return g->contains( f.createPoint( *point) );
-
-} // bool CompleteConflation::isInside( const Coordinate *point, const Polygon *triangle  ) const
-
-
-CoordinateSequence * CompleteConflation::findPointsToTransform( const CoordinateSequence *triangle )
-{
-    // intialize coord. sequence
-    CoordinateSequence *insidePoints = new CoordinateArraySequence();
-
-    // find all points inside triangle
-    unsigned int size = newLayer.size();
-    for ( unsigned int i = 0; i < size; i++)
+    // find pairs of close points from matching geometries in reference and new layer
+    size_t nSize = newLayer.size();
+    for ( size_t i = 0; i < nSize; i++ )
     {
-        // get points from geometry
-        CoordinateSequence *points = newLayer[i].getGEOSGeom()->getCoordinates();
-        unsigned int pSize = points->size();
-
-        // test whether point is inside triangle
-        for ( unsigned int j = 0; j < pSize; j++ )
+        // closest point only if geometry has a matching one
+        if ( newLayer[i].isMatch() )
         {
-            if( isInside( &(points->getAt(j)), triangle ) )
+            Geometry* g1 = newLayer[i].getGEOSGeom();
+            Geometry* g2 = newLayer[i].getMatched();
+
+            if (!g2->isEmpty() && g2->isValid())
             {
-                insidePoints->add( points->getAt(j) );
+                findClosestPoints( g1, g2 );
             }
         }
     }
 
-    return insidePoints;
-
-} // CoordinateSequence * CompleteConflation::findPointsToTransform( const Polygon *triangle )
+} // void CompleteConflation::chooseMatchingPoints()
 
 
-void CompleteConflation::affineTransform( const CoordinateSequence &identicPoints1, const CoordinateSequence &identicPoints2 )
+void CompleteConflation::findClosestPoints( const Geometry *g1, const Geometry *g2 )
+{
+    CoordinateSequence *c1 = g1->getCoordinates();
+    CoordinateSequence *c2 = g2->getCoordinates();
+
+    // find pairs of closest points
+   /* CoordinateSequence *nearest = DistanceOp::nearestPoints( g1, g2 );
+
+    const Coordinate c1 = nearest->getAt(0);
+    const Coordinate c2 = nearest->getAt(1);
+
+    if ( c1.distance(c2) <= tolDistance )
+    {
+        qDebug("is match");
+        matchingPoints->add( c1, false );
+        matchingPointsRef->add( c2, false );
+    } */
+
+    // find closest pair of points
+    for ( size_t i = 0; i < c1->getSize(); i++)
+    {
+        // minimal distance
+        double minDist = tolDistance;
+        size_t indMin = 0;
+        bool isMin = false;
+
+        for ( size_t j = 0; j < c2->getSize(); j++ )
+        {
+            // compute distance between two tested points
+            double dist = c1->getAt(i).distance( c2->getAt(j) );
+
+            if( dist < minDist )
+            {
+                minDist = dist;
+                indMin = j;
+                isMin = true;
+            }
+
+        }
+
+        // set closest pair of points
+        if ( isMin )
+        {
+            matchingPoints->add( c1->getAt(i), false );
+            matchingPointsRef->add( c2->getAt(indMin), false );
+
+            size_t mP = matchingPoints->size();
+            size_t mPRef = matchingPointsRef->size();
+
+            // not allow more corresponding point to the one
+            if( mP == mPRef+1 )
+            {
+                matchingPoints->deleteAt(mP-1);
+            }
+            else if ( mP == mPRef-1 )
+            {
+                matchingPointsRef->deleteAt(mPRef-1);
+            }
+
+        }
+
+    }
+
+} // void CompleteConflation::findClosestPoints( CoordinateSequence *c1, CoordinateSequence *c2 )
+
+
+void CompleteConflation::createTIN()
 {
 
-    // affine transformation provider
-    AffineTransformation affTransformator;
-    affTransformator.setIdenticPoints1( &identicPoints1 );
-    affTransformator.setIdenticPoints2( &identicPoints2 );
+    ttin = new TTin();
 
-    // find points inside triangle
-    CoordinateSequence *transfSet = findPointsToTransform( &identicPoints2 );
-    affTransformator.setTransfSet( transfSet );
+    // initialize tin maker
+    Triangulation tinMaker1;
+    tinMaker1.setTINVertices( matchingPoints );
 
-    // transform points inside triangle
-    affTransformator.affineTransf2D();
+    // create tin
+    GeometryCollection* tin1 = tinMaker1.getTriangles();
 
-} // void CompleteConflation::affineTransform(const CoordinateSequence &identicPoints1, const CoordinateSequence &identicPoints2)
+    // transfer tins to Ttin
+    size_t tSize = tin1->getNumGeometries(); // tin from matchinPoints
 
+
+    for ( size_t n = 0; n < tSize; n++ )
+    {
+        //Geometry *t1 = tin1->getGeometryN(n)->clone();
+        //Geometry *t2 = tin2->getGeometryN(n)->clone();
+        Polygon *t1 = dynamic_cast<Polygon*>(tin1->getGeometryN(n)->clone());
+
+        CoordinateSequence *c1 = t1->getExteriorRing()->getCoordinates();
+
+        // find corresponding triangle
+        CoordinateSequence * c2 = coresspondingPoints(c1);
+
+        // set triangle
+        Triangle triangle;
+        triangle.setTriangle( c1 );
+        triangle.setCorrespondingTriangle( c2 );
+
+        ttin->push_back( triangle );
+
+    }
+
+} // void CompleteConflation::createTIN()
+
+
+CoordinateSequence * CompleteConflation::coresspondingPoints( const CoordinateSequence * c )
+{
+    CoordinateSequence *c2 = new CoordinateArraySequence();
+
+    size_t mSize = matchingPoints->size();
+    size_t cSize = c->size();
+
+    for ( size_t i = 0; i < mSize; i++ )
+    {
+        for ( size_t j = 0; j < cSize; j++ )
+        {
+            if ( c->getAt(j).equals( matchingPoints->getAt(i) ) )
+            {
+                c2->add( matchingPointsRef->getAt(i) );
+            }
+        }
+    }
+
+    return c2;
+
+} // CoordinateSequence * CompleteConflation::coresspondingPoints( const CoordinateSequence * c )
+
+
+void CompleteConflation::transform()
+{
+    // create and set geometry editor
+    ConflateGeometryEditorOperation myOp;
+    myOp.setTIN( ttin );
+
+    size_t nSize = newLayer.size();
+    for ( size_t i = 0; i < nSize; i++ )
+    {
+        Geometry *geom = newLayer[i].getGEOSGeom();
+        GeometryEditor geomEdit( geom->getFactory() );
+
+        // set geometry to edited one
+        newLayer[i].setGEOSGeom( geomEdit.edit( geom , &myOp ) );
+
+        // check if geometry was changed
+        newLayer[i].setChanged( myOp.isChanged() );
+
+        // check validity
+        if( !newLayer[i].getGEOSGeom()->isValid() )
+        {
+            qDebug("CompleteConflation::transform: Geom is not valid.");
+            invalids.push_back( newLayer[i].getFeatureId() );
+        }
+
+    }
+}
 
 void CompleteConflation::conflate()
 {
+    qDebug("CompleteConflation::conflate: Entering.");
 
     // find matching points
     findMatchingFeatures();
+    qDebug("CompleteConflation::conflate: Matching feature done.");
+
     chooseMatchingPoints();
+    qDebug("CompleteConflation::conflate: Matching done.");
 
     // create TIN
     createTIN();
+    qDebug("CompleteConflation::conflate: TIN done.");
 
-    // transform points in each triangle
-    unsigned int tSize = tin->getNumGeometries(); // tin from matchinPoints
-
-    for ( unsigned int n = 0; n < tSize; n++ )
-    {
-        CoordinateSequence *ipoints2 = tin->getGeometryN(n)->getCoordinates();
-        CoordinateSequence *ipoints1 = tinRef->getGeometryN(n)->getCoordinates();
-
-        affineTransform( *ipoints1, *ipoints2 );
-    }
+    // transform geometry
+    transform();
+    qDebug("CompleteConflation::conflate: Transform done.");
 
 } // void CompleteConflation::conflate()

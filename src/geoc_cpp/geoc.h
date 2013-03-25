@@ -2,6 +2,7 @@
 #define GEOC_H
 
 #include "mygeosgeom.h"
+#include "triangle.h"
 #include "vertexsnapper.h"
 #include "vertexgeometryeditoroperation.h"
 #include "affinetransformation.h"
@@ -9,6 +10,7 @@
 #include "triangulation.h"
 #include "completeconflation.h"
 #include "featuresnapper.h"
+#include "conflategeometryeditoroperation.h"
 
 #include  <QtGui>
 

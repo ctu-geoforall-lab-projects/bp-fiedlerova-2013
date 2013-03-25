@@ -15,7 +15,9 @@ SOURCES += \
     triangulation.cpp \
     completeconflation.cpp \
     featuresnapper.cpp \
-    vertexgeometryoperation.cpp
+    vertexgeometryoperation.cpp \
+    conflategeometryeditoroperation.cpp \
+    triangle.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
@@ -25,7 +27,9 @@ HEADERS += geoc.h\
     triangulation.h \
     completeconflation.h \
     featuresnapper.h \
-    vertexgeometryeditoroperation.h
+    vertexgeometryeditoroperation.h \
+    conflategeometryeditoroperation.h \
+    triangle.h
 
 
 unix:LIBS += -L/usr/local/lib \

@@ -4,6 +4,15 @@
 // local includes
 #include "geoc.h"
 
+// geos includes
+#include <geos/operation/distance/DistanceOp.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
+
+using namespace geos::operation::distance;
+
 /** Class for vector conflation of two layers */
 
 class CompleteConflation
@@ -13,40 +22,53 @@ public:
 
     /** Default constructor
       */
-    CompleteConflation(): refLayer(NULL), subLayer(NULL), tolDistance(0), matchingPoints(NULL), matchingPointsRef(NULL), tin(NULL), tinRef(NULL){}
+    CompleteConflation();
 
     /** Constructor
       */
-    CompleteConflation( TGeomLayer *ref, TGeomLayer *sub, double tol = 0): refLayer(ref), subLayer(sub), tolDistance(tol), matchingPoints(NULL), matchingPointsRef(NULL), tin(NULL), tinRef(NULL){}
+    CompleteConflation( TGeomLayer &ref, TGeomLayer &sub, double tol = 0);
 
-    /** Set reference layer */
-    void setRefLayer( TGeomLayer *ref ){ refLayer = ref; }
+    /** Destructor
+      */
+    ~CompleteConflation();
 
-    /** Set subject layer */
-    void setSubLayer( TGeomLayer *sub ){ subLayer = sub; }
+    /** Set reference layer
+      */
+    void setRefGeometry( TGeomLayer &ref ){ refLayer = ref; }
 
-    /** Set tolerance distance */
+    /** Set subject layer
+      */
+    void setSubGeometry( TGeomLayer &sub ){ subLayer = sub; }
+
+    /** Set tolerance distance
+      */
     void setTolDistance( double tol ){ tolDistance = tol; }
 
-    /** Find matching features in ref and sub layer*/
+    /** Find matching features in ref and sub layer
+      */
     void findMatchingFeatures();
 
-    /** Choose matching points for triangulation */
+    /** Choose matching points for triangulation
+      */
     void chooseMatchingPoints();
 
-    /** Create TIN */
+    /** Find closest points from given CoordinateSequences and add them to the matchingPoints (tin vertices)
+      * @param g1 Geometry of new layer.
+      * @param g2 Geometry of reference layer.
+      */
+    void findClosestPoints( const Geometry *g1, const Geometry *g2 );
+
+    /** Create TIN
+      */
     void createTIN();
 
-    /** Find points to be transformed */
-    CoordinateSequence * findPointsToTransform( const CoordinateSequence *triangle );
+    /** Find corresponding points to tin
+      */
+    CoordinateSequence * coresspondingPoints( const CoordinateSequence * c );
 
-    /** Test whether point is inside triangle */
-    bool isInside( const Coordinate *point, const CoordinateSequence *triangle ) const;
-
-    /** Transform points in geometries - local affine transformation
-      * @param identicPoints1 Points from reference triangle.
-      * @param identicPoints2 Points from subject triangle. */
-    void affineTransform( const CoordinateSequence &identicPoints1, const CoordinateSequence &identicPoints2 );
+    /** Transform new geometry.
+      */
+    void transform();
 
     /** Conflate two layers */
     void conflate();
@@ -54,18 +76,22 @@ public:
     /** Get new layer
       * @return New layer as TGeomLayer
       */
-    TGeomLayer & getNewLayer() { return newLayer; }
+    TGeomLayer & getNewGeometry() { return newLayer; }
+
+    /** Get list of invalid geometries.
+      */
+    vector<int> getInvalidGeometries() { return invalids; }
 
 private:
 
-    TGeomLayer *refLayer;
-    TGeomLayer *subLayer;
+    TGeomLayer refLayer;
+    TGeomLayer subLayer;
     TGeomLayer newLayer;
     double tolDistance;
     CoordinateSequence *matchingPoints;
     CoordinateSequence *matchingPointsRef;
-    GeometryCollection *tin;
-    GeometryCollection *tinRef;
+    TTin *ttin;
+    vector<int> invalids;
 
 };
 

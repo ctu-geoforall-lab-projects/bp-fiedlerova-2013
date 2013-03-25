@@ -17,7 +17,6 @@ MatchingGeometry::~MatchingGeometry()
 void MatchingGeometry::buildIndex()
 {
     // create new index
-    delete index;
     index = new STRtree();
 
     // add envelopes of geometries to index

@@ -24,11 +24,11 @@ public:
 
     /** Default constructor
      */
-    MyGEOSGeom(): geosGeom( NULL ), matched( NULL ), changed( false ), featureId( 0 ) {}
+    MyGEOSGeom(): geosGeom( NULL ), matched( NULL ), changed( false ), hasMatch(false), featureId( 0 ) {}
 
     /** Constructor
      */
-    MyGEOSGeom( Geometry *g, int fid = 0 ): geosGeom( g ), matched( NULL ), changed( false ), featureId( fid ) {}
+    MyGEOSGeom( Geometry *g, int fid = 0 ): geosGeom( g ), matched( NULL ), changed( false ), hasMatch(false), featureId( fid ) {}
 
     /** Sets geometry of this to given Geometry.
      */
@@ -40,7 +40,7 @@ public:
 
     /** Sets matching geometry to this.
      */
-    void setMatchingGeom( Geometry *m ) { matched = m; }
+    void setMatchingGeom( Geometry *m ) { hasMatch = true; matched = m; }
 
     /** Returns matching geometry
       */
@@ -70,12 +70,17 @@ public:
      */
     bool isChanged() { return changed; }
 
+    /** Returns true if geometry has matching geometry
+      */
+    bool isMatch() { return hasMatch; }
+
 
 private:
 
     Geometry * geosGeom;
     Geometry * matched;
     bool changed;
+    bool hasMatch;
     int featureId;
 
 };

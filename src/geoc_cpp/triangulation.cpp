@@ -7,10 +7,10 @@ void Triangulation::setTINVertices( CoordinateSequence *points )
 } // void Triangulation::setTINVertices( CoordinateSequence *points )
 
 
-std::auto_ptr<GeometryCollection> Triangulation::getTriangles()
+GeometryCollection* Triangulation::getTriangles()
 {
     GeometryFactory fact;
     std::auto_ptr<GeometryCollection> gColl = tBuilder.getTriangles( fact );
 
-    return gColl;
+    return gColl.release();
 }
