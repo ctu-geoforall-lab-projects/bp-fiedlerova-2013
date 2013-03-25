@@ -89,12 +89,15 @@ QgsVectorLayer* Dialog::selectedLayer(int index)
 
 void Dialog::on_processButton_clicked()
 {
+    // clear protocol
+    this->mTextEdit->clear();
+
     // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
     mConflate->setRefVectorLayer( selectedLayer(0) );
     mConflate->setSubVectorLayer( selectedLayer(1) );
 
-
+    // copy subject layer and conflate
     if( mConflate->copyLayer() )
     {
         qDebug( "Dialog::onokButtonclicked: Layer was copied." );
@@ -110,7 +113,7 @@ void Dialog::on_processButton_clicked()
         }
         else if ( mrbConflate->isChecked() )
         {
-            //mConflate->conflate();
+            mConflate->conflate();
         }
 
         QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();

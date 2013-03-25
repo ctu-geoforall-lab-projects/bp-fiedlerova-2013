@@ -70,6 +70,9 @@ public:
     /** Snap features */
     void featureSnap();
 
+    /** Conflation */
+    void conflate();
+
     /** Set distance tolerance for snapping.
       */
     void setTolDistance( double dist ){ tolDistance = dist; }

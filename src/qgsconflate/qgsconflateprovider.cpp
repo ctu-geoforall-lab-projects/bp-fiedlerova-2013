@@ -272,6 +272,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
 
 void QgsConflateProvider::vertexSnap()
 {
+
     // transfer ref and sub geometry
     bool isRef = true;
     transferGeometrytoGeos( isRef );
@@ -332,6 +333,10 @@ void QgsConflateProvider::featureSnap()
     // set new geometry
     mGeosNew = fs.getNewGeometry();
 
+    // write protocol
+    vector<int> invalids;
+    writeProtocol( invalids );
+
     // transfer geometry back
     if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
     {
@@ -341,14 +346,53 @@ void QgsConflateProvider::featureSnap()
 } // void QgsConflateProvider::featureSnap()
 
 
+void QgsConflateProvider::conflate()
+{
+
+    // transfer ref and sub geometry
+    bool isRef = true;
+    transferGeometrytoGeos( isRef );
+    transferGeometrytoGeos( !isRef );
+
+    // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
+
+    CompleteConflation cp = CompleteConflation();
+
+    // set geometries of layers to vertex snapper
+    cp.setRefGeometry( mGeosRef );
+    cp.setSubGeometry( mGeosSub );
+
+    // set tolerance distance
+    cp.setTolDistance( tolDistance );
+
+    // snap vertices from subject layer to the reference layer
+    cp.conflate();
+    qDebug("QgsConflateProvider::conflate: CONFLATE DONE");
+
+    // set new geometry
+    mGeosNew = cp.getNewGeometry();
+
+    // get ids of invalid geometries and write them to the protocol
+    vector<int> invalids = cp.getInvalidGeometries();
+    writeProtocol(invalids);
+
+    // transfer geometry back
+    if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
+    {
+        qDebug("QgsConflateProvider::conflate: CONFLATION DONE SUCESSFULY");
+    }
+
+} // void QgsConflateProvider::conflate()
+
+
 void QgsConflateProvider::writeProtocol( const vector<int> &invalids )
 {
     mProtocol.clear();
 
     // some general informations
-    mProtocol = "Conflation protocol\n\nreference layer: "+mRefLayer->name()+"\nsubject layer: "+mSubLayer->name()+
-            "\nnumber of processed feature: "+QString::number(mGeosNew.size())+"\nnumber of invalid features: "+  // note: number of processed feature is not exactly right
-            QString::number(invalids.size())+"\n\nids of invalid features (needs to be repaired manually): ";
+    mProtocol = "Conflation protocol\n\nreference layer:\t\t"+mRefLayer->name()+"\nsubject layer:\t\t"+mSubLayer->name()+
+            "\nnumber of processed features:\t"+QString::number(mGeosNew.size())+"\nnumber of invalid features:\t"+  // note: number of processed feature is not exactly right
+            QString::number(invalids.size())+"\n\nids of invalid features (needs to be repaired manually):";
 
     // add list of invalid features
     for ( size_t i = 0; i < invalids.size(); i++ )
