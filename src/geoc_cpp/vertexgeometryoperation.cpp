@@ -35,5 +35,5 @@ CoordinateSequence* VertexGeometryEditorOperation::edit(const CoordinateSequence
 
     }
 
-    return coord;
+    return &(coord->removeRepeatedPoints());
 }

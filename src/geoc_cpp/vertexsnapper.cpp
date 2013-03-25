@@ -59,6 +59,7 @@ void VertexSnapper::snap()
             Envelope subEnv = *( subGeometry[i].getGEOSGeom()->getEnvelopeInternal() );
             subEnv.expandBy( tolDistance ); // expand envelope with tolerance distance
 
+            // features are close if their envelopes intersects
             if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
             {
                 // add coordinates from close features
