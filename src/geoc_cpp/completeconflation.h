@@ -13,68 +13,69 @@
 
 using namespace geos::operation::distance;
 
-/** Class for vector conflation of two layers */
+/** Class for vector conflation of two layers. */
 
 class CompleteConflation
 {
 
 public:
 
-    /** Default constructor
+    /** Default constructor.
       */
     CompleteConflation();
 
-    /** Constructor
+    /** Constructor.
       */
     CompleteConflation( TGeomLayer &ref, TGeomLayer &sub, double tol = 0);
 
-    /** Destructor
+    /** Destructor.
       */
     ~CompleteConflation();
 
-    /** Set reference layer
+    /** Set reference layer.
       */
     void setRefGeometry( TGeomLayer &ref ){ refLayer = ref; }
 
-    /** Set subject layer
+    /** Set subject layer.
       */
     void setSubGeometry( TGeomLayer &sub ){ subLayer = sub; }
 
-    /** Set tolerance distance
+    /** Set tolerance distance.
       */
     void setTolDistance( double tol ){ tolDistance = tol; }
 
-    /** Find matching features in ref and sub layer
+    /** Find matching features in ref and sub layer.
       */
     void findMatchingFeatures();
 
-    /** Choose matching points for triangulation
+    /** Choose matching points for triangulation.
       */
     void chooseMatchingPoints();
 
-    /** Find closest points from given CoordinateSequences and add them to the matchingPoints (tin vertices)
+    /** Find closest points from given CoordinateSequences and add them to the matchingPoints (tin vertices).
       * @param g1 Geometry of new layer.
       * @param g2 Geometry of reference layer.
       */
     void findClosestPoints( const Geometry *g1, const Geometry *g2 );
 
-    /** Create TIN
+    /** Create TIN from matching points of subject/new layer
       */
     void createTIN();
 
-    /** Find corresponding points to tin
+    /** Find corresponding points to tin ( tin points from refLayer)
+      * @return CoordinateSequence corresponding to ttin with points from reference layer.
       */
-    CoordinateSequence * coresspondingPoints( const CoordinateSequence * c );
+    CoordinateSequence * correspondingPoints( const CoordinateSequence * c );
 
     /** Transform new geometry.
       */
     void transform();
 
-    /** Conflate two layers */
+    /** Conflate two layers. */
     void conflate();
 
-    /** Get new layer
-      * @return New layer as TGeomLayer
+    /** Get new layer.
+      * @return New layer as TGeomLayer.
       */
     TGeomLayer & getNewGeometry() { return newLayer; }
 

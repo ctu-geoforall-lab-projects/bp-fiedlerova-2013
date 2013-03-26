@@ -160,14 +160,12 @@ void CompleteConflation::createTIN()
 
     for ( size_t n = 0; n < tSize; n++ )
     {
-        //Geometry *t1 = tin1->getGeometryN(n)->clone();
-        //Geometry *t2 = tin2->getGeometryN(n)->clone();
         Polygon *t1 = dynamic_cast<Polygon*>(tin1->getGeometryN(n)->clone());
 
         CoordinateSequence *c1 = t1->getExteriorRing()->getCoordinates();
 
         // find corresponding triangle
-        CoordinateSequence * c2 = coresspondingPoints(c1);
+        CoordinateSequence * c2 = correspondingPoints(c1);
 
         // set triangle
         Triangle triangle;
@@ -178,23 +176,26 @@ void CompleteConflation::createTIN()
 
     }
 
+
 } // void CompleteConflation::createTIN()
 
 
-CoordinateSequence * CompleteConflation::coresspondingPoints( const CoordinateSequence * c )
+CoordinateSequence * CompleteConflation::correspondingPoints( const CoordinateSequence * c )
 {
     CoordinateSequence *c2 = new CoordinateArraySequence();
 
     size_t mSize = matchingPoints->size();
     size_t cSize = c->size();
 
-    for ( size_t i = 0; i < mSize; i++ )
+    // find equivalent to each c point and add it to c2
+    for ( size_t i = 0; i < cSize; i++ )
     {
-        for ( size_t j = 0; j < cSize; j++ )
+        for ( size_t j = 0; j < mSize; j++ )
         {
-            if ( c->getAt(j).equals( matchingPoints->getAt(i) ) )
+            if ( c->getAt(i).equals( matchingPoints->getAt(j) ) )
             {
-                c2->add( matchingPointsRef->getAt(i) );
+                c2->add( matchingPointsRef->getAt(j) );
+
             }
         }
     }

@@ -1,5 +1,6 @@
 #include "conflategeometryeditoroperation.h"
 
+#include<iostream>
 
 CoordinateSequence* ConflateGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *g )
 {
@@ -19,7 +20,6 @@ CoordinateSequence* ConflateGeometryEditorOperation::edit(const CoordinateSequen
             at.setIdenticPoints2( idPoints2 );
             at.transformPoint2D( point );
             changed = true;
-
         }
 
         coord->setAt( *point, i );
@@ -44,6 +44,7 @@ bool ConflateGeometryEditorOperation::findIdPoints( Coordinate *point )
         {
             idPoints1 = tin->at(i).getTriangle();
             idPoints2 = tin->at(i).getCorrespondingTriangle();
+
             return true;
         }
 
