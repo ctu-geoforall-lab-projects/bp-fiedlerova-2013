@@ -33,6 +33,5 @@ HEADERS += geoc.h\
 
 
 unix:LIBS += -L/usr/local/lib \
-        -lgeos-3.3.7 \
         -lgeos \
 	-lgeos_c
