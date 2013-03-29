@@ -3,7 +3,7 @@
 
 VertexSnapper::VertexSnapper()
 {
-    index = NULL;
+    sIndex = NULL;
     tolDistance = 0;
 
 } // constructor
@@ -11,7 +11,7 @@ VertexSnapper::VertexSnapper()
 
 VertexSnapper::~VertexSnapper()
 {
-    delete index;
+    if (sIndex) delete sIndex;
 
 } // destructor
 
@@ -20,7 +20,7 @@ void VertexSnapper::buildIndex()
 {
     // create new index
     //delete index;
-    index = new STRtree();
+    sIndex = new STRtree();
 
     // add envelopes of geometries to index
     size_t gSize = refGeometry.size();
@@ -28,7 +28,7 @@ void VertexSnapper::buildIndex()
     {
         const Geometry* g = refGeometry[i].getGEOSGeom();
         const Envelope* env = g->getEnvelopeInternal();
-        index->insert(env, (void*)g );
+        sIndex->insert(env, (void*)g );
     }
 
 } // void VertexSnapper::buildIndex()
@@ -48,7 +48,7 @@ void VertexSnapper::snap()
 
         // use spatial index
         vector<void*> results;
-        index->query( subGeometry[i].getGEOSGeom()->getEnvelopeInternal(), results );
+        sIndex->query( subGeometry[i].getGEOSGeom()->getEnvelopeInternal(), results );
         size_t rSize = results.size();
 
         // get close coordinates

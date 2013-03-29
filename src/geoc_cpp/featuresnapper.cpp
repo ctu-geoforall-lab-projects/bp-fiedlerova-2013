@@ -8,7 +8,7 @@ FeatureSnapper::FeatureSnapper()
 
 FeatureSnapper::~FeatureSnapper()
 {
-    delete index;
+    if (index) delete index;
 
 } // destructor
 

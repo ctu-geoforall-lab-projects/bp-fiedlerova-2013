@@ -26,9 +26,9 @@ CompleteConflation::CompleteConflation( TGeomLayer &ref, TGeomLayer &sub, double
 
 CompleteConflation::~CompleteConflation()
 {
-   delete matchingPoints;
-   delete matchingPointsRef;
-   delete ttin;
+   if (matchingPoints) delete matchingPoints;
+   if (matchingPointsRef) delete matchingPointsRef;
+   if (ttin) delete ttin;
 
 } // destructor
 
@@ -79,13 +79,8 @@ void CompleteConflation::findClosestPoints( const Geometry *g1, const Geometry *
     CoordinateSequence *c2 = g2->getCoordinates();
 
     // sort coordinates -> for controlling repeated points
-    vector<Coordinate> v1, v2;
-    c1->toVector( v1 );
-    c2->toVector( v2 );
-    sort( v1.begin(), v1.end() );
-    sort( v2.begin(), v2.end() );
-    c1->setPoints(v1);
-    c2->setPoints(v2);
+    sortCoordinates(c1);
+    sortCoordinates(c2);
 
     // find closest pairs of points
     for ( size_t i = 0; i < c1->size(); i++)
@@ -112,21 +107,11 @@ void CompleteConflation::findClosestPoints( const Geometry *g1, const Geometry *
         // set closest pair of points
         if ( isMin )
         {
-            matchingPoints->add( c1->getAt(i), false );  // NOTE: if one point match to two points from other layer, the first matching pair is selected, not the closest one
+            matchingPoints->add( c1->getAt(i), false );
             matchingPointsRef->add( c2->getAt(indMin), false );
 
-            size_t mP = matchingPoints->size();
-            size_t mPRef = matchingPointsRef->size();
-
-            // not allow repeated points to the one
-            if( mP == mPRef+1 )
-            {
-                matchingPoints->deleteAt(mP-1);
-            }
-            else if ( mP == mPRef-1 )
-            {
-                matchingPointsRef->deleteAt(mPRef-1);
-            }
+            // check added points and remove repeated if necessary
+            removeRepeatedPoints();
         }
 
     }
@@ -138,15 +123,66 @@ void CompleteConflation::findClosestPoints( const Geometry *g1, const Geometry *
 } // void CompleteConflation::findClosestPoints( const Geometry *g1, const Geometry *g2 )
 
 
-void CompleteConflation::createTIN()
+void CompleteConflation::sortCoordinates( CoordinateSequence * c )
+{
+    // transfer to vector
+    vector<Coordinate> vc;
+    c->toVector( vc );
+
+    // sort
+    sort( vc.begin(), vc.end() );
+
+    // set sorted points to c
+    c->setPoints(vc);
+
+} // void CompleteConflation::sortCoordinates( CoordinateSequence * c )
+
+
+void CompleteConflation::removeRepeatedPoints()
 {
 
-    std::cout << "\n"<< matchingPoints->size() << "\n" << matchingPointsRef->size() << "\n\n";
+    size_t mP = matchingPoints->size();
+    size_t mPRef = matchingPointsRef->size();
+
+    // not allow repeated points to the one
+    if( mP == mPRef+1 )
+    {
+        // delete the farther point from matchingPoints
+        if ( matchingPoints->getAt(mP-1).distance( matchingPointsRef->getAt(mPRef-1)) >
+             matchingPoints->getAt(mP-2).distance( matchingPointsRef->getAt(mPRef-1)))
+        {
+            matchingPoints->deleteAt(mP-1);
+        }
+        else
+        {
+            matchingPoints->deleteAt(mP-2);
+        }
+
+    }
+    else if ( mP == mPRef-1 )
+    {
+        // delete the farther point from matchingPointsRef
+        if ( matchingPointsRef->getAt(mPRef-1).distance( matchingPoints->getAt(mP-1)) >
+             matchingPointsRef->getAt(mPRef-2).distance( matchingPoints->getAt(mP-1)))
+        {
+            matchingPointsRef->deleteAt(mPRef-1);
+        }
+        else
+        {
+            matchingPointsRef->deleteAt(mPRef-2);
+        }
+
+    }
+
+} // void CompleteConflation::removeRepeatedPoints()
+
+
+void CompleteConflation::createTIN()
+{
 
     ttin = new TTin();
 
     GeometryFactory gf;
-    CoordinateArraySequenceFactory cf;
 
     // initialize tin maker
     Triangulation tinMaker1;
@@ -167,7 +203,8 @@ void CompleteConflation::createTIN()
         CoordinateSequence *c1 = extRing->getCoordinates();
 
         // find corresponding triangle
-        CoordinateSequence * c2 = correspondingPoints( c1 );
+        CoordinateSequence *c2 = new CoordinateArraySequence();
+        correspondingPoints( c1, c2 );
 
         // set triangle
         Triangle triangle;
@@ -187,15 +224,15 @@ void CompleteConflation::createTIN()
 } // void CompleteConflation::createTIN()
 
 
-CoordinateSequence * CompleteConflation::correspondingPoints( const CoordinateSequence * c )
+void CompleteConflation::correspondingPoints( const CoordinateSequence * c, CoordinateSequence * c2 )
 {
-    CoordinateSequence *c2 = new CoordinateArraySequence(); // memory error
-
     size_t cSize = c->size();
 
+    // transfer coordinates to vector
     vector<Coordinate> vc;
     matchingPoints->toVector(vc);
 
+    // find corresponding points to tin points in matchingPointsRef
     for ( size_t i = 0; i < cSize; i++ )
     {
         vector<Coordinate>::iterator it = find( vc.begin(), vc.end(), c->getAt(i));
@@ -204,8 +241,6 @@ CoordinateSequence * CompleteConflation::correspondingPoints( const CoordinateSe
             c2->add( matchingPointsRef->getAt( it - vc.begin()) );
         }
     }
-
-    return c2;
 
 } // CoordinateSequence * CompleteConflation::coresspondingPoints( const CoordinateSequence * c )
 

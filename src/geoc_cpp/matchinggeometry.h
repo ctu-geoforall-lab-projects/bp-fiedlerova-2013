@@ -91,7 +91,7 @@ private:
     TGeomLayer* geometrySet;
     vector<Geometry*> closeSet;
     double tolDistance;
-    SpatialIndex *index;
+    SpatialIndex *sIndex;
 
 };
 

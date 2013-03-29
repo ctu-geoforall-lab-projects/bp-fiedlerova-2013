@@ -9,15 +9,9 @@ Triangle::Triangle()
 
 Triangle::~Triangle()
 {
-    /*if ( triangle != NULL )
-    {
-        delete triangle;
-    }
-
-    if ( correspondingT != NULL)
-    {
-        delete correspondingT;
-    }*/
+    /*if (triangle) delete triangle;
+    if (correspondingT) delete correspondingT;
+    if( triangleGeom) delete triangleGeom;*/
 }
 
 

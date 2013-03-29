@@ -2,22 +2,23 @@
 
 MatchingGeometry::MatchingGeometry()
 {
-    index = NULL;
+    sIndex = NULL;
     tolDistance = 1;
     geometrySet = NULL;
 
-}
+} // constructor
 
 MatchingGeometry::~MatchingGeometry()
 {
-    delete index;
-}
+    if(sIndex) delete sIndex;
+
+} //destructor
 
 
 void MatchingGeometry::buildIndex()
 {
     // create new index
-    index = new STRtree();
+    sIndex = new STRtree();
 
     // add envelopes of geometries to index
     size_t gSize = geometrySet->size();
@@ -25,7 +26,7 @@ void MatchingGeometry::buildIndex()
     {
         const Geometry* g = geometrySet->at(i).getGEOSGeom();
         const Envelope* env = g->getEnvelopeInternal();
-        index->insert(env, (void*)g );
+        sIndex->insert(env, (void*)g );
     }
 
 } // void VertexSnapper::buildIndex()
@@ -49,7 +50,7 @@ void  MatchingGeometry::closeGeometries( const Geometry *geom )
 
     // use spatial index
     vector<void*> results;
-    index->query( geom->getEnvelopeInternal(), results );
+    sIndex->query( geom->getEnvelopeInternal(), results );
     size_t rSize = results.size();
 
     // get close geometries

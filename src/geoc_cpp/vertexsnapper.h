@@ -98,7 +98,7 @@ private:
     TGeomLayer subGeometry;
     TGeomLayer newGeometry;
     double tolDistance;
-    SpatialIndex* index;
+    SpatialIndex* sIndex;
     vector<int> invalids;
 
 };

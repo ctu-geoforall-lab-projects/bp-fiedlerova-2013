@@ -17,6 +17,10 @@ public:
       */
     AffineTransformation();
 
+    /** Destructor
+      */
+    ~AffineTransformation();
+
     /** Set identical points - vertices of triangle in the first system.
       * @param points Identical points from original system.
       */

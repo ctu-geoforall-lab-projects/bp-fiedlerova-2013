@@ -4,7 +4,10 @@
 
 ConflateGeometryEditorOperation::~ConflateGeometryEditorOperation()
 {
-    delete sIndex;
+    if (sIndex) delete sIndex;
+    /*if (idPoints1) delete idPoints1;
+    if (idPoints2) delete idPoints2;
+    if (tin) delete tin;*/
 }
 
 CoordinateSequence* ConflateGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *g )
@@ -80,7 +83,7 @@ bool ConflateGeometryEditorOperation::findIdPoints( Coordinate *point )
 void ConflateGeometryEditorOperation::buildIndex()
 {
     // create new index
-    //delete index;
+    //delete sIndex;
     sIndex = new STRtree();
 
     // add envelopes of geometries to index

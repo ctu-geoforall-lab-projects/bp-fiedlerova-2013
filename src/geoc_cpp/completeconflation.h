@@ -61,14 +61,23 @@ public:
       */
     void findClosestPoints( const Geometry *g1, const Geometry *g2 );
 
+    /** Sort given CoordinateSequence
+      */
+    void sortCoordinates( CoordinateSequence * c );
+
+    /** Remove repeated points correctly
+      */
+    void removeRepeatedPoints();
+
     /** Create TIN from matching points of subject/new layer
       */
     void createTIN();
 
     /** Find corresponding points to tin ( tin points from refLayer)
-      * @return CoordinateSequence corresponding to ttin with points from reference layer.
+      * @param c CoordinateSequence with tin triangle points.
+      * @param c2 Searched CoordinateSequence corresponding to ttin with points from reference layer.
       */
-    CoordinateSequence * correspondingPoints( const CoordinateSequence * c );
+    void correspondingPoints( const CoordinateSequence * c, CoordinateSequence *c2 );
 
     /** Transform new geometry.
       */

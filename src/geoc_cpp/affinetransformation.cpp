@@ -9,6 +9,14 @@ AffineTransformation::AffineTransformation()
 } // constructor
 
 
+AffineTransformation::~AffineTransformation()
+{
+    //if (identicPoints1) delete identicPoints1;
+    //if (identicPoints2) delete identicPoints2;
+
+} // destructor
+
+
 double AffineTransformation::determinant()
 {
 
