@@ -11,6 +11,9 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 
+// std includes
+#include <algorithm>
+
 using namespace geos::operation::distance;
 
 /** Class for vector conflation of two layers. */

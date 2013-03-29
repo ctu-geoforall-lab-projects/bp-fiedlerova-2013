@@ -2,6 +2,11 @@
 
 #include<iostream>
 
+ConflateGeometryEditorOperation::~ConflateGeometryEditorOperation()
+{
+    delete sIndex;
+}
+
 CoordinateSequence* ConflateGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *g )
 {
     CoordinateSequence* coord = g->getCoordinates();
@@ -14,7 +19,7 @@ CoordinateSequence* ConflateGeometryEditorOperation::edit(const CoordinateSequen
 
         if ( findIdPoints( point ) )
         {
-            // set identical points and transform point
+
             AffineTransformation at;
             at.setIdenticPoints1( idPoints1 );
             at.setIdenticPoints2( idPoints2 );
@@ -35,21 +40,58 @@ CoordinateSequence* ConflateGeometryEditorOperation::edit(const CoordinateSequen
 
 bool ConflateGeometryEditorOperation::findIdPoints( Coordinate *point )
 {
-    // test all triangles
-    size_t tSize = tin->size();
-    for ( size_t i = 0; i < tSize; i++ )
-    {
-        // check if point is inside triangle
-        if ( tin->at(i).isInside( point ) )
-        {
-            idPoints1 = tin->at(i).getTriangle();
-            idPoints2 = tin->at(i).getCorrespondingTriangle();
+    // use spatial index
+    vector<void*> results;
+    Envelope * searchEnv = new Envelope( *point );
+    sIndex->query( searchEnv, results );
+    size_t rSize = results.size();
 
+    // build point geometry
+    GeometryFactory f;
+    Geometry * p = f.createPoint( *point );
+
+    // test all close triangles
+    for ( size_t i = 0; i < rSize; i++ )
+    {
+        Geometry *searchGeom = static_cast<Geometry*>( results[i] );
+        Geometry *g = f.createGeometry(searchGeom);
+        Triangle * t = static_cast<Triangle *>( searchGeom->getUserData() );
+
+        // check if point is inside triangle
+        if ( p->intersects( g ) )
+        {
+            idPoints1 = t->getTriangle();
+            idPoints2 = t->getCorrespondingTriangle();
+
+            delete searchEnv;
             return true;
         }
 
+        f.destroyGeometry(g);
+
     }
 
+    delete searchEnv;
     return false;
 
 } // bool ConflateGeometryEditorOperation::findIdPoints( Coordinate *point )
+
+
+void ConflateGeometryEditorOperation::buildIndex()
+{
+    // create new index
+    //delete index;
+    sIndex = new STRtree();
+
+    // add envelopes of geometries to index
+    size_t gSize = tin->size();
+    for ( size_t i = 0; i < gSize; i++ )
+    {
+        Geometry* g = tin->at(i).getTriangleGeom();
+        g->setUserData( (void*)(&tin->at(i)) );
+        const Envelope* env = g->getEnvelopeInternal();
+
+        sIndex->insert(env, (void*)g );
+    }
+
+} // void ConflateGeometryEditorOperation::buildIndex()

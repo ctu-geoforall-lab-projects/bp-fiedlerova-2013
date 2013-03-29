@@ -11,6 +11,7 @@ AffineTransformation::AffineTransformation()
 
 double AffineTransformation::determinant()
 {
+
     // get coordinates of identical points
     double xA, yA, xB, yB, xC, yC;
     xA = identicPoints1->getX( 0 );
@@ -70,8 +71,9 @@ void AffineTransformation::computeParameters2D( const double det, double &a1, do
 
 void AffineTransformation::transformPoint2D( Coordinate *point )
 {    
+
     // check number of identic points
-    if (identicPoints1->size() < 3 || identicPoints1->size() != identicPoints2->size() )
+    if ((identicPoints1->size() < 3) || (identicPoints1->size() != identicPoints2->size()) )
     {
         qDebug("AffineTransformation::transformPoint2D: Wrong number of identical points.");
         return;

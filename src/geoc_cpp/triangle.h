@@ -24,6 +24,10 @@ public:
       */
     Triangle();
 
+    /** Destructor
+      */
+    ~Triangle();
+
     /** Set triangle
       */
     void setTriangle( CoordinateSequence *t ){ triangle = t; }
@@ -35,6 +39,14 @@ public:
     /** Get triangle
       */
     CoordinateSequence* getTriangle(){ return triangle; }
+
+    /** Set triangle geometry
+      */
+    void setTriangleGeom( Geometry *g ){ triangleGeom = g; }
+
+    /** Get geometry of triangle
+      */
+    Geometry * getTriangleGeom(){ return triangleGeom; }
 
     /** Get corresponding triangle
       */
@@ -49,6 +61,7 @@ public:
 private:
     CoordinateSequence* triangle;
     CoordinateSequence *correspondingT;
+    Geometry *triangleGeom;
 
 };
 

@@ -2,7 +2,7 @@
 
 MatchingGeometry::MatchingGeometry()
 {
-    index = 0;
+    index = NULL;
     tolDistance = 1;
     geometrySet = NULL;
 
@@ -123,6 +123,8 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
     Geometry *boundaryA = boundary( geom->getGEOSGeom() );
     Geometry *bufferBoundaryA = buffer( boundaryA );
 
+    GeometryFactory f;
+
     // find matching geometry
     for ( unsigned int i = 0; i < csSize; i++ )
     {
@@ -140,11 +142,33 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
             {
                 geom->setChanged(true);
                 geom->setMatchingGeom( closeSet[i] );  // FINDS ONLY FIRST MATCHING GEOMETRIES, WHAT ABOUT ELSE????????????
+
+                // for clear memory
+                f.destroyGeometry(bufferA);
+                f.destroyGeometry(bufferB);
+                f.destroyGeometry(boundaryA);
+                f.destroyGeometry(boundaryB);
+                f.destroyGeometry(bufferBoundaryA);
+                f.destroyGeometry(bufferBoundaryB);
+
                 return true;
             }
+
+            // for clear memory
+            f.destroyGeometry(boundaryB);
+            f.destroyGeometry(bufferBoundaryB);
+
         }
 
+        // for clear memory;
+        f.destroyGeometry(bufferB);
+
     }
+
+    // for clear memory;
+    f.destroyGeometry(bufferA);
+    f.destroyGeometry(boundaryA);
+    f.destroyGeometry(bufferBoundaryA);
 
     return false;
 

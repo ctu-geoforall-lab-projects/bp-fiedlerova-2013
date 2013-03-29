@@ -2,15 +2,37 @@
 
 Triangle::Triangle()
 {
+    triangle = NULL;
+    correspondingT = NULL;
+    triangleGeom = NULL;
+}
+
+Triangle::~Triangle()
+{
+    /*if ( triangle != NULL )
+    {
+        delete triangle;
+    }
+
+    if ( correspondingT != NULL)
+    {
+        delete correspondingT;
+    }*/
 }
 
 
 bool Triangle::isInside( const Coordinate *point ) const
 {
     GeometryFactory f;
-    Geometry *g = f.createLinearRing( triangle );
+      // memory error
+    Geometry *p = f.createPoint( *point);       // memory error
 
-    return g->contains( f.createPoint( *point) );
+    bool inside = triangleGeom->intersects( p );
+
+    //f.destroyGeometry(g);
+    //f.destroyGeometry(p);
+
+    return inside;
 
 } // bool Triangle::isInside( const Coordinate *point ) const
 
