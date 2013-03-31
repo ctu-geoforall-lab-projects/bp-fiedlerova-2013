@@ -29,7 +29,7 @@ public:
 
     /** Constructor.
       */
-    CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol = 0);
+    CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol = 0);//, bool addVer = false );
 
     /** Destructor.
       */
@@ -46,6 +46,10 @@ public:
     /** Set tolerance distance.
       */
     void setTolDistance( double tol ){ tolDistance = tol; }
+
+    /** Indicates if vertices may be added to features.
+      */
+    //void setAddVertices( bool yes ) { addVertices = yes; }
 
     /** Find matching features in ref and sub layer.
       */
@@ -64,6 +68,11 @@ public:
     /** Remove repeated points from matchingPoints and matchingPointsRef.
       */
     void cleanMatchingPoints();
+
+    /** Add corner points to be sure that tin covers all the matching features.
+      * @param vector with all points from matching features
+      */
+    void addCornerPoints( vector<Coordinate>& vc );
 
     /** Delete repeated points based on given vector.
       */
@@ -110,6 +119,7 @@ private:
     TTin *ttin;
     vector<int> invalids;
     TGeomLayer tin;
+    //bool addVertices;
 
 };
 

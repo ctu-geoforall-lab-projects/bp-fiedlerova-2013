@@ -8,11 +8,12 @@ CoverageAlignment::CoverageAlignment()
     matchingPoints = NULL;
     matchingPointsRef = NULL;
     ttin = NULL;
+    //addVertices = false;
 
 } // default constructor
 
 
-CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol )
+CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol)//, bool addVer )
 {
     refLayer = ref;
     subLayer = sub;
@@ -20,6 +21,7 @@ CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double t
     matchingPoints = NULL;
     matchingPointsRef = NULL;
     ttin = NULL;
+    //addVertices = addVer;
 
 } // constructor
 
@@ -56,6 +58,9 @@ void CoverageAlignment::chooseMatchingPoints()
     matchingPoints = new CoordinateArraySequence();
     matchingPointsRef = new CoordinateArraySequence();
 
+    CoordinateSequence *mfPoints = new CoordinateArraySequence();
+    vector<Coordinate> vc;
+
     // find pairs of close points from matching geometries in reference and new layer
     size_t nSize = newLayer.size();
     for ( size_t i = 0; i < nSize; i++ )
@@ -63,15 +68,27 @@ void CoverageAlignment::chooseMatchingPoints()
         // closest point only if geometry has a matching one
         if ( newLayer[i].isMatch() )
         {
+
+            /*if ( addVertices )
+            {
+                addVerticesToGeometry( newLayer[i] );
+            }*/
+
             Geometry* g1 = newLayer[i].getGEOSGeom();
             Geometry* g2 = newLayer[i].getMatched();
 
             findClosestPoints( g1, g2 );
 
+            mfPoints->add( g1->getCoordinates(), false, true );
+
         }
     }
 
     cleanMatchingPoints();
+
+    // add extreme points for tin
+    mfPoints->toVector( vc );
+    addCornerPoints( vc );
 
 } // void CoverageAlignment::chooseMatchingPoints()
 
@@ -140,7 +157,40 @@ void CoverageAlignment::cleanMatchingPoints()
 } //void CoverageAlignment::cleanMatchingPoints()
 
 
-void  CoverageAlignment::deleteRepeated( vector<Coordinate> & vc)
+void CoverageAlignment::addCornerPoints( vector<Coordinate>& vc )
+{
+
+    // find max and min coordinates
+    double maxX = (*max_element( vc.begin(), vc.end(), SortByX() )).x + tolDistance;
+    double maxY = (*max_element( vc.begin(), vc.end(), SortByY() )).y + tolDistance;
+    double minX = (*min_element( vc.begin(), vc.end(), SortByX() )).x + tolDistance;
+    double minY = (*min_element( vc.begin(), vc.end(), SortByY() )).y + tolDistance;
+
+    // corner points
+    Coordinate c1, c2, c3, c4;
+    c1.x = maxX;
+    c1.y = maxY;
+    c2.x = minX;
+    c2.y = maxY;
+    c3.x = minX;
+    c3.y = minY;
+    c4.x = maxX;
+    c4.y = minY;
+
+    // add to matching points
+    matchingPoints->add( c1 );
+    matchingPoints->add( c2 );
+    matchingPoints->add( c3 );
+    matchingPoints->add( c4 );
+    matchingPointsRef->add( c1 );
+    matchingPointsRef->add( c2 );
+    matchingPointsRef->add( c3 );
+    matchingPointsRef->add( c4 );
+
+} // void CoverageAlignment::addCornerPoints()
+
+
+void CoverageAlignment::deleteRepeated( vector<Coordinate> & vc)
 {
     vector<Coordinate>::iterator it = vc.begin();
 
@@ -294,19 +344,29 @@ void CoverageAlignment::align()
 {
     qDebug("CoverageAlignment::align: Entering.");
 
-    // find matching points
-    findMatchingFeatures();
-    qDebug("CoverageAlignment::align: Matching feature done.");
+    for (int i = 0; i < 1; i++ )
+    {
+        tin.clear();
 
-    chooseMatchingPoints();
-    qDebug("CoverageAlignment::align: Matching done.");
+        // find matching points
+        findMatchingFeatures();
+        qDebug("CoverageAlignment::align: Matching feature done.");
 
-    // create TIN
-    createTIN();
-    qDebug("CoverageAlignment::align: TIN done.");
+        chooseMatchingPoints();
+        qDebug("CoverageAlignment::align: Matching done.");
 
-    // transform geometry
-    transform();
-    qDebug("CoverageAlignment::align: Transform done.");
+        // create TIN
+        createTIN();
+        qDebug("CoverageAlignment::align: TIN done.");
+
+        // transform geometry
+        transform();
+        qDebug("CoverageAlignment::align: Transform done.");
+
+        subLayer = newLayer;
+        matchingPoints = NULL;
+        matchingPointsRef = NULL;
+        ttin = NULL;
+    }
 
 } // void CoverageAlignment::align()
