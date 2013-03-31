@@ -70,8 +70,8 @@ public:
     /** Snap features */
     void featureSnap();
 
-    /** Conflation */
-    void conflate();
+    /** Coverage alignment */
+    void align();
 
     /** Set distance tolerance for snapping.
       */
@@ -85,6 +85,10 @@ public:
       */
     void writeProtocol( const vector<int> &invalids );
 
+    /** TIN for conflation
+      */
+    void showTin();
+
 private:
 
     QgsVectorLayer *mRefLayer;
@@ -95,6 +99,8 @@ private:
     TGeomLayer mGeosNew;
     double tolDistance;
     QString mProtocol;
+    TGeomLayer mTin;
+    QgsVectorLayer *mTinLayer;
 };
 
 #endif // QGSCONFLATEPROVIDER_H

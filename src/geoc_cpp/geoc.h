@@ -8,9 +8,9 @@
 #include "affinetransformation.h"
 #include "matchinggeometry.h"
 #include "triangulation.h"
-#include "completeconflation.h"
+#include "coveragealignment.h"
 #include "featuresnapper.h"
-#include "conflategeometryeditoroperation.h"
+#include "aligngeometryeditoroperation.h"
 
 #include  <QtGui>
 

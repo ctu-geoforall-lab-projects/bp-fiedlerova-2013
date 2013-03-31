@@ -1,0 +1,312 @@
+#include "coveragealignment.h"
+
+#include <iostream>
+
+CoverageAlignment::CoverageAlignment()
+{
+    tolDistance = 0;
+    matchingPoints = NULL;
+    matchingPointsRef = NULL;
+    ttin = NULL;
+
+} // default constructor
+
+
+CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol )
+{
+    refLayer = ref;
+    subLayer = sub;
+    tolDistance = tol;
+    matchingPoints = NULL;
+    matchingPointsRef = NULL;
+    ttin = NULL;
+
+} // constructor
+
+
+CoverageAlignment::~CoverageAlignment()
+{
+   if (matchingPoints) delete matchingPoints;
+   if (matchingPointsRef) delete matchingPointsRef;
+   if (ttin) delete ttin;
+
+} // destructor
+
+
+void CoverageAlignment::findMatchingFeatures()
+{
+    // create new matcher
+    MatchingGeometry matcher(&refLayer, tolDistance);
+
+    // copy geometries from subject layer to the new one
+    newLayer = subLayer;
+
+    // set matching feature to each feature from new layer
+    size_t size = newLayer.size();
+    for ( size_t i = 0; i < size; i++ )
+    {
+        matcher.setMatch( &newLayer[i] );
+    }
+
+} // void CoverageAlignment::findMatchingFeatures()
+
+
+void CoverageAlignment::chooseMatchingPoints()
+{
+    matchingPoints = new CoordinateArraySequence();
+    matchingPointsRef = new CoordinateArraySequence();
+
+    // find pairs of close points from matching geometries in reference and new layer
+    size_t nSize = newLayer.size();
+    for ( size_t i = 0; i < nSize; i++ )
+    {
+        // closest point only if geometry has a matching one
+        if ( newLayer[i].isMatch() )
+        {
+            Geometry* g1 = newLayer[i].getGEOSGeom();
+            Geometry* g2 = newLayer[i].getMatched();
+
+            findClosestPoints( g1, g2 );
+
+        }
+    }
+
+    cleanMatchingPoints();
+
+} // void CoverageAlignment::chooseMatchingPoints()
+
+
+void CoverageAlignment::findClosestPoints( const Geometry *g1, const Geometry *g2 )
+{
+    CoordinateSequence *c1 = g1->getCoordinates();
+    CoordinateSequence *c2 = g2->getCoordinates();
+
+    // find closest pairs of points
+    for ( size_t i = 0; i < c1->size(); i++)
+    {
+        // minimal distance
+        double minDist = tolDistance;
+        size_t indMin = 0;
+        bool isMin = false;
+
+        for ( size_t j = 0; j < c2->size(); j++ )
+        {
+            // compute distance between two tested points
+            double dist = c1->getAt(i).distance( c2->getAt(j) );
+
+            if( dist < minDist )
+            {
+                minDist = dist;
+                indMin = j;
+                isMin = true;
+            }
+
+        }
+
+        // set closest pair of points
+        if ( isMin )
+        {
+            matchingPoints->add( c1->getAt(i), true );  // NOTE: repeated points will be removed later
+            matchingPointsRef->add( c2->getAt(indMin), true );
+        }
+
+    }
+
+    delete c1;
+    delete c2;
+
+
+} // void CoverageAlignment::findClosestPoints( const Geometry *g1, const Geometry *g2 )
+
+
+void CoverageAlignment::cleanMatchingPoints()
+{
+
+    // transfer to vector
+    vector<Coordinate> vc1;
+    matchingPoints->toVector( vc1 );
+
+    // delete repeated
+    deleteRepeated( vc1 );
+
+    // transfer to vector
+    vector<Coordinate> vc2;
+    matchingPointsRef->toVector( vc2 );
+
+    // delete repeated
+    deleteRepeated( vc2 );
+
+
+} //void CoverageAlignment::cleanMatchingPoints()
+
+
+void  CoverageAlignment::deleteRepeated( vector<Coordinate> & vc)
+{
+    vector<Coordinate>::iterator it = vc.begin();
+
+    // delete repeated points from matching points
+    for ( ; it != vc.end(); it++ )
+    {
+        vector<Coordinate>::iterator fit = find( it+1, vc.end(),  *it );
+
+        if ( fit != vc.end() )
+        {
+            size_t fi = fit - vc.begin();
+            size_t fj = it - vc.begin();
+
+            // delete the farther pair of points
+            if ( matchingPointsRef->getAt(fi).distance( matchingPoints->getAt(fi)) >
+                 matchingPointsRef->getAt(fj).distance( matchingPoints->getAt(fj)))
+            {
+                matchingPoints->deleteAt(fi);
+                matchingPointsRef->deleteAt(fi);
+                vc.erase(fit);
+            }
+            else
+            {
+                matchingPoints->deleteAt(fj);
+                matchingPointsRef->deleteAt(fj);
+                vc.erase(it);
+            }
+
+            it--;
+
+        }
+
+    }
+
+} // void  CoverageAlignment::deleteRepeated( vector<Coordinate> * vc)
+
+
+void CoverageAlignment::createTIN()
+{
+
+    ttin = new TTin();
+
+    GeometryFactory gf;
+
+    // initialize tin maker
+    Triangulation tinMaker1;
+    tinMaker1.setTINVertices( matchingPoints );
+
+    // create tin
+    GeometryCollection* tin1 = tinMaker1.getTriangles();
+
+    // transfer tins to Ttin
+    size_t tSize = tin1->getNumGeometries(); // tin from matchinPoints
+
+    // set own representation of tin
+    for ( size_t n = 0; n < tSize; n++ )
+    {
+        Polygon *t1 = dynamic_cast<Polygon*>( tin1->getGeometryN(n)->clone() );
+
+        Geometry * pol = t1->clone();
+        CoordinateSequence *c1 = t1->getExteriorRing()->getCoordinates();
+
+        // find corresponding triangle
+        CoordinateSequence *c2 = new CoordinateArraySequence();
+        correspondingPoints( c1, c2 );
+
+        // set triangle
+        Triangle triangle;
+        triangle.setTriangleGeom( pol );
+        triangle.setTriangle( c1 );
+        triangle.setCorrespondingTriangle( c2 );
+
+        ttin->push_back( triangle );
+
+        gf.destroyGeometry(t1);
+
+    }
+
+    // just test
+    for (size_t k = 0; k < tSize; k++)
+    {
+        MyGEOSGeom gt;
+        gt.setGEOSGeom(tin1->getGeometryN(k)->clone());
+        tin.push_back( gt );
+    }
+
+    // for clear memory
+    gf.destroyGeometry(tin1);
+
+} // void CoverageAlignment::createTIN()
+
+
+void CoverageAlignment::correspondingPoints( const CoordinateSequence * c, CoordinateSequence * c2 )
+{
+    size_t cSize = c->size();
+
+    // transfer coordinates to vector
+    vector<Coordinate> vc;
+    matchingPoints->toVector(vc);
+
+    // find corresponding points to tin points in matchingPointsRef
+    for ( size_t i = 0; i < cSize; i++ )
+    {
+        vector<Coordinate>::iterator it = find( vc.begin(), vc.end(), c->getAt(i));
+        if ( it != vc.end() )
+        {
+            c2->add( matchingPointsRef->getAt( it - vc.begin()) );
+        }
+    }
+
+} // CoordinateSequence * CoverageAlignment::coresspondingPoints( const CoordinateSequence * c )
+
+
+void CoverageAlignment::transform()
+{
+
+    if ( ttin->size() == 0 )
+    {
+        qDebug("CoverageAlignment::transform: tin has no triangles");
+        return;
+    }
+
+    // create and set geometry editor
+    AlignGeometryEditorOperation myOp;
+    myOp.setTIN( ttin );
+
+    size_t nSize = newLayer.size();
+    for ( size_t i = 0; i < nSize; i++ )
+    {
+        Geometry *geom = newLayer[i].getGEOSGeom();
+        GeometryEditor geomEdit( geom->getFactory() );
+
+        // set geometry to edited one
+        newLayer[i].setGEOSGeom( geomEdit.edit( geom , &myOp ) );
+
+        // check if geometry was changed
+        newLayer[i].setChanged( myOp.isChanged() );
+
+        // check validity
+        if( !newLayer[i].getGEOSGeom()->isValid() )
+        {
+            qDebug("CoverageAlignment::transform: Geom is not valid.");
+            invalids.push_back( newLayer[i].getFeatureId() );
+        }
+
+    }
+} // void CoverageAlignment::transform()
+
+
+void CoverageAlignment::align()
+{
+    qDebug("CoverageAlignment::align: Entering.");
+
+    // find matching points
+    findMatchingFeatures();
+    qDebug("CoverageAlignment::align: Matching feature done.");
+
+    chooseMatchingPoints();
+    qDebug("CoverageAlignment::align: Matching done.");
+
+    // create TIN
+    createTIN();
+    qDebug("CoverageAlignment::align: TIN done.");
+
+    // transform geometry
+    transform();
+    qDebug("CoverageAlignment::align: Transform done.");
+
+} // void CoverageAlignment::align()

@@ -91,12 +91,14 @@ void Dialog::on_processButton_clicked()
 {
     // clear protocol
     this->mTextEdit->clear();
+    this->mlabelStatus->setText("Conflating, please, wait.");
 
     // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
     mConflate->setRefVectorLayer( selectedLayer(0) );
     mConflate->setSubVectorLayer( selectedLayer(1) );
 
+    this->mlabelStatus->setText("Copying subject layer.");
     // copy subject layer and conflate
     if( mConflate->copyLayer() )
     {
@@ -113,7 +115,7 @@ void Dialog::on_processButton_clicked()
         }
         else if ( mrbConflate->isChecked() )
         {
-            mConflate->conflate();
+            mConflate->align();
         }
 
         QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();
@@ -138,6 +140,8 @@ void Dialog::on_processButton_clicked()
         qDebug( "Dialog::on_okButton_clicked: Unable to copy subject layer for conflation." );
         QMessageBox::information(0,"Information","Unable to copy subject layer for conflation.", QMessageBox::Ok);
     }
+
+    this->mlabelStatus->setText("Conflation done.");
 
 } // void Dialog::on_okButton_clicked()
 

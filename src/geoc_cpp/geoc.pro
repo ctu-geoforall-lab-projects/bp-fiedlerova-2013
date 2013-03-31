@@ -13,11 +13,11 @@ SOURCES += \
     matchinggeometry.cpp \
     affinetransformation.cpp \
     triangulation.cpp \
-    completeconflation.cpp \
     featuresnapper.cpp \
     vertexgeometryoperation.cpp \
-    conflategeometryeditoroperation.cpp \
-    triangle.cpp
+    triangle.cpp \
+    coveragealignment.cpp \
+    aligngeometryeditoroperation.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
@@ -25,11 +25,11 @@ HEADERS += geoc.h\
     matchinggeometry.h \
     affinetransformation.h \
     triangulation.h \
-    completeconflation.h \
     featuresnapper.h \
     vertexgeometryeditoroperation.h \
-    conflategeometryeditoroperation.h \
-    triangle.h
+    triangle.h \
+    coveragealignment.h \
+    aligngeometryeditoroperation.h
 
 
 unix:LIBS += -L/usr/local/lib \

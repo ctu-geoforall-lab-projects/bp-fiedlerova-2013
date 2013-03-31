@@ -117,6 +117,8 @@ void AffineTransformation::transformPoint2D( Coordinate *point )
     double xx = xAA + a1*(point->x - xA) - b1*(point->y - yA);
     double yy = yAA + b2*(point->x - xA) + a2*(point->y - yA);
 
+    //std::cout << "from " << point->x+770000 << " " << point->y+1050000 << " to " << xx+770000 << " " << yy+1050000 << "\n";
+
     // set transformed coordinates
     point->x = xx;
     point->y = yy;

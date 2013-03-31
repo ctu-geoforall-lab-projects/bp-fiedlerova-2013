@@ -15,6 +15,7 @@ QgsConflateProvider::QgsConflateProvider()
     mRefLayer = NULL;
     mSubLayer = NULL;
     mNewLayer = NULL;
+    mTinLayer = NULL;
 
     tolDistance = 0;
 
@@ -160,6 +161,7 @@ bool QgsConflateProvider::copyLayer( QString uri )
 
 } // bool QgsConflateProvider::copyLayer()
 
+
 void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
 {
 
@@ -233,7 +235,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     while ( featureIt.nextFeature( myFeature ) )
     {
         // get new geometry for the feature from geos geometry
-        QgsGeometry *geom = new QgsGeometry();
+        QgsGeometry *geom = NULL;
         int fid = myFeature.id();
         //GEOSGeometry * newGeom = GEOSGeom_clone( (*it).getGEOSGeom() );
         //geom->fromGeos( newGeom );
@@ -346,7 +348,7 @@ void QgsConflateProvider::featureSnap()
 } // void QgsConflateProvider::featureSnap()
 
 
-void QgsConflateProvider::conflate()
+void QgsConflateProvider::align()
 {
 
     // transfer ref and sub geometry
@@ -356,24 +358,28 @@ void QgsConflateProvider::conflate()
 
     // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
-    CompleteConflation cp = CompleteConflation();
+    CoverageAlignment ca = CoverageAlignment();
 
     // set geometries of layers to vertex snapper
-    cp.setRefGeometry( mGeosRef );
-    cp.setSubGeometry( mGeosSub );
+    ca.setRefGeometry( mGeosRef );
+    ca.setSubGeometry( mGeosSub );
 
     // set tolerance distance
-    cp.setTolDistance( tolDistance );
+    ca.setTolDistance( tolDistance );
 
     // snap vertices from subject layer to the reference layer
-    cp.conflate();
+    ca.align();
     qDebug("QgsConflateProvider::conflate: CONFLATE DONE");
 
     // set new geometry
-    mGeosNew = cp.getNewGeometry();
+    mGeosNew = ca.getNewGeometry();
+
+    // just test
+    mTin = ca.getTIN();
+    showTin();
 
     // get ids of invalid geometries and write them to the protocol
-    vector<int> invalids = cp.getInvalidGeometries();
+    vector<int> invalids = ca.getInvalidGeometries();
     writeProtocol(invalids);
 
     // transfer geometry back
@@ -403,9 +409,42 @@ void QgsConflateProvider::writeProtocol( const vector<int> &invalids )
     if ( invalids.size() > 10 )
     {
         mProtocol.append("\n\nNOTE: The high number of invalid features can be caused by too large tolerance distance or by combining "
-                         "two layers with very different precision. Please try conflation again with different settings.");
+                         "two layers with very different precision. Please try conflation again with different settings or check if data"
+                         "are topologically correct.");
     }
 
     mProtocol.append("\n\nend of protocol");
 
 } // void QgsConflateProvider::writeProtocol( const vector<int> &invalids ) const
+
+
+// just for test
+void QgsConflateProvider::showTin()
+{
+    int rank = 0;
+    QString uri = newUri( QgsProject::instance()->readPath( mSubLayer->name() ), rank ); //QgsProject::instance()->homePath(), rank);//mSubLayer->source()+"_copy.shp";
+
+    createEmptyLayer( uri );
+
+    //new layer
+    mTinLayer = new QgsVectorLayer(uri, "tin", mSubLayer->providerType(), "ogr");
+
+    // copy features from tin  to the tin layer
+    QList<QgsFeature> features;
+
+    for (size_t i = 0; i < mTin.size(); i++)
+    {
+        QgsFeature myFeature;
+        QgsGeometry *g = NULL;
+        myFeature.setGeometry( *(g->fromWkt( QString::fromStdString(mTin.at(i).getWKTGeom()) )) );
+
+        // add feature to the list
+
+        features.push_back( myFeature );
+    }
+
+
+    mTinLayer->dataProvider()->addFeatures(features);
+
+
+} // void QgsConflateProvider::showTin()
