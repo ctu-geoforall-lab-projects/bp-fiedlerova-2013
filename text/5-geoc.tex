@@ -45,7 +45,7 @@ může dojít k~přichycení dvou bodů k~jednomu bodu z~referenční vrstvy. Zd
   \begin{figure}[hbt]
     \centering
       \includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
-      \caption{Vznik nevalidní geometrie při přichycení vrcholů }
+      \caption{Vznik nevalidní geometrie při přichycení vrcholů (\todo{zdroj})}
       \label{fig:vs-nevalidni}
   \end{figure} 
 
@@ -79,7 +79,7 @@ Nejčastější používaný postup při~spojování vektorových map je násled
 	použitý v~knihovně \textit{GEOC} je popsán níže.
  \item Poté, co se určí odpovídající si prvky, musí se určit totožné vrcholy těchto dvojic prvků. Ty z~vrcholů, které jsou určeny s~dostatečnou přesností (ta může být určena
 	například danou vzdálenostní tolerancí), jsou označeny jako body budoucí triangulační sítě.
- \item Jak už bylo naznačeno, z~nalezených bodů se vytvoří pomocí Delaunayho triangulace trojúhelníková síť.
+ \item Jak už bylo naznačeno, z~nalezených bodů se vytvoří pomocí Delaunayho triangulace trojúhelníková síť. %ML: doplnit poznamku pod carou - kratka charakteristka DT
  \item Následně se provede lokální, nejčastěji afinní transformace v~každém trojúhelníku sítě. Tak se přetransformují body cílové vrstvy do~systému vrstvy referenční.
  \item Celý postup je možné iterativně opakovat, dokud nedosáhneme požadovaného výsledku (ten může být dán např. podmínkou minimálního množství nalezených 
 	odpovídajících si vrcholů).
@@ -96,6 +96,7 @@ zón jednotlivých prvků následujícím způsobem.
  \item Dále se testuje, zda hranice prvku B leží v~obalové zóně hranice prvku A a~naopak. Je-li splněna i~tato podmínka, pak jsou prvky označeny za~odpovídající si.
 \end{enumerate}
 
+%% ML: doplnit ilustraci
 
 \subsection{Využití}
 \label{ca-vyuziti}

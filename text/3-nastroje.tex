@@ -16,7 +16,7 @@ produktů.
 \subsection{ESRI ArcGIS}
 \label{arcgis}
 
-V~softwaru ArcGIS 10 existuje několik nástrojů, které lze využít pro~spojování geografických dat, přenos atributů a~odstraňování geometrických rozdílů mezi~datasety. 
+V~softwaru ArcGIS 10 existuje několik nástrojů, které lze využít pro~spojování geo\-grafických dat, přenos atributů a~odstraňování geometrických rozdílů mezi~datasety. 
 
 \subsubsection{Spatial Adjustment}
 
@@ -38,7 +38,7 @@ ostatních neoznačených bodů je pak vypočtena interpolací v~této síti.
 
 Poslední z~nástrojů pro~'conflation' je \textit{Attribute Transfer}. Pomocí něho je možné převést atributy mezi odpovídajícími si prvky, ale také upravit jejich geometrii.
 Po~volbě jednoho či více atributů, které se mají převádět mezi~zdrojovou a~cílovou vrstvou lze interaktivně vybírat odpovídající si dvojice prvků v obou vrstvách. Mezi~těmito
-prvky se převedou atributy a~pokud je zaškrtnuta volba \textit{Transfer Geometry} neboli "převést geometrii", změní se geometrie cílového prvku dle~zdrojového. Převod lze
+prvky se převedou atributy a~pokud je zaškrtnuta volba \textit{Transfer Geometry} neboli \uv{převést geometrii}, změní se geometrie cílového prvku dle~zdrojového. Převod lze
 provést také najednou pro~více vybraných prvků.
 
 
@@ -74,25 +74,25 @@ reprezentací sjednotit. GeoMedia Fusion umožňuje úpravu bodových, liniovýc
 \label{mapmerger}
 
 MapMerger je GIS nástroj firmy ESEA zaměřený na~slučování geometrie a~atributů vektorových map ('conflation') a~kontrolu kvality. Umožňuje převod atributů 
-mezi~dvěma překrývajícími se mapami, navázání hranic dvou sousedících map, přidání prvků z~jedné mapy do~druhé, synchronizaci mapy s~její aktualizovanou verzí, 
+mezi dvěma překrývajícími se mapami, navázání hranic dvou sousedících map, přidání prvků z~jedné mapy do~druhé, synchronizaci mapy s~její aktualizovanou verzí, 
 identifikaci geometrických a~atributových rozdílů mezi~dvěma verzemi té samé mapy. 
 
 \section{Open Source nástroje}
 \label{open-source}
 
-V~nekomerční sféře zatím neexistuje mnoho nástrojů, které by komplexně řešili problém spojování vektorových map ('conflation'). Většinou jde pouze o~malé prográmky či
-zásuvné moduly k~větším softwarům, pomocí nichž se dá provést manuální či poloautomatické sloučení vektorových datasetů, případně jejich atributů. Ovšem většinou je
+Ve~této sféře zatím neexistuje mnoho nástrojů, které by komplexně řešili problém spojování vektorových map ('conflation'). Většinou jde pouze o~malé programy či
+zásuvné moduly k~větším projektům, pomocí nichž se dá provést manuální či poloautomatické sloučení vektorových datasetů, případně jejich atributů. Ovšem většinou je
 cesta k~dosažení cíle pomocí těchto nástrojů poměrně složitá a~ne vždy jsou výsledky takové, jak bychom si představovali. Asi jediným ucelenějším nástrojem je knihovna
 \textit{JCS} implementovaná jako kolekce zásuvných modulů v~programu OpenJUMP.
 
 \subsection{JCS - Java Conflation Suite}
 \label{JCS}
 
-\textit{JCS} je \textit{open source} knihovna napsaná v~jazyce java, která zahrnuje API a~soubor interaktivních nástrojů, které slouží ke~slučování ('conflation') 
+\textit{JCS} je \textit{open source} knihovna napsaná v~jazyce Java, která zahrnuje API a~soubor interaktivních nástrojů, které slouží ke~slučování ('conflation') 
 prostorových datasetů. Byla vyvinuta společností Vivid Solutions, Inc. Obsahuje funkce umožňující provádění různých procesů spojených se~slučováním vektorových map 
 ('map conflation'), které jsou zaměřeny především na~polygonové případně liniové datasety, co se týče bodových vrstev, je její funkcionalita poměrně omezená. 
 Knihovna \textit{JCS} je závislá na~knihovně \textit{JTS - Java Topology Suite}, která poskytuje základní geometrické funkce pro~práci s~prostorovými
- daty. Obě knihovny jsou navrženy v~souladu s~OGC \footnote{OGC - Open Geospatial Consorcium} specifikací \textit{Simple Features} \footnote{specifikace týkající se 2D 
+ daty. Obě knihovny jsou navrženy v~souladu s~OGC \footnote{OGC - Open Geospatial Consorcium} specifikací \textit{Simple Features} \footnote{Specifikace týkající se 2D 
 prostorových predikátů a~funkcí}. \textit{JCS} vznikla v~rámci projektu JUMP Unified Mapping Platform. Je poskytována pod~licencí LGPL \footnote{GNU Lesser General Public 
 License}.
 
@@ -101,7 +101,7 @@ License}.
   \begin{figure}[hbt]
     \centering
       \includegraphics[width=250pt]{./pictures/JCS_Architecture.png}
-      \caption{Architektura JCS}
+      \caption{Architektura JCS (\todo{uvést zdroj})}
       \label{fig:architektura}
   \end{figure}
 
@@ -116,8 +116,9 @@ OpenJUMP je \textit{open source} projekt, který vyvinula firma Vivid Solutions,
 s~prostorovými daty v~rastrové či vektorové podobě a~jejich atributy.
 
 \subsubsection{JTS - Java Topology Suite}
+\label{kap:jts}
 
-Knihovna \textit{JTS} je jedním ze~základních prvků projektu OpenJUMP. Je napsána v~jazyce java a~poskytována pod~licencí LGPL. Obsahuje třídy pro~reprezentaci geometrických
+Knihovna \textit{JTS} je jedním ze~základních prvků projektu OpenJUMP. Je napsána v~jazyce Java a~poskytována pod~licencí LGPL. Obsahuje třídy pro~reprezentaci geometrických
 objektů a~základní funkce pro~práci s~prostorovými daty dle~specifikace \textit{Simple Features} pro~SQL od~OGC. Kromě tříd reprezentujících geometrické prvky dle~zmíněné
 specifikace zahrnuje další podpůrné třídy pro~reprezentaci seznamu souřadnic, aplikaci geometrického filtru (např. při~transformaci), uchovávání informace o~maximální 
 a~minimální souřadnici objektu a jiné. Dále jsou součástí této knihovny třídy umožňující geometrické výpočty jako je vzájemná polohu bodu a linie, výpočet průsečíku, 
@@ -125,11 +126,11 @@ prostorové analýzy, test polohy bodu a~uzavřené oblasti atd.
 
 \subsubsection{Funkcionalita JCS} %% JINÝ NÁZEV?
 
-Projekt \textit{JCS} neobsahuje neumožňuje změnu souřadnicového systému apod. funkcionalitu. Proto je automaticky přepokládáno, že vrstvy vstupující do~zpracování mají stejný
-geodetický referenční systém. Souřadnice bodů výstupních vrstev mají vždy desetinnou přesnost.  %% JE TO SPRÁVNĚ ??
+Projekt \textit{JCS} neumožňuje změnu souřadnicového systému. Proto je automaticky přepokládáno, že vrstvy vstupující do~zpracování mají stejný
+prostorový referenční systém. Souřadnice bodů výstupních vrstev mají vždy desetinnou přesnost.  %% JE TO SPRÁVNĚ ??
 
-Při většině výpočtů v~zásuvných modulech \textit{JCS} je využívána Hausdorffova metrika. Na~rozdíl od~euklidovské metriky totiž nezkoumá pouze, jak blízko se prvky nacházejí
-(tedy nejkratší vzdálenost), ale i jaká je největší vzdálenost mezi~prvky a~tedy zohledňuje i~jejich topologické vztahy. 
+Při většině výpočtů v~zásuvných modulech \textit{JCS} je využívána tzv. Hausdorffova metrika. Na~rozdíl od~euklidovské metriky totiž nezkoumá pouze, jak blízko se prvky nacházejí
+(tedy nejkratší vzdálenost), ale i jaká je největší vzdálenost mezi~prvky a~tedy zohledňuje i~jejich topologické vztahy.  %% ML: Kostrbate...
 
 Na~výpočet je Hausdorffova vzdálenost poměrně složitá. Proto se v~algoritmech použitých v~\textit{JCS} používá spíše vrcholová Hausdorffova vzdálenost (\textit{Vertex Hausdorff
  Distance}), která není vztažena ke~geometrickému prvku, ale pouze k~jeho vrcholům. Tato varianta Hausdorffovy vzdálenosti ve~většině případů vrací stejně dobré výsledky. 
@@ -143,6 +144,8 @@ zda se rovná jejich obsah. Porovnání obsahu se zakládá na~porovnávání je
 proto je možné určit i prvky, které splňují podmínku danou tolerancí. Zde se provádí porovnání Hausdorffovy vzdálenosti mezi~prvky s~touto tolerancí, nepočítá se přitom přímo
 tato vzdálenost. Rozhodující je, jestliže obalová zóna o~velikosti vzdálenostní tolerance prvního prvku obsahuje prvek druhý a~naopak. Tato podmínka je ekvivalentní k~podmínce,
 že Hausdorffova vzdálenost musí být menší nebo rovna toleranci. 
+
+%% ML: doplnit ilustraci?
 
 Pro~odstraňování překrytů či mezer neexistuje exaktní algoritmus, ale jsou využívány různé heuristiky poskytující dobré topologické výsledky.
 
@@ -160,12 +163,12 @@ Následující výčet podává přehled nejčastějších úloh, které je mož
 	je upravit méně přesnou vrstvu tak, aby odpovídala vrstvě referenční popřípadě její části, pokud se vrstvy úplně nepřekrývají. Proces spočívá v~posunutí vrcholů
 	polygonů upravované vrstvy do~blízkých vrcholů vrstvy referenční.
 
- \item Poměrně specifickou, ale velmi častou úlohou je \textit{Road Network Matching} neboli "spojování silničních sítí". Na~vstupu máme dvě vektorové mapy té samé silniční
+ \item Poměrně specifickou, ale velmi častou úlohou je \textit{Road Network Matching} neboli \uv{spojování silničních sítí}. Na~vstupu máme dvě vektorové mapy té samé silniční
 	sítě. Při~této úloze hledáme podobnost mezi~liniovými prvky obou datasetů, které označíme za~odpovídající si. Poté je vytvořena nová vrstva silniční sítě, která
 	obsahuje odpovídající si prvky, přičemž při~mírných odlišnostech použije liniové prvky z~přesnější mapy. \textit{JCS} bohužel zatím neumožňuje automatické provedení
 	této úlohy. Pouze nalezne odpovídající si prvky a~další kroky už je nutné provést manuálně.
 
-\item Úloha \textit{Geometry Difference Detection}, v češtině "detekce geometrických rozdílů", na~rozdíl od~předchozích nijak neupravuje vstupní vrstvy ani z~nich netvoří jiné.
+\item Úloha \textit{Geometry Difference Detection}, v češtině \uv{detekce geometrických rozdílů}, na~rozdíl od~předchozích nijak neupravuje vstupní vrstvy ani z~nich netvoří jiné.
 	Cílem je pouze nalézt rozdíly mezi vstupními datasety. Nejčastěji je používána pro~rozpoznání změn mezi~dvěma verzemi jedné vektorové mapy (např. po aktualizaci).
 \end{itemize}
 
@@ -219,18 +222,18 @@ Poslední skupina zásuvných modulů je nazvána \textit{Roads}. Zabývá se sp
 %\subsection{RoadMatcher Plugin}
 %Zásuvný modul pro OpenJUMP ..
 
-\subsection{Open Street Map}
+\subsection{OpenStreetMap}
 \label{OSM}
 
 OpenStreetMap je projekt sloužící k~tvorbě a~vizualizaci geografických dat. Jedná se o~\textit{open source} projekt, což znamená, že ho může kdokoli využívat a~přispívat do něj.
-V~OpenStreetMap existuje mnoho nástrojů pro~editaci prostorových dat a~některé z~nich umožňují i manuální nebo poloautomatické spojování datasetů z různých zdrojů ('conflation').
-Bohužel tu však neexistuje žádný komplexnější nástroj jako je výše popsaný \textit{JCS}. Navíc většina těchto nástrojů je vytvořena pro~nějaký konkrétní účel jako např. 
+V~OpenStreetMap existuje mnoho nástrojů pro~editaci prostorových dat a~některé z~nich umožňují i manuální nebo poloautomatické spojování datasetů z~různých zdrojů ('conflation').
+Bohužel ani tu však neexistuje žádný komplexnější nástroj jako je výše popsaný \textit{JCS}. Navíc většina těchto nástrojů je vytvořena pro~nějaký konkrétní účel jako např. 
 pro~spojování silničních sítí v~USA a~ne vždy je proto jejich použití zcela obecné. Uživatel si tedy mnohdy musí poradit sám a~použít několik různých nástrojů, aby dosáhl
 požadovaného výsledku. Dále uvádím nástroje, které lze pro~některé činnosti související s~'conflation' použít. 
 
 \subsubsection{JOSM conflation plugin}
 
-\textit{Java OpenStreetMap Editor JOSM} je desktopová aplikace umožnující editaci dat projektu OpenStreetMap. Jedním ze~zásuvných modulů pro~tuto aplikaci je \textit{conflation},
+\textit{Java OpenStreetMap Editor} (JOSM) je desktopová aplikace umožnující editaci dat projektu OpenStreetMap. Jedním ze~zásuvných modulů pro~tuto aplikaci je \textit{conflation},
 který umožňuje spojování vektorových dat. Tento nástroj však je stále označen jako experimentální, což znamená, že ne vždy funguje zcela správně. Nástroj umožňuje zarovnat
 prvky jedné vrstvy tak, aby souhlasily s~prvky druhé vrstvy, která je označena za~referenční. 
 
@@ -238,7 +241,7 @@ prvky jedné vrstvy tak, aby souhlasily s~prvky druhé vrstvy, která je označe
   \begin{figure}[hbt]
     \centering
       \includegraphics[width=350pt]{./pictures/josm.png}
-      \caption{JOSM conflation}
+      \caption{JOSM conflation (\todo{zdroj})}
       \label{fig:josm}
   \end{figure} 
 
@@ -250,8 +253,8 @@ je provedena automatická úprava prvků.
 
 \subsubsection{Potlatch 2 merging tool}
 
-\textit{Potlatch 2 merging tool} je nástroj původně navržený pro~spojování vektorových dat cyklistických tras v rámci England Cycling Data Project\footnote{projekt pod záštitou
-britského ministerstva dopravy, který si klade za~cíl umožnit dostupnost informací o~síti cyklostezek  ve~Velké Británii prostřednictvím OpenStreetMap}. %% tou záštitou si nejsem jistá
+\textit{Potlatch 2 merging tool} je nástroj původně navržený pro~spojování vektorových dat cyklistických tras v rámci England Cycling Data Project\footnote{Projekt pod záštitou
+britského ministerstva dopravy, který si klade za~cíl umožnit dostupnost informací o~síti cyklostezek  ve~Velké Británii prostřednictvím OpenStreetMap.}. %% tou záštitou si nejsem jistá
 V~případě tohoto nástroje se jedná především o~proces přenosu atributů. Pokud máme v~mapě dva odpovídající si prvky, pomocí tohoto nástroje je můžeme označit za~odpovídající
 a~jednoduše sloučit jejich atributy. Nutno však podotknout, že výběr odpovídajících si prvků musíme provést vždy ručně. 
 
@@ -261,14 +264,14 @@ a~jednoduše sloučit jejich atributy. Nutno však podotknout, že výběr odpov
 
 Mimo výše uvedené nástroje existuje také několik projektů různých světových univerzit zabývajících se buď 'conflation' obecně nebo spojováním map silničních sítí. Možnosti
 využití těchto projektů pro~běžného uživatele se velmi různí. A~ne vždy lze zcela volně tyto projekty vyzkoušet. Jedním z těchto projektů je i Conflation System MBP, který
-byl vyvinut na~katedře počítačů (\textit{Computer Science Department} na~Central Washington University v~USA. V~rámci tohoto projektu vznikl \textit{MBPConflate} software,
-který má přispět k~výzkumu v~oblasti 'conflation'. Program umožňuje automatické spojení map ('conflation'), poskytuje nástroje pro~následnou kontrolu kvality výsledné mapy.
+byl vyvinut na~katedře počítačů (\textit{Computer Science Department}) na~Central Washington University v~USA. V~rámci tohoto projektu vznikl \textit{MBPConflate} software,
+který má přispět k~výzkumu v~oblasti 'conflation'. Program umožňuje automatické spojení map, poskytuje nástroje pro~následnou kontrolu kvali\-ty výsledné mapy.
 Je navržen tak, aby bylo snadné implementovat nové techniky a~algoritmy v této oblasti.  
 
 \label{mbppic}
   \begin{figure}[hbt]
     \centering
       \includegraphics[width=350pt]{./pictures/MBPconflate.png}
-      \caption{MBPConflate}
+      \caption{MBPConflate (\todo{zdroj})}
       \label{fig:mbp}
   \end{figure}
