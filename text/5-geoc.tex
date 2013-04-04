@@ -10,36 +10,54 @@
 \section{Vertex Snapper} 
 \label{vertexsnapper}
 
-Při zpracování vrstev z~více zdrojů někdy stačí pouze upřesnit polohu či tvar prvků z~cílové vrstvy tak, aby se přiblížil prvkům z~vrstvy referenční. \mbox{Není-li} 
-podrobnost obou datasetů příliš rozdílná, lze využít jednoduchého postupu \textbf{přichycení blízkých vrcholů}.
+Při zpracování vrstev z~více zdrojů někdy stačí pouze upřesnit polohu či tvar 
+prvků z~cílové vrstvy tak, aby se přiblížil prvkům z~vrstvy referenční. 
+\mbox{Není-li} podrobnost obou datasetů příliš rozdílná, lze využít jednoduchého 
+postupu \textbf{přichycení blízkých vrcholů}.
 
 \subsection{Popis algoritmu}
 \label{vs-algoritmus}
 
-Nejjednodušším způsobem kombinace dvou vektorových vrstev je pouhé přichycení blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je následující:
+Nejjednodušším způsobem kombinace dvou vektorových vrstev je pouhé přichycení 
+blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je následující:
 
 \begin{enumerate}[leftmargin=*]
- \item Na~počátku je třeba určit vzdálenostní toleranci, tedy maximální vzdálenost mezi~dvěma body, kdy ještě bude provedeno jejich přichycení.
- \item Ke~každému prvku ze~zpracovávané vrstvy nalezneme nejbližší prvky z~vrstvy referenční. To jsou prvky, jejichž nejkratší vzdálenost od~zpracovávaného prvku není větší
-	než vzdálenostní tolerance.
- \item Pro~každý bod ze~zpracovávaného prvku vypočteme vzdálenosti ke~všem bodům z~blízkých referenčních prvků.
- \item Pokud nejmenší z~těchto délek je menší než vzdálenostní tolerance, pak posuneme zpracovávaný bod do~odpovídajícího referenčního bodu s~touto nejmenší vzdáleností.
- \item Takto projdeme postupně všechny vrcholy všech prvků cílové vrstvy a~snažíme se k~nim nalézt blízké body z~prvků vrstvy referenční. 
+ \item Na~počátku je třeba určit vzdálenostní toleranci, tedy maximální 
+    vzdálenost mezi~dvěma body, kdy ještě bude provedeno jejich přichycení.
+ \item Ke~každému prvku ze~zpracovávané vrstvy nalezneme nejbližší prvky 
+    z~vrstvy referenční. To jsou prvky, jejichž nejkratší vzdálenost 
+    od~zpracovávaného prvku není větší	než vzdálenostní tolerance.
+ \item Pro~každý bod ze~zpracovávaného prvku vypočteme vzdálenosti ke~všem
+    bodům z~blízkých referenčních prvků.
+ \item Pokud nejmenší z~těchto délek je menší než vzdálenostní tolerance, 
+    pak posuneme zpracovávaný bod do~odpovídajícího referenčního bodu s~touto
+    nejmenší vzdáleností.
+ \item Takto projdeme postupně všechny vrcholy všech prvků cílové vrstvy 
+    a~snažíme se k~nim nalézt blízké body z~prvků vrstvy referenční. 
 \end{enumerate}
 
 \subsection{Využití}
 \label{vs-vyuziti}
 
-Přichycení bodů jedné vrstvy k~vrstvě druhé má své výhody i~nevýhody, které je před volbou tohoto způsobu zpracování třeba zvážit. Použití této metody je vhodné v~takových
-případech, kdy máme k~dispozici dvě vrstvy o~rozdílné přesnosti (tento rozdíl však nesmí být příliš veliký) a~prvky vzájemně se překrývající.
-Cílem je upřesnit polohu a~tvar prvků z~méně přesného datasetu. Dopředu je třeba si uvědomit, že kromě polohy prvků je měněn i~jejich tvar.
+Přichycení bodů jedné vrstvy k~vrstvě druhé má své výhody i~nevýhody, které 
+je před volbou tohoto způsobu zpracování třeba zvážit. Použití této metody 
+je vhodné v~takových případech, kdy máme k~dispozici dvě vrstvy o~rozdílné 
+přesnosti (tento rozdíl však nesmí být příliš veliký) a~prvky vzájemně se 
+překrývající. Cílem je upřesnit polohu a~tvar prvků z~méně přesného datasetu. 
+Dopředu je třeba si uvědomit, že kromě polohy prvků je měněn i~jejich tvar.
 
-Využít by tento postup šel i~pro~přichycení dvou sousedních vrstev o~stejné přesnosti, avšak to znamená, že by se změnil pouze tvar krajních prvků (nedošlo by k~posunu 
-celé vrstvy), a~to nemusí být vždy žádoucí. Jako jediný z~algoritmů \textit{GEOC} má pak smysl pro~bodové vrstvy.
+Využít by tento postup šel i~pro~přichycení dvou sousedních vrstev o~stejné 
+přesnosti, avšak to znamená, že by se změnil pouze tvar krajních prvků 
+(nedošlo by k~posunu celé vrstvy), a~to nemusí být vždy žádoucí. Jako jediný
+z~algoritmů \textit{GEOC} má pak smysl pro~bodové vrstvy.
 
-Pro~rozumné výsledky je důležité zvolit vhodnou toleranční vzdálenost. Tato hodnota by měla odpovídat maximální vzdálenosti, o~kterou se vrchol prvku může posunout. Při~volbě
-příliš krátké vzdálenosti se výsledná vrstva nemusí vůbec odlišovat od té vstupní. Naopak \mbox{je-li} zvolená vzdálenost delší než nejkratší úsek geometrie (linie, polygonu),
-může dojít k~přichycení dvou bodů k~jednomu bodu z~referenční vrstvy. Zda je toto přípustné či nikoli je už na~rozhodnutí uživatele.
+Pro~rozumné výsledky je důležité zvolit vhodnou toleranční vzdálenost. Tato 
+hodnota by měla odpovídat maximální vzdálenosti, o~kterou se vrchol prvku 
+může posunout. Při~volbě příliš krátké vzdálenosti se výsledná vrstva nemusí 
+vůbec odlišovat od té vstupní. Naopak \mbox{je-li} zvolená vzdálenost delší 
+než nejkratší úsek geometrie (linie, polygonu), může dojít k~přichycení dvou 
+bodů k~jednomu bodu z~referenční vrstvy. Zda je toto přípustné či nikoli je 
+už na~rozhodnutí uživatele.
 
 \label{vsinvalid}
   \begin{figure}[hbt]
@@ -49,24 +67,29 @@ může dojít k~přichycení dvou bodů k~jednomu bodu z~referenční vrstvy. Zd
       \label{fig:vs-nevalidni}
   \end{figure} 
 
-V~některých případech může dojít ke~vzniku nevalidních geometrií, to je takových, jejichž segmenty se vzájemně protínají apod. To se nejčastěji stává u~protáhlých úzkých prvků
-a jiných speciálních tvarů. Příkladem může být situace uvedená na obrázku \ref{fig:vs-nevalidni}, kde růžový polygon je prvkem přichycen k~referenční fialové vrstvě, ale 
-z~důvodu nedostatečné hustoty vrcholů a~nevhodného tvaru vzniká nežádoucího křížení. 
+V~některých případech může dojít ke~vzniku nevalidních geometrií, to je takových,
+jejichž segmenty se vzájemně protínají apod. To se nejčastěji stává u~protáhlých 
+úzkých prvků a~jiných speciálních tvarů. Příkladem může být situace uvedená 
+na~obrázku \ref{fig:vs-nevalidni}, kde růžový polygon je prvkem přichycen 
+k~referenční fialové vrstvě, ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného
+tvaru vzniká nežádoucího křížení. 
 
 
-
-%Někdy může být tento postup výhodný i~v~případě, kdy chceme odstranit drobné mezery či překryty v~rámci jedné vrstvy. Poté stačí nastavit danou vrstvu jako referenční i~jako
-%cílovou.  -- teď to ale nejde, protože se z mezer stanou překryty apod. (vrstva se v průběhu nemění), ale šlo by to asi dodělat. 
-
-
+%Někdy může být tento postup výhodný i~v~případě, kdy chceme odstranit drobné mezery či 
+%překryty v~rámci jedné vrstvy. Poté stačí nastavit danou vrstvu jako referenční i~jako
+%cílovou.  -- teď to ale nejde, protože se z mezer stanou překryty apod. (vrstva se v 
+%průběhu nemění), ale šlo by to asi dodělat. 
 
 
 \section{Coverage Alignment} 
 \label{coverage alignment}
 
-\textit{Coverage alignment} lze vysvětlit jako \textbf{zarovnání jedné vrstvy k vrstvě druhé}. Tento způsob je složitější než výše uvedené přichytávání vrcholů.
-V~knihovně \textit{GEOC} je využit opět pro~úpravu jedné vrstvy na~základě vrstvy referenční. Do~upravované vrstvy nejsou žádné prvky přidávány ani z~ní vymazávány,
-pouze jde o~jejich modifikaci. Velmi podobný algoritmus se však dá použít i~ke~kombinaci dvou vrstev. 
+\textit{Coverage alignment} lze vysvětlit jako \textbf{zarovnání jedné vrstvy 
+k~vrstvě druhé}. Tento způsob je složitější než výše uvedené přichytávání vrcholů.
+V~knihovně \textit{GEOC} je využit opět pro~úpravu jedné vrstvy na~základě vrstvy 
+referenční. Do~upravované vrstvy nejsou žádné prvky přidávány ani z~ní vymazávány,
+pouze jde o~jejich modifikaci. Velmi podobný algoritmus se však dá použít 
+i~ke~kombinaci dvou vrstev. 
 
 \subsection{Popis algoritmu}
 \label{ca-algoritmus}
@@ -74,26 +97,46 @@ pouze jde o~jejich modifikaci. Velmi podobný algoritmus se však dá použít i
 Nejčastější používaný postup při~spojování vektorových map je následující.
 
 \begin{enumerate}[leftmargin=*]
- \item Nejprve je třeba nalézt odpovídající si prvky v~obou překrývajících se vrstvách. Kritéria pro~určení odpovídajících si prvků mohou být velmi odlišná. Existuje mnoho
-	algoritmů řešících tuto problematiku, přičemž postupy se mohou různit podle toho, zda je úkolem vyhledání odpovídajících si bodů, polygonů či linií. Kritéria a~postup
-	použitý v~knihovně \textit{GEOC} je popsán níže.
- \item Poté, co se určí odpovídající si prvky, musí se určit totožné vrcholy těchto dvojic prvků. Ty z~vrcholů, které jsou určeny s~dostatečnou přesností (ta může být určena
-	například danou vzdálenostní tolerancí), jsou označeny jako body budoucí triangulační sítě.
- \item Jak už bylo naznačeno, z~nalezených bodů se vytvoří pomocí Delaunayho triangulace trojúhelníková síť. %ML: doplnit poznamku pod carou - kratka charakteristka DT
- \item Následně se provede lokální, nejčastěji afinní transformace v~každém trojúhelníku sítě. Tak se přetransformují body cílové vrstvy do~systému vrstvy referenční.
- \item Celý postup je možné iterativně opakovat, dokud nedosáhneme požadovaného výsledku (ten může být dán např. podmínkou minimálního množství nalezených 
-	odpovídajících si vrcholů).
+ \item Nejprve je třeba nalézt odpovídající si prvky v~obou překrývajících se 
+    vrstvách. Kritéria pro~určení odpovídajících si prvků mohou být velmi 
+    odlišná. Existuje mnoho algoritmů řešících tuto problematiku, přičemž 
+    postupy se mohou různit podle toho, zda je úkolem vyhledání 
+    odpovídajících si bodů, polygonů či linií. Kritéria a~postup použitý 
+    v~knihovně \textit{GEOC} je popsán níže.
+ \item Poté, co se určí odpovídající si prvky, musí se určit totožné vrcholy 
+    těchto dvojic prvků. Ty z~vrcholů, které jsou určeny s~dostatečnou 
+    přesností (ta může být určena například danou vzdálenostní tolerancí), 
+    jsou označeny jako body budoucí triangulační sítě.
+ \item Jak už bylo naznačeno, z~nalezených bodů se vytvoří pomocí Delaunayho 
+    triangulace\footnote{Delaunayho triangulace z~množiny bodů v~rovině vytvoří takovou 
+    trojúhelníkovou síť, pro kterou platí, že v~kružnici opsané každému
+    trojúhelníku, neleží žádný jiný bod. DT maximalizuje
+    minimální úhly trojúhelníků.} trojúhelníková síť. 
+    %ML: doplnit poznamku pod carou - kratka charakteristka DT
+ \item Následně se provede lokální, nejčastěji afinní transformace v~každém 
+    trojúhelníku sítě. Tak se přetransformují body cílové vrstvy do~systému 
+    vrstvy referenční.
+ \item Celý postup je možné iterativně opakovat, dokud nedosáhneme 
+    požadovaného výsledku (ten může být dán např. podmínkou minimálního 
+    množství nalezených odpovídajících si vrcholů).
 \end{enumerate}
 
-V~knihovně \textit{GEOC} je pro nalezení odpovídajících si prvků využito obdobného postupu jako ve~výše zmiňované knihovně \textit{JCS}. Využívá se vrcholová Hausdorffova 
-vzdálenost, přičemž tato vzdálenost není počítána přímo. Splnění podmínky, že dané prvky nejsou od~sebe dále, než je daná Hausdorffova vzdálenost, se testuje pomocí obalových
-zón jednotlivých prvků následujícím způsobem.
+V~knihovně \textit{GEOC} je pro nalezení odpovídajících si prvků využito 
+obdobného postupu jako ve~výše zmiňované knihovně \textit{JCS}. Využívá 
+se vrcholová Hausdorffova vzdálenost, přičemž tato vzdálenost není počítána 
+přímo. Splnění podmínky, že dané prvky nejsou od~sebe dále, než je daná 
+Hausdorffova vzdálenost, se testuje pomocí obalových zón jednotlivých prvků 
+následujícím způsobem.
 
 \begin{enumerate}[leftmargin=*]
  \item Máme dva prvky A a~B ze~dvou různých překrývajících se vrstev.
- \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, že si prvky odpovídají 
-	a~pokračuje se dalším krokem. V~opačném případě si prvky neodpovídají.
- \item Dále se testuje, zda hranice prvku B leží v~obalové zóně hranice prvku A a~naopak. Je-li splněna i~tato podmínka, pak jsou prvky označeny za~odpovídající si.
+ \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní 
+    tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, 
+    že si prvky odpovídají a~pokračuje se dalším krokem. V~opačném případě 
+    si prvky neodpovídají.
+ \item Dále se testuje, zda hranice prvku B leží v~obalové zóně hranice prvku
+    A a~naopak. Je-li splněna i~tato podmínka, pak jsou prvky označeny 
+    za~odpovídající si.
 \end{enumerate}
 
 %% ML: doplnit ilustraci
@@ -101,5 +144,8 @@ zón jednotlivých prvků následujícím způsobem.
 \subsection{Využití}
 \label{ca-vyuziti}
 
-Na~rozdíl od~předchozího algoritmu je tento trochu šířeji využitelný. Je opět vhodný pro~zpřesnění vrstvy dle vrstvy referenční, avšak tentokrát nejsou pouze přichytávány
-blízké vrcholy, ale jsou upravovány téměř všechny vrcholy. To zajišťuje reálnější výsledky i~v situacích, kdy hustota vrcholů v~obou datasetech je velmi rozdílná.
+Na~rozdíl od~předchozího algoritmu je tento trochu šířeji využitelný. Je opět 
+vhodný pro~zpřesnění vrstvy dle vrstvy referenční, avšak tentokrát nejsou 
+pouze přichytávány blízké vrcholy, ale jsou upravovány téměř všechny vrcholy. 
+To zajišťuje reálnější výsledky i~v situacích, kdy hustota vrcholů v~obou 
+datasetech je velmi rozdílná.
