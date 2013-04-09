@@ -1,0 +1,69 @@
+\chapter{Problémy a jejich řešení}
+\label{7-problemy}
+
+\section{Použití knihovny GEOS}
+\label{geos problem}
+Jako poměrně zásadní problém se ukázalo použití knihovny \textit{GEOS}. 
+Přestože tato knihovna je napsána v~jazyku C++, obsahuje \textit{wrapper} 
+v~podobě C~API\footnote{API (application program interface) - rozhraní 
+pro programování aplikací}. Hlavním důvodem toho je zajištění vyšší 
+stability. Při~použití C~API totiž není nutné vlastní aplikaci,
+která ho používá, při~každé změně v~knihovně \textit{GEOS} překompilovat. 
+Proto většina programů využívajících \textit{GEOS} a~mezi nimi i~Quantum 
+GIS používají právě C~API. Nicméně to má i~své nevýhody. V~C~API bohužel 
+zatím není implementována veškerá funkcionalita C++~API. Některé chybějící 
+funkce lze obejít aplikací sice složitějšího postupu, nicméně výsledek je 
+obdobný jako při~použití C++~API. Avšak jiná funkcionalita je pro~uživatele 
+C~API zcela nedostupná. Po~dlouhých úvahách bylo proto v~knihovně 
+\textit{GEOC} přistoupeno k~využití C++~API i~s~rizikem, že bude při~každé 
+změně nutné vše překompilovat. %% ML: odkaz pod carou - odkaz na diskuzi ML  
+
+S~tím souvisí i~další problém převodu geometrie. Jelikož v~programu QGIS je 
+používáno právě C~API, nelze GEOS geometrii jednoduše převést na~typ QGIS 
+geometrie. Tento problém byl vyřešen konverzí mezi těmito dvěma typy přes 
+WKT\footnote{Well Known Text - textový značkovací jazyk pro popis vektorové 
+geometrie geografických objektů apod.}. Nevýhoda tohoto postupu je však 
+zpomalení běhu programu obzvláště u~rozsáhlejších datasetů. 
+%% ML toto budu vyreseno C API knihovny GEOC...
+
+\section{Rychlost zpracování}
+\label{rychlost}
+
+Základem použitých algoritmů je vždy nalezení blízkých či podobných prvků 
+ze~dvou vrstev. Pro~nalezení takových dvojic prvků je obecně třeba porovnat 
+každý prvek z~jedné vrstvy s~každým prvkem z~vrstvy druhé. Je tedy třeba 
+porovnat $n\cdot m$ dvojic, kde $n$ je počet prvků vrstvy první a~$m$ vrstvy 
+druhé. U~rozsáhlejších datasetů je tedy nutné provést poměrně velké množství 
+operací a~čas zpracování pak výrazně roste. Tento problém byl vyřešen využitím 
+prostorových indexů. Díky tomu se porovnávají pouze dvojice prvků, u~nichž to 
+má smysl, tedy takové, jejichž minimální ohraničující obdélníky (v~některých 
+algoritmech rozšířené o~toleranční vzdálenost) se protínají.
+
+\subsection{Porovnání rychlosti s a bez použití prostorových indexů}
+% popis vstupních datasetů
+% dosazene casy (jako prumer z X pokusu) s a bez indexů
+% výhody x nevýhody
+% pro jaká data se to vyplatí
+% doplnit obrázky s ukázkami
+% závěr
+
+\section{VertexSnapper}
+% problemy pri implementaci vertexsnapperu
+% prichyceni polygonu do jednoho bodu a problém opakujících se bodů
+% nevalidni geometrie
+% doplnit obrázky s ukázkami
+
+\section{MatchingGeometry}
+% určí vždy jen první pasující geometrii, ale to nemusí být ta nejvíce pasující
+% tento problém především u linií, vhodnější RoadMatcher/LineMatcher
+% teoreticky by šlo najít všechny pasující, ale jak určit kritérium, 
+% která pasuje lépe?
+% doplnit obrázky s ukázkami
+
+
+\section{CoverageAlignment}
+% tin a jeho rozšíření, kdy to dělá problémy, ukázky
+% vrací nevalidní geometrii - možná ještě opravím
+% iterace a jaká podmínka?
+% měly by se nějakým způsobem řešit překrývající se prvky?
+% doplnit obrázky s ukázkami
