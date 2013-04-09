@@ -2,4 +2,9 @@
 *~
 *.log
 *.out
-fiedlter_bp.pdf
+*.bbl
+*.blg
+*.loa
+*.lof
+*.toc
+tereza-fiedlerova-bp-2013.pdf
