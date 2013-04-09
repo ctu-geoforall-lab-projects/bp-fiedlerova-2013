@@ -1,0 +1,5 @@
+Testovaci data
+
+obce.shp
+---------
+http://www.uloz.to/xUDciXt/administrativni-cleneni-cr-kraje-okresy-obce-shapefile-zip
