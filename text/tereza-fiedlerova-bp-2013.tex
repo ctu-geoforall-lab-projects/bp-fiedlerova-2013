@@ -56,6 +56,10 @@
 ]{thesiscvut}       % Balíček pro sazbu studentských prací
 
 \usepackage{enumitem} % pro nastavení číslování
+%\setlist{nolistsep} % bez mezer mezi položkami
+\setlist{itemsep=10pt,topsep=10pt,parsep=0pt} % nastaveni mezer mezi položkami a před seznamem
+\setlist{leftmargin=*} % bez odsazení
+
 
 \newif\ifweb
 \ifx\ifHtml\undefined % Mimo HTML.
