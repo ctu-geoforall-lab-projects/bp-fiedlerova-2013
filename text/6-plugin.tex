@@ -181,12 +181,12 @@ vzdálenosti může vést ke~vzniku nevalidních geometrií či nereálným výs
 Nakonec je nutné zvolit způsob zpracování (\textit{Select the way of conflation}). 
 Na~výběr jsou tyto metody:
 \begin{itemize}
- \item Přichycení vrcholů (\textit{Snap Vertices}) - tato metoda vyhledá blízké
-	vrcholy z~obou datasetů a~změní polohu bodů upravované vrstvy tak, aby
-	odpovídala poloze blízkých bodů vrstvy referenční.
+ \item \textbf{Přichycení vrcholů} (\textit{Snap Vertices}) - tato metoda vyhledá 
+	blízké vrcholy z~obou datasetů a~změní polohu bodů upravované vrstvy tak, 
+	aby odpovídala poloze blízkých bodů vrstvy referenční.
 % obrázek, jak funguje ?
- \item Zarovnání vrstev (\textit{Coverage Alignment}) - princip této metody je
-	poměrně složitější. Na~rozdíl od~předchozí metody nepracuje s~jednotlivými
+ \item \textbf{Zarovnání vrstev} (\textit{Coverage Alignment}) - princip této 
+	metody je složitější. Na~rozdíl od~předchozí metody nepracuje s~jednotlivými
 	body, ale s celými prvky. Upravuje i~některé prvky, k nimž neexistují 
 	žádné odpovídající ve~vrstvě refe\-renční, a~to na~základě změny okolních 
 	prvků. Je proto vhodnější zejména pro datasety, které mají rozdílný počet
