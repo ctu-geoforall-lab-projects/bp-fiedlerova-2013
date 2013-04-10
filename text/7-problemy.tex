@@ -2,7 +2,7 @@
 \label{7-problemy}
 
 \section{Použití knihovny GEOS}
-\label{geos problem}
+\label{problemy-geos}
 Jako poměrně zásadní problém se ukázalo použití knihovny \textit{GEOS}. 
 Přestože tato knihovna je napsána v~jazyku C++, obsahuje \textit{wrapper} 
 v~podobě C~API\footnote{API (application program interface) - rozhraní 
@@ -26,18 +26,41 @@ geometrie geografických objektů apod.}. Nevýhoda tohoto postupu je však
 zpomalení běhu programu obzvláště u~rozsáhlejších datasetů. 
 %% ML toto budu vyreseno C API knihovny GEOC...
 
+
 \section{Rychlost zpracování}
-\label{rychlost}
+\label{problemy-rychlost}
 
 Základem použitých algoritmů je vždy nalezení blízkých či podobných prvků 
 ze~dvou vrstev. Pro~nalezení takových dvojic prvků je obecně třeba porovnat 
 každý prvek z~jedné vrstvy s~každým prvkem z~vrstvy druhé. Je tedy třeba 
 porovnat $n\cdot m$ dvojic, kde $n$ je počet prvků vrstvy první a~$m$ vrstvy 
 druhé. U~rozsáhlejších datasetů je tedy nutné provést poměrně velké množství 
-operací a~čas zpracování pak výrazně roste. Tento problém byl vyřešen využitím 
-prostorových indexů. Díky tomu se porovnávají pouze dvojice prvků, u~nichž to 
-má smysl, tedy takové, jejichž minimální ohraničující obdélníky (v~některých 
-algoritmech rozšířené o~toleranční vzdálenost) se protínají.
+operací a~čas zpracování pak výrazně roste. Tento problém byl částečně vyřešen 
+využitím prostorových indexů. Díky tomu se porovnávají pouze dvojice prvků, 
+u~nichž to má smysl, tedy takové, jejichž minimální ohraničující obdélníky 
+(v~některých algoritmech rozšířené o~toleranční vzdálenost) se protínají.
+
+Použití prostorových indexů rychlost zpracování sice značně zvýšilo, %(viz následující test),
+ale stále trvá zpracování rozsáhlejších dat obzvláště u~algoritmu 
+\texttt{CoverageAlignment} poměrně dlouhou dobu. Zvýšení rychlosti by bylo
+možné dosáhnout použitím prostorových indexů nejen při vyhledávání blízkých
+prvků, ale i~při následném hledání blízkých bodů. V~těchto případech nebyly
+prostorové indexy využity z~toho důvodu, že pro reprezentaci bodů je
+v~algoritmech použita třída \texttt{geos::geom::Coordinate}, pro níž však 
+nejsou na~rozdíl od~\texttt{geos::geom::Geometry} prostorové indexy
+v~knihovně \textit{GEOS} implementovány.
+
+Další částí programu, která působí výrazné zpomalení, je vyhledávání
+odpovídajících si geometrií ve~třídě \texttt{MatchingGeometry}. Konkrétně
+se jedná o~test, kdy jsou porovnávány obalové zóny prvků. Konstrukce
+obalových zón je výpočetně náročná, proto je žádoucí, aby se tento test
+prováděl u~co nejmenšího počtu prvků. V~algoritmu je tento počet snížen
+porovnáváním pouze blízkých prvků. Také by bylo možné u~těchto
+blízkých prvků nejdříve např. testovat vzdálenost centroidů, porovnávat
+jejich plochu či délku. Tento postup by však nemusel vždy čas běhu programu
+zrychlit. Pro rozhodnutí, zda ho použít, by bylo nezbytné znát charakteristiku
+zpracovávaných dat.
+
 
 \subsection{Porovnání rychlosti s a bez použití prostorových indexů}
 % popis vstupních datasetů
@@ -47,21 +70,64 @@ algoritmech rozšířené o~toleranční vzdálenost) se protínají.
 % doplnit obrázky s ukázkami
 % závěr
 
+
 \section{VertexSnapper}
+\label{problemy-vs}
 % problemy pri implementaci vertexsnapperu
-% prichyceni polygonu do jednoho bodu a problém opakujících se bodů
-% nevalidni geometrie
 % doplnit obrázky s ukázkami
+Vzhledem k~principu tohoto algoritmu mohou při jeho použití vznikat nevalidní 
+geometrie. Tyto chyby je samozřejmě možné opravit ručně po~zpracování. Avšak
+v~rozsáhlých datasetech může být nevalidních prvků poměrně velké množství.
+Pokud se toto nestalo z~důvodu nevhodného nastavení zpracování, bylo by 
+vhodné, aby samotný algoritmus tyto chyby minimalizoval. To by bylo možné 
+například přidáním nových vrcholů na~vhodná místa (dlouhé segmenty bez vrcholu
+apod.). Další možností je zrušit přichycení vrcholu, pokud při něm vznikne
+nevalidní geometrie. Nevýhoda takového postupu je horší zarovnání výsledné 
+vrstvy. 
+
+Speciálním případem vzniku nevalidní geometrie je situace, kdy se všechny 
+vrcholy prvku přichytí pouze k~jednomu bodu. Tím vzniká z~linie či polygonu
+bodový prvek. K~této situaci dochází v případě volby velké toleranční 
+vzdálenosti v~poměru k~velikosti prvku. U~datasetů obsahujících prvky
+o~výrazně rozdílných velikostech se tomu nelze vždy vyhnout. V~knihovně
+\textit{GEOC} tento problém zatím není vyřešen. Nejjednodušší řešení, které
+by bylo možné implementovat je nabídnout uživateli, co s~takovými prvky provést.
+Na~výběr by byly tyto možnosti:
+\begin{itemize}
+ \item odstranění takových prvků,
+ \item export těchto prvků do nové vrstvy, kde by bylo možné je dále upravovat,
+ \item ponechání původní geometrie. 
+\end{itemize}
+
 
 \section{MatchingGeometry}
-% určí vždy jen první pasující geometrii, ale to nemusí být ta nejvíce pasující
-% tento problém především u linií, vhodnější RoadMatcher/LineMatcher
-% teoreticky by šlo najít všechny pasující, ale jak určit kritérium, 
-% která pasuje lépe?
-% doplnit obrázky s ukázkami
+\label{problemy-mg}
 
+Algoritmus \texttt{MatchingGeometry} vyhledává odpovídající si geometrie tak,
+že nejdříve nalezne blízké prvky k~dané geometrii a~pak testuje postupně všechny
+tyto blízké prvky. Po nalezení prvního odpovídajícího prvku se už další prvky
+netestují. To může způsobit, že je nalezen sice odpovídající prvek, avšak
+nemusí to být ten, který je danému prvku podobný nejvíce. U~polygonových vrstev
+při vhodné volbě toleranční vzdálenosti tento problém většinou nenastává, 
+ale u~vrstev liniových se může objevit poměrně často. 
+
+Řešením by bylo seřadit před testováním blízké prvky dle nějakého
+kritéria, které by určovalo pravděpodobnost, že si budou odpovídat. Takové
+kritérium je však obtížné určit. U~polygonů by to mohla být velikost plochy,
+kde se polygony nepřekrývají. Jak už bylo řečeno, nastává tento problém
+spíše u~vrstev liniových, a~proto by takové kritérium příliš nepomohlo.
+Nejvhodnější by proto bylo použít pro liniové vrstvy zcela odlišný algoritmus.
+
+% jeden prvek odpovídající dvěma
+
+Výše uvedeným problémům u~liniových vrstev se lze vyhnout použitím jiného
+algoritmu \textit{RoadMatcher/LineMatcher}, který porovnává pouze jednotlivé
+úseky linií, nikoli celé prvky. 
+% obrázek kritéria pro polygony   
+% obrázek u linií
 
 \section{CoverageAlignment}
+\label{problemy-ca}
 % tin a jeho rozšíření, kdy to dělá problémy, ukázky
 % vrací nevalidní geometrii - možná ještě opravím
 % iterace a jaká podmínka?
