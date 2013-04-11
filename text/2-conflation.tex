@@ -9,7 +9,7 @@ lze do~češtiny přeložit jako slučování či spojování map. Překlad toho
 však není vždy jasný, jelikož se jím označuje více různých úloh, procesů či 
 činností. Proto zde uvádím několik definic z~různýc zdrojů. 
 
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
  \item Proces, jehož cílem je geometricky upravit (posunem, transformací) 
     digitální data zobrazující stejné území (obvykle pořízená v~jiném čase) 
     tak, aby byla vzájemně geograficky korektní a~vzájemně se překrývaly. %% slovem korektní si nejsem jistá 
@@ -91,14 +91,14 @@ adjustment, alignment, attribute transfer (přenos, převod atributů), geometry
 (upravovaný dataset), topologie, ... 
 
 
-\section{Klasifikace (\textit{conflation})}
+\section{Klasifikace \textit{conflation}}
 \label{klasifikace}
 
 \subsection{Dle typu vstupních vrstev}
 \label{dle-vstupu}
 
 % možná obrázky k jednotlivým typům
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item \textbf{Imagery-to-Imagery, Raster-to-Raster}
     \subitem Jedná se o~případ, kdy je úkolem na~sebe napasovat dva rastrové 
       mapové soubory. Nejčastěji jde o~ortofoto a~naskenovanou analogovou mapu
@@ -111,7 +111,7 @@ adjustment, alignment, attribute transfer (přenos, převod atributů), geometry
     \subitem Kombinace vektorových a~rastrových dat stejného území se využívá 
       často ke~zpřesnění vektorových dat jejich napasováním na~ortofoto. Hlavní
       náplní této oblasti je vývoj algoritmů umožňující následující: % dopsat referenci na lit. - gis enc. 
-	      \begin{enumerate}[leftmargin=*]
+	      \begin{enumerate}
 	       \item Detekce charakteristických hran rastrového obrazu a~jejich 
 		  porovnání s~vektorovými daty.
 	       \item Využití vektorových dat k~identifikaci hran v~rastru - tzv. 
@@ -127,7 +127,7 @@ adjustment, alignment, attribute transfer (přenos, převod atributů), geometry
 	sítí, dále aktualizace digitálních dat aj. Existuje mnoho různých algoritmů
 	pro~slučování vektorových dat, přičemž základní přístupy k~řešení problému 
 	jsou následující: % dopsat referenci na lit. - gis enc. 
-	      \begin{enumerate}[leftmargin=*]
+	      \begin{enumerate}
 	       \item Sloučení dat za~pomoci algoritmů, které pracují na~základě 
 		  porovnávání geometrických vlastností prvků.
 	       \item Algoritmy, které berou v~potaz podobnost tvarů prvků a~zároveň
@@ -143,7 +143,7 @@ adjustment, alignment, attribute transfer (přenos, převod atributů), geometry
 \subsection{Dle území zobrazovaného vstupními vrstvami}
 \label{dle-uzemi}
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item \textbf{Horizontální} % - sousedící datasety
     \subitem Za~\textit{horizontal conflation} se označují procesy, které 
 	zpracovávají data ze~sousedících území. Cílem je získat mapové 
@@ -167,7 +167,7 @@ Obecný postup při~slučování vektorových map z~více zdrojů se skládá z~
 kroků, které jsou uvedeny níže. Jako u~většiny podobných operací je třeba 
 nejdříve provést přípravu dat a~následně data zpracovat a~upravit.
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item \textbf{Předzpracování dat}
     \subitem Tento krok slouží k~zajištění kompatibility vstupních dat tak, 
       aby bylo možné je porovnávat. Obvykle spočívá v~převedení vstupních 

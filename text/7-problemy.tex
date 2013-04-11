@@ -5,8 +5,7 @@
 \label{problemy-geos}
 Jako poměrně zásadní problém se ukázalo použití knihovny \textit{GEOS}. 
 Přestože tato knihovna je napsána v~jazyku C++, obsahuje \textit{wrapper} 
-v~podobě C~API\footnote{API (application program interface) - rozhraní 
-pro programování aplikací}. Hlavním důvodem toho je zajištění vyšší 
+v~podobě C~API. Hlavním důvodem toho je zajištění vyšší 
 stability. Při~použití C~API totiž není nutné vlastní aplikaci,
 která ho používá, při~každé změně v~knihovně \textit{GEOS} překompilovat. 
 Proto většina programů využívajících \textit{GEOS} a~mezi nimi i~Quantum 
@@ -14,14 +13,17 @@ GIS používají právě C~API. Nicméně to má i~své nevýhody. V~C~API bohu�
 zatím není implementována veškerá funkcionalita C++~API. Některé chybějící 
 funkce lze obejít aplikací sice složitějšího postupu, nicméně výsledek je 
 obdobný jako při~použití C++~API. Avšak jiná funkcionalita je pro~uživatele 
-C~API zcela nedostupná. Po~dlouhých úvahách bylo proto v~knihovně 
-\textit{GEOC} přistoupeno k~využití C++~API i~s~rizikem, že bude při~každé 
-změně nutné vše překompilovat. %% ML: odkaz pod carou - odkaz na diskuzi ML  
+C~API zcela nedostupná. Po~dlouhých úvahách\footnote{O~problému jsem napsala
+na~\textit{mailing-list} vývojářů \textit{GEOSu} a~odpovědí bylo uvedení 
+již zmíněných pro a~proti. Problém jsem následně prodiskutovala s~vedoucím 
+práce, který mi doporučil toto řešení.} bylo proto v~knihovně \textit{GEOC} 
+přistoupeno k~využití C++~API i~s~rizikem, že bude při~každé změně nutné 
+vše překompilovat. %% ML: odkaz pod carou - odkaz na diskuzi ML  
 
 S~tím souvisí i~další problém převodu geometrie. Jelikož v~programu QGIS je 
 používáno právě C~API, nelze GEOS geometrii jednoduše převést na~typ QGIS 
 geometrie. Tento problém byl vyřešen konverzí mezi těmito dvěma typy přes 
-WKT\footnote{Well Known Text - textový značkovací jazyk pro popis vektorové 
+WKT\footnote{textový značkovací jazyk pro popis vektorové 
 geometrie geografických objektů apod.}. Nevýhoda tohoto postupu je však 
 zpomalení běhu programu obzvláště u~rozsáhlejších datasetů. 
 %% ML toto budu vyreseno C API knihovny GEOC...
@@ -29,6 +31,8 @@ zpomalení běhu programu obzvláště u~rozsáhlejších datasetů.
 
 \section{Rychlost zpracování}
 \label{problemy-rychlost}
+
+\subsubsection{Vyhledání blízkých prvků}
 
 Základem použitých algoritmů je vždy nalezení blízkých či podobných prvků 
 ze~dvou vrstev. Pro~nalezení takových dvojic prvků je obecně třeba porovnat 
@@ -49,6 +53,9 @@ prostorové indexy využity z~toho důvodu, že pro reprezentaci bodů je
 v~algoritmech použita třída \texttt{geos::geom::Coordinate}, pro níž však 
 nejsou na~rozdíl od~\texttt{geos::geom::Geometry} prostorové indexy
 v~knihovně \textit{GEOS} implementovány.
+
+\vspace{-9pt} %% Proc to tu nefunguje bez toho?
+\subsubsection{Testování podobných prvků}
 
 Další částí programu, která působí výrazné zpomalení, je vyhledávání
 odpovídajících si geometrií ve~třídě \texttt{MatchingGeometry}. Konkrétně
@@ -74,7 +81,9 @@ zpracovávaných dat.
 \section{VertexSnapper}
 \label{problemy-vs}
 % problemy pri implementaci vertexsnapperu
+% měly by se nějakým způsobem řešit překrývající se prvky?
 % doplnit obrázky s ukázkami
+\subsubsection{Nevalidní geometrie}
 Vzhledem k~principu tohoto algoritmu mohou při jeho použití vznikat nevalidní 
 geometrie. Tyto chyby je samozřejmě možné opravit ručně po~zpracování. Avšak
 v~rozsáhlých datasetech může být nevalidních prvků poměrně velké množství.
@@ -85,6 +94,7 @@ apod.). Další možností je zrušit přichycení vrcholu, pokud při něm vzni
 nevalidní geometrie. Nevýhoda takového postupu je horší zarovnání výsledné 
 vrstvy. 
 
+\subsubsection{Přichycení do jednoho bodu}
 Speciálním případem vzniku nevalidní geometrie je situace, kdy se všechny 
 vrcholy prvku přichytí pouze k~jednomu bodu. Tím vzniká z~linie či polygonu
 bodový prvek. K~této situaci dochází v případě volby velké toleranční 
@@ -116,7 +126,7 @@ kritéria, které by určovalo pravděpodobnost, že si budou odpovídat. Takov�
 kritérium je však obtížné určit. U~polygonů by to mohla být velikost plochy,
 kde se polygony nepřekrývají. Jak už bylo řečeno, nastává tento problém
 spíše u~vrstev liniových, a~proto by takové kritérium příliš nepomohlo.
-Nejvhodnější by proto bylo použít pro liniové vrstvy zcela odlišný algoritmus.
+%Nejvhodnější by proto bylo použít pro liniové vrstvy zcela odlišný algoritmus.
 
 % jeden prvek odpovídající dvěma
 
@@ -128,8 +138,78 @@ algoritmu \textit{RoadMatcher/LineMatcher}, který porovnává pouze jednotlivé
 
 \section{CoverageAlignment}
 \label{problemy-ca}
-% tin a jeho rozšíření, kdy to dělá problémy, ukázky
-% vrací nevalidní geometrii - možná ještě opravím
-% iterace a jaká podmínka?
-% měly by se nějakým způsobem řešit překrývající se prvky?
-% doplnit obrázky s ukázkami
+
+\subsubsection{Vytvoření trojúhelníkové sítě}
+Po~nalezení odpovídajících si prvků je nutné určit vrcholy triangulační sítě.
+V~použitém algoritmu jsou zvoleny dvojice blízkých vrcholů dvou odpovídajících
+si prvků. Důsledkem tohoto výběru může být nepravidelné rozložení vrcholů sítě
+a~také vytvoření troj\-úhelníkové sítě pouze nad~malou částí území, a~tudíž 
+nezahrnující všechny odpovídající si prvky.
+% obrázek tinu bez rohů a s rohy, kdy je výhodný
+
+Pro pokrytí větší části území byly proto zahrnuty do~vrcholů rohové body, jejichž
+souřadnice odpovídají extrémním souřadnicím ze~všech vrcholů prvků zpracovávané 
+vrstvy, ke~kterým byl nalezen ekvivalent ve~vrstvě referenční. Tyto body mají 
+v~obou systémech pro~transformaci totožné souřadnice. Tímto postupem se nejen 
+zajistí zpracování všech odpovídajících si prvků, ale také zarovnání prvků 
+i~v~případech, kdy se jako odpovídající určí pouze jeden či dva body, z~nichž 
+by bez této úpravy nebylo možné TIN sestrojit. Nevýhodou zvoleného řešení jsou 
+nevhodné tvary trojúhelníků na okrajích sítě a~tím způsobené méně přesné zarovnání 
+v~těchto oblastech. Avšak i~přes tyto nevýhody jsou výsledky zarovnání datasetů 
+s~použitím rohových bodů přesnější. 
+% obrázek, kdy rohy mohou způsobit problémy
+
+Vylepšením tohoto řešení by mohlo být použití bodů konvexní obálky pasujících
+prvků namísto pouze čtyř rohových bodů.
+% zjednodušení TINu -> odkaz na http://mapcontext.com/autocarto/proceedings/auto-carto-8/pdf/pages641-650.pdf
+
+Velký vliv na~tvar TINu má způsob volby blízkých bodů. V~některých programech
+(např. ArcGIS) je proto tento krok přenechán uživateli. Počet dvojic bodů je
+sice obecně nižší, avšak jsou tak zvoleny pouze skutečně si odpovídající body
+a~jejich rozložení je většinou pravidelné. Výsledek je pak blíže skutečnosti
+než automatické zpracování. Navíc bylo experimentálně zjištěno, že větší počet
+trojúhelníků nezajistí větší přesnost, a~obecně tak postačí jedna dvojice
+bodů pro padesát prvků. % odkaz http://mapcontext.com/autocarto/proceedings/auto-carto-8/pdf/pages641-650.pdf nebo přímo Saalfeld
+
+\subsubsection{Nevalidní geometrie}
+
+V~případě nevhodné konfigurace odpovídajících si trojúhelníků může v~důsledku
+lokální transformace dojít ke~vzniku nevalidních geometrií. Této situaci by se
+dalo předejít výpočtem jednoho transformačního klíče ze~všech blízkých bodů
+vyrovnáním a~aplikací globální transformace. Tak by nevznikly neplatné geometrie,
+ale snížila by se přesnost zpracování, až na~situace, kdy by mezi datasety byl
+téměř konstantní posun, natočení a~změna měřítka u~všech prvků.
+
+% doplnit obrázek
+
+Tento problém úzce souvisí s~volbou toleranční vzdálenosti. Při dodržení pravidla
+o~nejkratším segmentu  se mu lze téměř vyhnout (stále mohou vznikat nevalidní 
+geometrie u~příliš úzkých, protáhlých tvarů apod.). 
+
+Pravděpodobně by bylo možné nevalidní geometrie automaticky opravit např. výměnou
+vrcholů způsobujících křížení hran. Nyní je oprava těchto geometrií ponechána 
+na~uživateli.
+
+\subsubsection{Volba počtu iterací}
+
+V~popisu algoritmu zmiňuji, že proces zarovnání může probíhat iterativně.
+Otázkou je volba počtu iterací. Nabízí se tři možnosti.
+\begin{enumerate}
+ \item konstantní počet iterací
+ \item ponechání volby počtu iterací na uživateli
+ \item opakování procesu tak dlouho, dokud není splněna určitá podmínka
+\end{enumerate}
+Pevně daný počet není příliš vhodný, jelikož vůbec nezohledňuje výsledky
+předchozí iterace. Vzhledem k~tomu, že běžný uživatel by pravděpodobně
+obtížně určil vhodný počet iterací, zůstává třetí možnost. Tím vyvstává
+problém zvolení vhodné podmínky. Může to být počet nových odpovídajících 
+si prvků, počet nově nalezených dvojic bodů, počet zpracovaných prvků aj.
+Dle [..]  obvykle postačí dvě až tři opakování, % odkaz na [Saalfeld] 
+přičemž mezi jednotlivými cykly je vhodná kontrola operátora,
+který by měl odstranit případné hrubé chyby. Zároveň navrhuje jako podmínku
+počet nově nalezených odpovídajících si prvků. Cyklus se tedy opakuje,
+dokud jsou nacházeny nové dvojice pasujících prvků. Tento postup je   % zatím ještě ne
+v~knihovně \textit{GEOC} implementován bez možnosti kontroly mezi iteracemi. 
+
+
+

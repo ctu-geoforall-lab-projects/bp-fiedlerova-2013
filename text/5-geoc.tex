@@ -4,6 +4,9 @@
 \section{Tvorba knihovny GEOC}
 \label{knihovna}
 
+% úvodní poznámky, proč samost. knihovna (aby se to dalo využít i jinde než v mém pluginu)
+% co popisuje kapitola, vyjmenování algoritmů, jakou funkcionalitu by měla zajišťovat (stručně)
+
 %\section{Použité algoritmy}
 %\label{algoritmy}
 
@@ -21,7 +24,7 @@ postupu \textbf{přichycení blízkých vrcholů}.
 Nejjednodušším způsobem kombinace dvou vektorových vrstev je pouhé přichycení 
 blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je následující:
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
  \item Na~počátku je třeba určit vzdálenostní toleranci, tedy maximální 
     vzdálenost mezi~dvěma body, kdy ještě bude provedeno jejich přichycení.
  \item Ke~každému prvku ze~zpracovávané vrstvy nalezneme nejbližší prvky 
@@ -37,6 +40,10 @@ blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je n�
 \end{enumerate}
 
 % obrázek ilustrujici postup zpracovani
+
+\subsection{Implementace}
+\label{vs-implementace}
+% popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
 
 \subsection{Využití}
 \label{vs-vyuziti}
@@ -74,7 +81,7 @@ jejichž segmenty se vzájemně protínají apod. To se nejčastěji stává u~p
 úzkých prvků a~jiných speciálních tvarů. Příkladem může být situace uvedená 
 na~obrázku \ref{fig:vs-nevalidni}, kde růžový polygon je prvkem přichycen 
 k~referenční fialové vrstvě, ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného
-tvaru vzniká nežádoucího křížení. 
+tvaru vzniká nežádoucí křížení. 
 
 
 %Někdy může být tento postup výhodný i~v~případě, kdy chceme odstranit drobné mezery či 
@@ -98,7 +105,7 @@ i~ke~kombinaci dvou vrstev.
 
 Nejčastější používaný postup při~spojování vektorových map je následující.
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
  \item Nejprve je třeba nalézt odpovídající si prvky v~obou překrývajících se 
     vrstvách. Kritéria pro~určení odpovídajících si prvků mohou být velmi 
     odlišná. Existuje mnoho algoritmů řešících tuto problematiku, přičemž 
@@ -130,7 +137,7 @@ přímo. Splnění podmínky, že dané prvky nejsou od~sebe dále, než je dan�
 Hausdorffova vzdálenost, se testuje pomocí obalových zón jednotlivých prvků 
 následujícím způsobem.
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
  \item Máme dva prvky A a~B ze~dvou různých překrývajících se vrstev.
  \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní 
     tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, 
@@ -143,6 +150,10 @@ následujícím způsobem.
 
 % obrázek ilustrujici postup zpracovani, vč. tinu apod.
 %% ML: doplnit ilustraci .. obrázek obal. zón
+
+\subsection{Implementace}
+\label{ca-implementace}
+% popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
 
 \subsection{Využití}
 \label{ca-vyuziti}
