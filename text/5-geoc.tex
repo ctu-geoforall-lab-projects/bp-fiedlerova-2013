@@ -4,11 +4,18 @@
 \section{Tvorba knihovny GEOC}
 \label{knihovna}
 
+Algoritmy týkající se slučování vektorových map (\textit{conflation}) byly
+implementovány v~externí knihovně \textit{GEOC} bez závislosti na~QGIS API. 
+Zásuvný modul \textit{Conflate} umožňuje využití funkcionality knihovny 
+v~Quantum GIS. Díky tomuto oddělení vznikla nezávislá knihovna, kterou bude
+možné případně použít i~v~jiných programech a~projektech.
+
+Tato kapitola popisuje jednotlivé algoritmy a~jejich implementaci v~knihovně
+\textit{GEOC}, zároveň také stručně pojednává o~možnostech  jejich využití.
+Podrobný popis jednotlivých tříd a~jejich metod je podrobněji popsán v~dokumentaci. % viz příloha
+
 % úvodní poznámky, proč samost. knihovna (aby se to dalo využít i jinde než v mém pluginu)
 % co popisuje kapitola, vyjmenování algoritmů, jakou funkcionalitu by měla zajišťovat (stručně)
-
-%\section{Použité algoritmy}
-%\label{algoritmy}
 
 \section{Vertex Snapper} 
 \label{vertexsnapper}
@@ -40,10 +47,33 @@ blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je n�
 \end{enumerate}
 
 % obrázek ilustrujici postup zpracovani
+\label{vspic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=350pt]{./pictures/vs-princip.pdf}
+      \caption{Postup přichycení vrcholů (\todo{zdroj})}
+      \label{fig:vs-princip}
+  \end{figure}
 
-\subsection{Implementace}
+\subsection{Implementace} % text asi přepsat 
 \label{vs-implementace}
 % popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
+Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční je 
+implementován ve~třídách \texttt{Vertex\-Snapper} 
+a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí aplikaci 
+stačí po~předání vstupních parametrů třídě \texttt{Vertex\-Snapper} zavolat 
+funkci \texttt{snap}. Ta vyhledá blízké prvky s~využitím prostorových 
+indexů sestavených metodou \texttt{build\-Index} téže třídy.
+
+Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices}. Uvnitř této
+metody se vytvoří instance  třídy \texttt{Vertex\-Geometry\-Editor\-Operation},
+která edituje příslušnou geometrii přichycením blízkých vrcholů.
+\texttt{Vertex\-Geometry\-Editor\-Operation} je potomkem třídy 
+\texttt{geos::\-operation::\-Coordinate\-Operation}, která je \textit{inter\-face}
+\footnote{rozhraní třídy, kde jsou deklarovány pouze abstraktní metody bez
+implementace, není možné vytvořit instanci této třídy} třídou pro editaci 
+geometrie.
+
 
 \subsection{Využití}
 \label{vs-vyuziti}
@@ -127,8 +157,17 @@ Nejčastější používaný postup při~spojování vektorových map je násled
     vrstvy referenční.
  \item Celý postup je možné iterativně opakovat, dokud nedosáhneme 
     požadovaného výsledku (ten může být dán např. podmínkou minimálního 
-    množství nalezených odpovídajících si vrcholů).
+    množství nalezených odpovídajících si vrcholů či prvků).
 \end{enumerate}
+
+% obrázek ilustrujici postup zpracovani, vč. tinu apod.
+\label{capic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=400pt]{./pictures/ca-princip.pdf}
+      \caption{Postup zarovnání vrstev (\todo{zdroj})}
+      \label{fig:ca-princip}
+  \end{figure}
 
 V~knihovně \textit{GEOC} je pro nalezení odpovídajících si prvků využito 
 obdobného postupu jako ve~výše zmiňované knihovně \textit{JCS}. Využívá 
@@ -148,12 +187,32 @@ následujícím způsobem.
     za~odpovídající si.
 \end{enumerate}
 
-% obrázek ilustrujici postup zpracovani, vč. tinu apod.
 %% ML: doplnit ilustraci .. obrázek obal. zón
 
-\subsection{Implementace}
+\subsection{Implementace} % text asi přepsat 
 \label{ca-implementace}
 % popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
+Veškeré zpracování je opět schováno pod jedinou funkcí \texttt{align} třídy
+\texttt{Coverage\-Alignment}. Ta postupně volá metody provádějící jednotlivé
+kroky algoritmu.
+
+Nejdříve je třeba nalézt odpovídající si prvky. K~tomu slouží třída 
+\texttt{Matching\-Geometry}, která k~dané geometrii najde odpovídající
+(\texttt{set\-Match}). Obdobně jako u~\texttt{Vertex\-Snapper} je i~zde 
+využito prostorových indexů, které jsou vytvořeny metodou 
+\texttt{build\-Index}. Určení blízkých bodů je pak prostřednictvím
+funkcí \texttt{choose\-Matching\-Points, \-find\-Closest\-Points,
+\-clean\-Matching\-Points} a~dalšími třídy \texttt{Co\-ve\-ra\-ge\-Align\-ment}.
+
+Třetím krokem je vytvoření TINu metodou \texttt{create\-TIN}, která k~tomu
+využívá třídu \texttt{Tri\-an\-gu\-la\-tion}.  
+
+Konečně je provedena postupně transformace všech prvků. Funkce pro
+transformaci poskytuje třída \texttt{Affine\-Trans\-for\-mation},
+která transformuje prvky na~základě předané geometrie a~triangulační
+sítě. Ta je volána prostřednictvím třídy pro editaci 
+\texttt{Align\-Geo\-metry\-Edi\-tor\-Ope\-ra\-tion}.
+
 
 \subsection{Využití}
 \label{ca-vyuziti}
