@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+namespace geoc {
+namespace alg {
+
 CoverageAlignment::CoverageAlignment()
 {
     tolDistance = 0;
@@ -9,6 +12,7 @@ CoverageAlignment::CoverageAlignment()
     matchingPointsRef = NULL;
     ttin = NULL;
     //addVertices = false;
+    found = 0;
 
 } // default constructor
 
@@ -22,6 +26,7 @@ CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double t
     matchingPointsRef = NULL;
     ttin = NULL;
     //addVertices = addVer;
+    found = 0;
 
 } // constructor
 
@@ -37,6 +42,7 @@ CoverageAlignment::~CoverageAlignment()
 
 void CoverageAlignment::findMatchingFeatures()
 {
+
     // create new matcher
     MatchingGeometry matcher(&refLayer, tolDistance);
 
@@ -47,7 +53,15 @@ void CoverageAlignment::findMatchingFeatures()
     size_t size = newLayer.size();
     for ( size_t i = 0; i < size; i++ )
     {
-        matcher.setMatch( &newLayer[i] );
+        if ( !newLayer[i].isMatch() )
+        {
+            matcher.setMatch( &newLayer[i] );
+            if( newLayer[i].isMatch() )
+            {
+                found++;
+            }
+        }
+
     }
 
 } // void CoverageAlignment::findMatchingFeatures()
@@ -93,6 +107,35 @@ void CoverageAlignment::chooseMatchingPoints()
 } // void CoverageAlignment::chooseMatchingPoints()
 
 
+/*void CoverageAlignment::addVerticesToGeometry( GEOCGeom & g ) // TOO SLOW
+{
+
+    // geometry
+    Geometry *geom = g.getGEOSGeom();
+    GeometryEditor geomEdit( geom->getFactory() );
+
+    // number of points to be added
+    size_t n = geom->getNumPoints(); //g.getMatched()->getNumPoints() - geom->getNumPoints();
+
+    std::cout << g.getGEOSGeom()->getNumPoints() << " "<< n << " n\n";
+
+    // create and set geometry editor
+    AddVerticesGeometryEditorOperation myOp;
+    myOp.setWay(false);
+    myOp.setTolDist(tolDistance/100);
+    myOp.setNumber(n);
+
+    // set geometry to edited one
+    g.setGEOSGeom( geomEdit.edit( geom , &myOp ) );
+
+    // check if geometry was changed
+    g.setChanged( true );
+
+    //std::cout << g.getGEOSGeom()->getNumPoints() << "\n";
+
+}*/ // void CoverageAlignment::addVerticesToGeometry( GEOCGeom & g )
+
+
 void CoverageAlignment::findClosestPoints( const Geometry *g1, const Geometry *g2 )
 {
     CoordinateSequence *c1 = g1->getCoordinates();
@@ -111,7 +154,7 @@ void CoverageAlignment::findClosestPoints( const Geometry *g1, const Geometry *g
             // compute distance between two tested points
             double dist = c1->getAt(i).distance( c2->getAt(j) );
 
-            if( dist < minDist )
+            if( (0 < dist) && (dist < minDist) )
             {
                 minDist = dist;
                 indMin = j;
@@ -160,11 +203,17 @@ void CoverageAlignment::cleanMatchingPoints()
 void CoverageAlignment::addCornerPoints( vector<Coordinate>& vc )
 {
 
+    // don't add point if there is no reason
+    if ( matchingPoints->size() < 3 )
+    {
+        return;
+    }
+
     // find max and min coordinates
-    double maxX = (*max_element( vc.begin(), vc.end(), SortByX() )).x + tolDistance;
-    double maxY = (*max_element( vc.begin(), vc.end(), SortByY() )).y + tolDistance;
-    double minX = (*min_element( vc.begin(), vc.end(), SortByX() )).x + tolDistance;
-    double minY = (*min_element( vc.begin(), vc.end(), SortByY() )).y + tolDistance;
+    double maxX = (*max_element( vc.begin(), vc.end(), SortByX() )).x; //+ tolDistance;
+    double maxY = (*max_element( vc.begin(), vc.end(), SortByY() )).y; //+ tolDistance;
+    double minX = (*min_element( vc.begin(), vc.end(), SortByX() )).x; //+ tolDistance;
+    double minY = (*min_element( vc.begin(), vc.end(), SortByY() )).y; // + tolDistance;
 
     // corner points
     Coordinate c1, c2, c3, c4;
@@ -272,7 +321,7 @@ void CoverageAlignment::createTIN()
     // just test
     for (size_t k = 0; k < tSize; k++)
     {
-        MyGEOSGeom gt;
+        GEOCGeom gt;
         gt.setGEOSGeom(tin1->getGeometryN(k)->clone());
         tin.push_back( gt );
     }
@@ -344,8 +393,10 @@ void CoverageAlignment::align()
 {
     qDebug("CoverageAlignment::align: Entering.");
 
-    for (int i = 0; i < 1; i++ )
-    {
+    // repeat until no new matches are found
+    //do
+    //{
+        //found = 0;
         tin.clear();
 
         // find matching points
@@ -363,10 +414,14 @@ void CoverageAlignment::align()
         transform();
         qDebug("CoverageAlignment::align: Transform done.");
 
-        subLayer = newLayer;
+     /*   subLayer = newLayer;
         matchingPoints = NULL;
         matchingPointsRef = NULL;
         ttin = NULL;
-    }
+
+    } while ( found != 0 );*/
 
 } // void CoverageAlignment::align()
+
+} // namespace geoc
+} // namespace alg

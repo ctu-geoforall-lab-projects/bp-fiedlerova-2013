@@ -15,6 +15,12 @@ using namespace geos::geom;
 using namespace geos::index;
 using namespace geos::index::strtree;
 
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+
+namespace geoc {
+namespace alg {
 
 /** Class providing methods for match (indicate corresponding) geometries from two datasets. */
 
@@ -51,10 +57,10 @@ public:
     void closeGeometries( const Geometry *geom );
 
     /** Test whether two geometries are within tolerance distance.
-      @param g1 Geometry of the first tested feature.
-      @param g2 Geometry of the  second tested feature.
-      @return True if g1 and g2 are within distance tolerance.
-     */
+      * @param g1 Geometry of the first tested feature.
+      * @param g2 Geometry of the  second tested feature.
+      * @return True if g1 and g2 are within distance tolerance.
+      */
     bool isClose( const Geometry * g1, const Geometry * g2 );
 
     /** Create buffer of given Geometry with tolDistance
@@ -77,10 +83,10 @@ public:
     bool contains( const Geometry *geomA, const Geometry *geomB );
 
     /** Sets matching geometry from geometrySet to given geometry.
-      * @param geom MyGEOSGeom to which we want to set matching geometry.
+      * @param geom GEOCGeom to which we want to set matching geometry.
       * @return True if some matching geometry was found.
       */
-    bool setMatch( MyGEOSGeom *geom );
+    bool setMatch( GEOCGeom *geom );
 
     /** Build spatial index
       */
@@ -94,5 +100,8 @@ private:
     SpatialIndex *sIndex;
 
 };
+
+} // namespace alg
+} // namespace geoc
 
 #endif // MATCHINGGEOMETRY_H

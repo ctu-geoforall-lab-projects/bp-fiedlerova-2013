@@ -17,7 +17,15 @@ using namespace geos;
 using namespace geos::geom;
 using namespace geos::geom::util;
 
-/** Class for editing geometry by coordinate sequence. */
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+using namespace geoc::edit;
+
+namespace geoc {
+namespace edit {
+
+/** Class for editing geometry - snap vertices to the closest points. */
 
 class VertexGeometryEditorOperation: public CoordinateOperation
 {
@@ -41,9 +49,9 @@ public:
       */
     bool isChanged() { return changed; }
 
-    /** Virtual function for editing geometry according to mCoord.
-     @param coordinates Not important.
-     @param geom Geometry to be edited.
+    /** Virtual function for editing geometry - snap to closest vertices.
+     * @param coordinates Not important.
+     * @param gGeometry to be edited.
      */
     CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *g );
 
@@ -56,5 +64,7 @@ private:
 
 };
 
+} //namespace geoc
+} //namespace edit
 
 #endif // VERTEXGEOMETRYEDITOROPERATION_H

@@ -2,6 +2,9 @@
 
 #include<iostream>
 
+namespace geoc {
+namespace edit {
+
 AlignGeometryEditorOperation::~AlignGeometryEditorOperation()
 {
     if (sIndex) delete sIndex;
@@ -98,3 +101,7 @@ void AlignGeometryEditorOperation::buildIndex()
     }
 
 } // void AlignGeometryEditorOperation::buildIndex()
+
+
+} //namespace geoc
+} //namespace edit

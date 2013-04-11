@@ -10,6 +10,17 @@
 
 using namespace geos::geom::util;
 
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+using namespace geoc::edit;
+using namespace geoc::tin;
+
+namespace geoc {
+namespace edit {
+
+/** Class for editing in coverage alignment by affine tr. */
+
 class AlignGeometryEditorOperation: public CoordinateOperation
 {
 
@@ -42,9 +53,9 @@ public:
     void buildIndex();
 
     /** Virtual function for editing geometry according to mCoord.
-     @param coordinates Not important.
-     @param geom Geometry to be edited.
-     */
+      * @param coordinates Not important.
+      * @param geom Geometry to be edited.
+      */
     CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *g );
 
 private:
@@ -56,5 +67,9 @@ private:
     bool changed;
 
 };
+
+
+} //namespace geoc
+} //namespace edit
 
 #endif // ALIGNGEOMETRYEDITOROPERATION_H

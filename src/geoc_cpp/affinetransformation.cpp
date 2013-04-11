@@ -1,5 +1,8 @@
 #include "affinetransformation.h"
 
+namespace geoc {
+namespace edit {
+
 AffineTransformation::AffineTransformation()
 {
     // initialize private variables
@@ -117,10 +120,15 @@ void AffineTransformation::transformPoint2D( Coordinate *point )
     double xx = xAA + a1*(point->x - xA) - b1*(point->y - yA);
     double yy = yAA + b2*(point->x - xA) + a2*(point->y - yA);
 
-    //std::cout << "from " << point->x+770000 << " " << point->y+1050000 << " to " << xx+770000 << " " << yy+1050000 << "\n";
+    //std::cout << "from i " << identicPoints1->getX( 0 )+770000 << " " << identicPoints1->getY( 0 )+1050000 << " to " << identicPoints2->getX( 0 )+770000 << " " << identicPoints2->getY( 0 )+1050000 << "\n";
+    //std::cout << "from i " << identicPoints1->getX( 1 )+770000 << " " << identicPoints1->getY( 1 )+1050000 << " to " << identicPoints2->getX( 1 )+770000 << " " << identicPoints2->getY( 1 )+1050000 << "\n";
+    //std::cout << "from i " << identicPoints1->getX( 2 )+770000 << " " << identicPoints1->getY( 2 )+1050000 << " to " << identicPoints2->getX( 2 )+770000 << " " << identicPoints2->getY( 2 )+1050000 << "\n";
 
     // set transformed coordinates
     point->x = xx;
     point->y = yy;
 
 } // void AffineTransformation::transformPoint2D( Coordinate *point )
+
+} //namespace geoc
+} //namespace edit

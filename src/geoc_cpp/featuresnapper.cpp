@@ -1,5 +1,8 @@
 #include "featuresnapper.h"
 
+namespace geoc {
+namespace alg {
+
 FeatureSnapper::FeatureSnapper()
 {
     index = NULL;
@@ -61,7 +64,7 @@ void FeatureSnapper::snap()
             if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
             {
                 // add coordinates from close features
-                closeFeat.push_back( MyGEOSGeom(searchGeom) );
+                closeFeat.push_back( GEOCGeom(searchGeom) );
             }
         }
 
@@ -77,7 +80,7 @@ void FeatureSnapper::snap()
 } // void FeatureSnapper::snap()
 
 
-bool FeatureSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
+bool FeatureSnapper::isClose(GEOCGeom & g1, GEOCGeom & g2)
 {
     // min distance between geometries is less than tolerance
     if ( g1.getGEOSGeom()->distance( g2.getGEOSGeom() ) <= tolDistance )
@@ -87,10 +90,10 @@ bool FeatureSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
 
     return false;
 
-} // bool FeatureSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
+} // bool FeatureSnapper::isClose(GEOCGeom & g1, GEOCGeom & g2)
 
 
-void FeatureSnapper::snapFeatures( MyGEOSGeom * geom, TGeomLayer *closeFeatures )
+void FeatureSnapper::snapFeatures( GEOCGeom * geom, TGeomLayer *closeFeatures )
 {
     // initialize geometry matcher
     MatchingGeometry matcher;
@@ -103,18 +106,36 @@ void FeatureSnapper::snapFeatures( MyGEOSGeom * geom, TGeomLayer *closeFeatures 
         editGeometry( geom );
     }
 
-} // void FeatureSnapper::snapFeatures( MyGEOSGeom * geom, const TGeomLayer *closeFeatures )
+} // void FeatureSnapper::snapFeatures( GEOCGeom * geom, const TGeomLayer *closeFeatures )
 
 
-void FeatureSnapper::editGeometry( MyGEOSGeom * geom )
+void FeatureSnapper::editGeometry( GEOCGeom * geom )
 {
     // change geometry to the geometry of coressponding feature
     geom->setGEOSGeom( geom->getMatched() );
     geom->setChanged( true );
 
+    // create and set geometry editor
+    /*FeatureGeometryEditorOperation myOp;
+    myOp.setTolDistance( tolDistance );
+    myOp.setGeometry(geom);
+
+    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
+
+    // set geometry to edited one
+    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
+
+    // check if geometry was changed
+    geom->setChanged( myOp.isChanged() );*/
+
+    // check validity
     if ( !geom->getGEOSGeom()->isValid() )
     {
         qDebug("FeatureSnapper::editGeometry: geom is not valid ");
+        invalids.push_back(geom->getFeatureId());
     }
 
-} // void FeatureSnapper::editGeometry( MyGEOSGeom * geom )
+} // void FeatureSnapper::editGeometry( GEOCGeom * geom )
+
+} //namespace geoc
+} //namespace alg

@@ -5,6 +5,8 @@
 
 #include <cmath>
 
+namespace geoc {
+
 /** Class for sort Coordinate by X */
 
 class SortByX
@@ -45,5 +47,6 @@ class SortByY
 };
 
 
+} //namespace geoc
 
 #endif // SORT_H

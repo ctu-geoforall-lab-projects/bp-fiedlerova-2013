@@ -1,5 +1,8 @@
 #include "matchinggeometry.h"
 
+namespace geoc {
+namespace alg {
+
 MatchingGeometry::MatchingGeometry()
 {
     sIndex = NULL;
@@ -112,7 +115,7 @@ bool MatchingGeometry::contains( const Geometry *geomA, const Geometry *geomB )
 } // bool MatchingGeometry::contains( const Geometry *geomA, const Geometry *geomB )
 
 
-bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
+bool MatchingGeometry::setMatch( GEOCGeom *geom )
 {
 
     // find close geometries
@@ -141,7 +144,7 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
             // if boundary buffer of one contains boundary of the other -> geometries are similar
             if ( contains( bufferBoundaryA, boundaryB ) && contains( bufferBoundaryB, boundaryA ) )
             {
-                geom->setChanged(true);
+                //geom->setChanged(true);
                 geom->setMatchingGeom( closeSet[i] );  // FINDS ONLY FIRST MATCHING GEOMETRIES, WHAT ABOUT ELSE????????????
 
                 // for clear memory
@@ -173,4 +176,7 @@ bool MatchingGeometry::setMatch( MyGEOSGeom *geom )
 
     return false;
 
-} // bool MatchingGeometry::setMatch( MyGEOSGeom *geom, bool isFirst )
+} // bool MatchingGeometry::setMatch( GEOCGeom *geom, bool isFirst )
+
+} // namespace alg
+} // namespace geoc

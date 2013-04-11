@@ -13,6 +13,9 @@ using namespace std;
 using namespace geos;
 using namespace geos::geom;
 
+namespace geoc {
+namespace tin {
+
 /** Class representing TIN triangle */
 
 class Triangle
@@ -66,5 +69,9 @@ private:
 };
 
 typedef vector< Triangle > TTin;
+
+
+} //namespace geoc
+} //namespace tin
 
 #endif // TRIANGLE_H

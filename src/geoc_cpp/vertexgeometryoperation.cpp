@@ -1,5 +1,8 @@
 #include "vertexgeometryeditoroperation.h"
 
+namespace geoc {
+namespace edit {
+
 CoordinateSequence* VertexGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *geom )
 {
     CoordinateSequence* coord = geom->getCoordinates();
@@ -17,7 +20,7 @@ CoordinateSequence* VertexGeometryEditorOperation::edit(const CoordinateSequence
             // compute distance between two tested points
             double dist = coord->getAt(i).distance( closeCoord->getAt(j) );
 
-            if( dist < minDist )
+            if( (0 < dist) && (dist < minDist) )
             {
                 minDist = dist;
                 indMin = j;
@@ -35,5 +38,12 @@ CoordinateSequence* VertexGeometryEditorOperation::edit(const CoordinateSequence
 
     }
 
-    return &(coord->removeRepeatedPoints());
+    //coord->removeRepeatedPoints();
+    // NOTE: this can cause that polygon has less than 4 necessary points .. should i left polygon unchanged or let it as just one or two points?
+
+    return coord;
+
 }
+
+} //namespace geoc
+} //namespace edit

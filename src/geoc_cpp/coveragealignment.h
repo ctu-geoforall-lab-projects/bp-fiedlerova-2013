@@ -16,6 +16,15 @@
 
 using namespace geos::operation::distance;
 
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+using namespace geoc::edit;
+using namespace geoc::tin;
+
+namespace geoc {
+namespace alg {
+
 /** Class for vector conflation of two layers. */
 
 class CoverageAlignment
@@ -54,6 +63,10 @@ public:
     /** Find matching features in ref and sub layer.
       */
     void findMatchingFeatures();
+
+    /** Add vertices to the geometry according to number of matching geom
+      */
+    //void addVerticesToGeometry( GEOCGeom & g );
 
     /** Choose matching points for triangulation.
       */
@@ -120,7 +133,12 @@ private:
     vector<int> invalids;
     TGeomLayer tin;
     //bool addVertices;
+    int found;
 
 };
+
+
+} // namespace geoc
+} // namespace alg
 
 #endif // COVERAGEALIGNMENT_H

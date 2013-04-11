@@ -6,6 +6,15 @@
 
 using namespace std;
 
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+using namespace geoc::edit;
+
+
+namespace geoc {
+namespace edit {
+
 /** Class providing functions for affine transformation of point from system 1 to system 2. */
 
 class AffineTransformation
@@ -51,5 +60,8 @@ private:
     const CoordinateSequence *identicPoints2;
 
 };
+
+} //namespace geoc
+} //namespace edit
 
 #endif // AFFINETRANSFORMATION_H

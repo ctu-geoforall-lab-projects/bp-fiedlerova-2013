@@ -1,5 +1,5 @@
-#ifndef MYGEOSGEOM_H
-#define MYGEOSGEOM_H
+#ifndef GEOCGEOM_H
+#define GEOCGEOM_H
 
 // GEOS includes
 #include <geos/geom/GeometryFactory.h>
@@ -14,21 +14,23 @@ using namespace geos;
 using namespace geos::geom;
 using namespace geos::io;
 
+namespace geoc {
+namespace geo {
 
 /** Class for representing GEOS geometry and supporting parameters. */
 
-class MyGEOSGeom
+class GEOCGeom
 {
 
 public:
 
     /** Default constructor
      */
-    MyGEOSGeom(): geosGeom( NULL ), matched( NULL ), changed( false ), hasMatch(false), featureId( 0 ) {}
+    GEOCGeom(): geosGeom( NULL ), matched( NULL ), changed( false ), hasMatch(false), featureId( 0 ) {}
 
     /** Constructor
      */
-    MyGEOSGeom( Geometry *g, int fid = 0 ): geosGeom( g ), matched( NULL ), changed( false ), hasMatch(false), featureId( fid ) {}
+    GEOCGeom( Geometry *g, int fid = 0 ): geosGeom( g ), matched( NULL ), changed( false ), hasMatch(false), featureId( fid ) {}
 
     /** Sets geometry of this to given Geometry.
      */
@@ -85,7 +87,10 @@ private:
 
 };
 
+typedef std::vector< GEOCGeom > TGeomLayer;
 
-typedef std::vector< MyGEOSGeom > TGeomLayer;
+} // namespace geoc
+} // namespace geo
 
-#endif // MYGEOSGEOM_H
+
+#endif // GEOCGEOM_H

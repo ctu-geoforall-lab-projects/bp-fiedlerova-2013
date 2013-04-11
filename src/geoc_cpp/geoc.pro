@@ -17,11 +17,11 @@ SOURCES += \
     vertexgeometryoperation.cpp \
     triangle.cpp \
     coveragealignment.cpp \
-    aligngeometryeditoroperation.cpp
+    aligngeometryeditoroperation.cpp \
+    featuregeometryeditoroperation.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
-    mygeosgeom.h \
     matchinggeometry.h \
     affinetransformation.h \
     triangulation.h \
@@ -29,7 +29,10 @@ HEADERS += geoc.h\
     vertexgeometryeditoroperation.h \
     triangle.h \
     coveragealignment.h \
-    aligngeometryeditoroperation.h
+    aligngeometryeditoroperation.h \
+    sort.h \
+    featuregeometryeditoroperation.h \
+    geocgeom.h
 
 
 unix:LIBS += -L/usr/local/lib \

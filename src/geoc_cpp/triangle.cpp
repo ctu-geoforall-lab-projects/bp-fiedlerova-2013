@@ -1,5 +1,8 @@
 #include "triangle.h"
 
+namespace geoc {
+namespace tin {
+
 Triangle::Triangle()
 {
     triangle = NULL;
@@ -30,3 +33,5 @@ bool Triangle::isInside( const Coordinate *point ) const
 
 } // bool Triangle::isInside( const Coordinate *point ) const
 
+} //namespace geoc
+} //namespace tin

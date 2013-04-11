@@ -1,6 +1,9 @@
 // local includes
 #include "vertexsnapper.h"
 
+namespace geoc {
+namespace alg {
+
 VertexSnapper::VertexSnapper()
 {
     sIndex = NULL;
@@ -36,10 +39,11 @@ void VertexSnapper::buildIndex()
 
 void VertexSnapper::snap()
 {
-    // build spatial index
-    buildIndex();
 
     newGeometry = subGeometry;
+
+    // build spatial index
+    buildIndex();
 
     for ( size_t i = 0; i < subGeometry.size(); i++ )
     {
@@ -69,9 +73,9 @@ void VertexSnapper::snap()
         }
 
         // snap vertex if there are close points
-        if ( closeCoord->getSize() > 0 )
+        if ( closeCoord->size() > 0 )
         {
-            MyGEOSGeom newGeom = subGeometry[i];
+            GEOCGeom newGeom = subGeometry[i];
             snapVertices( &newGeom, closeCoord );
             newGeometry[i] = newGeom;
         }
@@ -83,20 +87,7 @@ void VertexSnapper::snap()
 } // void VertexSnapper::snap()
 
 
-bool VertexSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
-{
-    // min distance between geometries is less than tolerance
-    if ( g1.getGEOSGeom()->distance( g2.getGEOSGeom() ) < tolDistance )
-    {
-       return true;
-    }
-
-    return false;
-
-} // bool VertexSnapper::isClose(MyGEOSGeom & g1, MyGEOSGeom & g2)
-
-
-void VertexSnapper::snapVertices(MyGEOSGeom *geom, CoordinateSequence *closeCoord)
+void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
 {
 
     // create and set geometry editor
@@ -119,4 +110,8 @@ void VertexSnapper::snapVertices(MyGEOSGeom *geom, CoordinateSequence *closeCoor
         invalids.push_back(geom->getFeatureId());
     }
 
-} // void VertexSnapper::snapVertices(MyGEOSGeom *geom, CoordinateSequence *closeCoord)
+} // void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
+
+
+} //namespace geoc
+} //namespace alg

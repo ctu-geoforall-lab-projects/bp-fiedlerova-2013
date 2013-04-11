@@ -11,6 +11,16 @@
 using namespace geos;
 using namespace triangulate;
 
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+
+namespace geoc {
+namespace tin {
+
+/** Class for Delaunay triangulation */
+
+
 class Triangulation
 {
 
@@ -38,5 +48,9 @@ private:
     DelaunayTriangulationBuilder tBuilder;
 
 };
+
+} //namespace geoc
+} //namespace tin
+
 
 #endif // TRIANGULATION_H

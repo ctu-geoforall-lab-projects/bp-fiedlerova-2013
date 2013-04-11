@@ -1,5 +1,8 @@
 #include "triangulation.h"
 
+namespace geoc {
+namespace tin {
+
 void Triangulation::setTINVertices( CoordinateSequence *points )
 {
     tBuilder.setSites(*points);
@@ -14,3 +17,6 @@ GeometryCollection* Triangulation::getTriangles()
 
     return gColl.release();
 }
+
+} //namespace geoc
+} //namespace tin
