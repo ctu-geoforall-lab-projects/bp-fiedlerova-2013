@@ -50,7 +50,7 @@ blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je n�
 \label{vspic}
   \begin{figure}[hbt]
     \centering
-      \includegraphics[width=350pt]{./pictures/vs-princip.pdf}
+      \includegraphics[width=300pt]{./pictures/vs-princip.pdf}
       \caption{Postup přichycení vrcholů (\todo{zdroj})}
       \label{fig:vs-princip}
   \end{figure}
@@ -164,7 +164,7 @@ Nejčastější používaný postup při~spojování vektorových map je násled
 \label{capic}
   \begin{figure}[hbt]
     \centering
-      \includegraphics[width=400pt]{./pictures/ca-princip.pdf}
+      \includegraphics[width=350pt]{./pictures/ca-princip.pdf}
       \caption{Postup zarovnání vrstev (\todo{zdroj})}
       \label{fig:ca-princip}
   \end{figure}
@@ -180,14 +180,35 @@ následujícím způsobem.
  \item Máme dva prvky A a~B ze~dvou různých překrývajících se vrstev.
  \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní 
     tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, 
-    že si prvky odpovídají a~pokračuje se dalším krokem. V~opačném případě 
-    si prvky neodpovídají.
+    že si prvky odpovídají a~pokračuje se dalším krokem. Situace je naznačena
+    na~obrázku \ref{fig:buffer}. V~opačném případě si prvky neodpovídají.
+
+\label{bfpic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=300pt]{./pictures/buffer-test.pdf}
+      \caption{Porovnání prvků na základě jejich obalových zón (\todo{zdroj})}
+      \label{fig:buffer}
+
+  \end{figure}
  \item Dále se testuje, zda hranice prvku B leží v~obalové zóně hranice prvku
-    A a~naopak. Je-li splněna i~tato podmínka, pak jsou prvky označeny 
-    za~odpovídající si.
+    A a~naopak (viz obrázek \ref{fig:buffer-boundary}). Je-li splněna i~tato 
+    podmínka, pak jsou prvky označeny za~odpovídající si.
+
+\label{bf2pic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=300pt]{./pictures/buffer-boundary.pdf}
+      \caption{Porovnání prvků na základě obalových zón jejich hranic(\todo{zdroj})}
+      \label{fig:buffer-boundary}
+  \end{figure}
+
 \end{enumerate}
 
 %% ML: doplnit ilustraci .. obrázek obal. zón
+
+
+
 
 \subsection{Implementace} % text asi přepsat 
 \label{ca-implementace}
@@ -200,9 +221,9 @@ Nejdříve je třeba nalézt odpovídající si prvky. K~tomu slouží třída
 \texttt{Matching\-Geometry}, která k~dané geometrii najde odpovídající
 (\texttt{set\-Match}). Obdobně jako u~\texttt{Vertex\-Snapper} je i~zde 
 využito prostorových indexů, které jsou vytvořeny metodou 
-\texttt{build\-Index}. Určení blízkých bodů je pak prostřednictvím
+\texttt{build\-Index}. Určení blízkých bodů je pak provedeno prostřednictvím
 funkcí \texttt{choose\-Matching\-Points, \-find\-Closest\-Points,
-\-clean\-Matching\-Points} a~dalšími třídy \texttt{Co\-ve\-ra\-ge\-Align\-ment}.
+\-clean\-Matching\-Points} třídy \texttt{Co\-ve\-ra\-ge\-Align\-ment}.
 
 Třetím krokem je vytvoření TINu metodou \texttt{create\-TIN}, která k~tomu
 využívá třídu \texttt{Tri\-an\-gu\-la\-tion}.  
