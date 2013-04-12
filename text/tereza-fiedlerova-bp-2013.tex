@@ -20,6 +20,13 @@
 \usepackage[utf8]	% Kódování zdrojových souborů je UTF8
 	{inputenc}      % Balíček pro nastavení kódování zdrojových souborů
 
+%% Správné nastavení mezer před sekcema
+%\usepackage[setspace]
+%\onehalfspacing
+\usepackage[compact]{titlesec}
+\titleformat{\subsubsection}{\normalfont\bfseries}{\thesection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{15pt}{10pt}
+
 \usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
 
 \usepackage{wrapfig}        % pro obtékání textu kolem obrázků a tabulek 
@@ -69,6 +76,7 @@
 \fi 
 
 \renewcommand{\figurename}{Obrázek} % Pro český popis obrázku
+\def\figurename{Obrázek}
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 

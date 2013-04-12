@@ -68,6 +68,7 @@ najednou pro~více vybraných prvků.
 %% http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/About_spatial_adjustment_attribute_transfer/001t000000v9000000/
 %% http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/About_spatial_adjustment_rubbersheeting/001t000000v3000000/
 
+%\vspace{-0.73cm} % Proc to nefunguje bez toho?
 \subsubsection{Integrate}
 
 Nástroj \textit{Integrate} umožňuje sladění dvou datasetů. Na~vstupu vyžaduje 
@@ -160,7 +161,7 @@ Knihovna \textit{JCS} používá pro~vizualizaci dat a~interakci JUMP WorkBench
 a~API. Pro~poskytování základní geometrické funkcionality je pak využíváno 
 knihovny \textit{JTS}. JUMP API umožňuje vstup a~výstup prostorových dat 
 a~další funkcionalitu s~nimi spojenou. Jádro \textit{JCS} tvoří Conflation API
-obsahující algoritmy pro~kontrolu a~slučování prostorových dat 
+obsahující algoritmy pro~kontrolu a~slučo\-vání prostorových dat 
 (\textit{conflation}). Funkce \textit{JCS} jsou v~projektu OpenJUMP 
 implementovány v~podobě kolekce zásuvných modulů - \textit{QA, Conflate, 
 RoadMatcher}.
@@ -205,7 +206,7 @@ prvku, ale pouze k~jeho vrcholům. Tato varianta Hausdorffovy vzdálenosti
 ve~většině případů vrací stejně dobré výsledky. 
 
 Postup spojování vektorových datasetů pomocí knihovny \textit{JCS} je založen
-na~nalezení geometrických rozdílů mezi~oběma mapami a~následném odstranění 
+na~na\-le\-zení geometrických rozdílů mezi~oběma mapami a~následném odstranění 
 těchto rozdílů.
 
 K~detekci geometrických rozdílů je použit algoritmus pro~prostorové rozdíly.
@@ -227,7 +228,7 @@ musí být menší nebo rovna toleranci.
 %% ML: doplnit ilustraci? .. stejná jako u popisu meho algoritmu CoverageAlignment
 
 Pro~odstraňování překrytů či mezer neexistuje exaktní algoritmus,
-ale jsou využívány různé heuristiky poskytující dobré topologické výsledky.
+ale jsou vy\-užívány různé heuristiky poskytující dobré topologické výsledky.
 
 Následující výčet podává přehled nejčastějších úloh, které je možné 
 s~tímto nástrojem řešit.
@@ -293,7 +294,7 @@ pouze k~identifikaci geometrických rozdílů.
     vrcholy linií či polygonů) ze~dvou různých datasetů, jejichž vzdálenost
     je menší než daná tolerance.
  \item \textit{Find Offset Boundary Corners} - slouží k~nalezení hranic
-    polygonů ze~dvou sousedících vektorových map, které by na~sebe měly
+    polygonů ze~dvou sou\-sedících vektorových map, které by na~sebe měly
     navazovat, ale je mezi~nimi posun menší než zadaná tolerance.
  \item \textit{DiffSegmentsPlugin} - identifikuje liniové segmenty, které
     jsou obsaženy pouze v~jedné ze~zadaných vrstev, nikoli v~obou dvou.

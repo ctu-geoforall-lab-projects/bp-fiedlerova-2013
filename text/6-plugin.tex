@@ -35,12 +35,12 @@ Pro správné načtení musí zásuvný modul obsahovat následující.
  \item Metoda \texttt{unload}, která odstraní alokované elementy a~samotnou
 	instanci třídy zásuvného modulu (pomocí destruktoru) při ukončení 
 	programu.
- \item Další externí C ~funkce (\texttt{name, description, ...}) pro správné
+ \item Další externí C ~funkce (\texttt{na\-me, descrip\-tion}) pro správné
 	zobrazení ve~\textit{Správci zásuvný modulů}.
 \end{enumerate}
 
 V~modulu \textit{Conflate} jsou všechny tyto funkce obsaženy ve~třídě
-\texttt{QgsConflatePlugin}. 
+\texttt{Qgs\-Con\-flate\-Plugin}. 
 Podrobnější popis tvorby C++ pluginu lze najít v~\textit{QGIS Coding and 
 Compilation Guide} % uvést odkaz na literaturu
 , odkud byly čerpány výše uvedené informace.
@@ -104,15 +104,16 @@ dokumentaci k~pluginu. % doplnit odkazy na přílohy
 	např. \texttt{subject(3).shp}.
  \item Poté je převedena geometrie prvků zvolených vrstev (upravovaná
 	a~referenční) na~reprezentaci geometrie knihovny \textit{GEOC},
-	tedy z~\texttt{QgsGeometry} na~\texttt{GEOCGeometry}. Tyto geometrie
-	jsou uloženy do~vektorů, které se pak předají třídám \textit{GEOC}.
+	tedy z~\texttt{Qgs\-Geo\-metry} na~\texttt{GEOC\-Geo\-metry}. 
+	Tyto geometrie 	jsou uloženy do~vektorů, které se pak předají 
+	třídám \textit{GEOC}.
  \item Jak už bylo naznačeno, je vytvořena instance příslušné třídy 
 	\textit{GEOC} a~té jsou předány parametry - vektory s~prvky vybraných
 	vrstev a~toleranční vzdálenost. 
  \item Dále je zavolána funkce vytvořené třídy pro zarovnání datasetů. Při volbě 
-	přichycení vrcholů \textit{Snap vertices} v~dialogu je použita třída 
+	při\-chycení vrcholů \textit{Snap vertices} v~dialogu je použita třída 
 	\texttt{VertexSnapper} a~metoda \texttt{snap}, při volbě zarovnání 
-	vrstev \textit{Coverage Alignment} pak 	třída \texttt{CoverageAlignment} 
+	vrstev \textit{Coverage Alignment} pak třída \texttt{Cove\-rage\-Align\-ment} 
 	a~metoda \texttt{align}. Výsledek je uložen do~nového vektoru geometrií.
  \item Na závěr je upravena geometrie nové vrstvy (kopie upravované vrstvy) dle
 	výsledků úprav provedených algoritmy knihovny \textit{GEOC}.

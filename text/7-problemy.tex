@@ -54,7 +54,7 @@ v~algoritmech použita třída \texttt{geos::geom::Coordinate}, pro níž však
 nejsou na~rozdíl od~\texttt{geos::geom::Geometry} prostorové indexy
 v~knihovně \textit{GEOS} implementovány.
 
-\vspace{-9pt} %% Proc to tu nefunguje bez toho?
+
 \subsubsection{Testování podobných prvků}
 
 Další částí programu, která působí výrazné zpomalení, je vyhledávání
@@ -62,7 +62,7 @@ odpovídajících si geometrií ve~třídě \texttt{MatchingGeometry}. Konkrétn
 se jedná o~test, kdy jsou porovnávány obalové zóny prvků. Konstrukce
 obalových zón je výpočetně náročná, proto je žádoucí, aby se tento test
 prováděl u~co nejmenšího počtu prvků. V~algoritmu je tento počet snížen
-porovnáváním pouze blízkých prvků. Také by bylo možné u~těchto
+porovnáváním pouze blízkých prvků. Také by bylo možné u~těchto 
 blízkých prvků nejdříve např. testovat vzdálenost centroidů, porovnávat
 jejich plochu či délku. Tento postup by však nemusel vždy čas běhu programu
 zrychlit. Pro rozhodnutí, zda ho použít, by bylo nezbytné znát charakteristiku
