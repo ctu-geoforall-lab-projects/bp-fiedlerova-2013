@@ -342,6 +342,7 @@ na t\'{e}ma \uv{\nazev@cz} jsem vypracovala samostatn\v{e}. Pou\v{z}itou literat
 	}
 	\cfoot{\thepage}
 
+
 \renewcommand{\headrulewidth}{0.4pt}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -527,6 +528,7 @@ na t\'{e}ma \uv{\nazev@cz} jsem vypracovala samostatn\v{e}. Pou\v{z}itou literat
 }
 
 %% Predefinovani seznamu obrazku
+
 \newcommand{\seznamobrazku}{
   {	% vlozene prostredi z duvodu pagestyle
   	\cleardoublepage
@@ -540,8 +542,13 @@ na t\'{e}ma \uv{\nazev@cz} jsem vypracovala samostatn\v{e}. Pou\v{z}itou literat
 	  \fi
 	} %
 }
+\addto\captionsenglish{%
+   \def\listfigurename{Seznam obrázků}%
+%   \def\listoftables{Seznam tabulek}%
+}%
 
 %% Predefinovani seznamu tabulek
+
 \newcommand{\seznamtabulek}{
 	{ % vlozene prostredi z duvodu pagestyle
 	  \cleardoublepage
@@ -560,9 +567,9 @@ na t\'{e}ma \uv{\nazev@cz} jsem vypracovala samostatn\v{e}. Pou\v{z}itou literat
 \ifTT@cvutstyle
 	\newenvironment{seznamzkratek}[1]{
 		\cleardoublepage
-		\chapter*{Seznam symbol\r{u}, veli\v{c}in a zkratek}
-		\addcontentsline{toc}{chapter}{Seznam symbol\r{u}, veli\v{c}in a zkratek}
-		\markboth{\MakeUppercase {Seznam symbol\r{u}, veli\v{c}in a zkratek}}{}
+		\chapter*{Seznam zkratek}
+		\addcontentsline{toc}{chapter}{Seznam zkratek}
+		\markboth{\MakeUppercase {Seznam zkratek}}{}
 		\begin{acronym}[#1]
 	}{
 		\end{acronym}
