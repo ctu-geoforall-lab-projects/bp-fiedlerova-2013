@@ -1,8 +1,8 @@
 \chapter{Knihovna GEOC}
 \label{5-geoc}
 
-\section{Tvorba knihovny GEOC}
-\label{knihovna}
+%\section{Tvorba knihovny GEOC} % mám to nechat zakomentované?
+%\label{knihovna}
 
 Algoritmy týkající se slučování vektorových map (\textit{conflation}) byly
 implementovány v~externí knihovně \textit{GEOC} bez závislosti na~QGIS API. 
@@ -98,21 +98,23 @@ než nejkratší úsek geometrie (linie, polygonu), může dojít k~přichycení
 bodů k~jednomu bodu z~referenční vrstvy. Zda je toto přípustné či nikoli je 
 už na~rozhodnutí uživatele.
 
-\label{vsinvalid}
-  \begin{figure}[hbt]
-    \centering
-      \includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
-      \caption{Vznik nevalidní geometrie při přichycení vrcholů}
-      \label{fig:vs-nevalidni}
-  \end{figure} 
 
-V~některých případech může dojít ke~vzniku nevalidních geometrií, to je takových,
-jejichž segmenty se vzájemně protínají apod. To se nejčastěji stává u~protáhlých 
-úzkých prvků a~jiných speciálních tvarů. Příkladem může být situace uvedená 
-na~obrázku \ref{fig:vs-nevalidni}, kde růžový polygon je prvkem přichycen 
-k~referenční fialové vrstvě, ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného
-tvaru vzniká nežádoucí křížení. 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  PRESUNUTO DO PROBLEMU
+% \label{vsinvalid}
+%   \begin{figure}[hbt]
+%     \centering
+%       \includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
+%       \caption{Vznik nevalidní geometrie při přichycení vrcholů}
+%       \label{fig:vs-nevalidni}
+%   \end{figure} 
+% 
+% V~některých případech může dojít ke~vzniku nevalidních geometrií, to je takových,
+% jejichž segmenty se vzájemně protínají apod. To se nejčastěji stává u~protáhlých 
+% úzkých prvků a~jiných speciálních tvarů. Příkladem může být situace uvedená 
+% na~obrázku \ref{fig:vs-nevalidni}, kde růžový polygon je prvkem přichycen 
+% k~referenční fialové vrstvě, ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného
+% tvaru vzniká nežádoucí křížení. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Někdy může být tento postup výhodný i~v~případě, kdy chceme odstranit drobné mezery či 
 %překryty v~rámci jedné vrstvy. Poté stačí nastavit danou vrstvu jako referenční i~jako

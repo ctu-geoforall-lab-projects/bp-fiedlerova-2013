@@ -224,7 +224,22 @@ vzdálenosti. % To je dáno tím, ...
 
 \subsubsection{Nevalidní geometrie}
 Vzhledem k~principu tohoto algoritmu mohou při jeho použití vznikat nevalidní 
-geometrie. Tyto chyby je samozřejmě možné opravit ručně po~zpracování. Avšak
+geometrie, to je takové, jejichž segmenty se vzájemně protínají apod. 
+To se nejčastěji stává u~protáhlých úzkých prvků a~jiných speciálních tvarů. 
+Příkladem může být situace uvedená na~obrázku \ref{fig:vs-nevalidni}, 
+kde růžový polygon je prvkem přichycen k~referenční fialové vrstvě, 
+ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného tvaru vzniká nežádoucí 
+křížení.
+
+\label{vsinvalid}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
+      \caption{Vznik nevalidní geometrie při přichycení vrcholů}
+      \label{fig:vs-nevalidni}
+  \end{figure} 
+
+Tyto chyby je samozřejmě možné opravit ručně po~zpracování. Avšak
 v~rozsáhlých datasetech může být nevalidních prvků poměrně velké množství.
 Pokud se toto nestalo z~důvodu nevhodného nastavení zpracování, bylo by 
 vhodné, aby samotný algoritmus tyto chyby minimalizoval. To by bylo možné 
