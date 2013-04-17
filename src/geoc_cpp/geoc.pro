@@ -13,26 +13,24 @@ SOURCES += \
     matchinggeometry.cpp \
     affinetransformation.cpp \
     triangulation.cpp \
-    featuresnapper.cpp \
     vertexgeometryoperation.cpp \
     triangle.cpp \
     coveragealignment.cpp \
     aligngeometryeditoroperation.cpp \
-    featuregeometryeditoroperation.cpp
+    linematcher.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
     matchinggeometry.h \
     affinetransformation.h \
     triangulation.h \
-    featuresnapper.h \
     vertexgeometryeditoroperation.h \
     triangle.h \
     coveragealignment.h \
     aligngeometryeditoroperation.h \
     sort.h \
-    featuregeometryeditoroperation.h \
-    geocgeom.h
+    geocgeom.h \
+    linematcher.h
 
 
 unix:LIBS += -L/usr/local/lib \

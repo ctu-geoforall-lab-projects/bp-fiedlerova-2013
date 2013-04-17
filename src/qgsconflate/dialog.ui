@@ -18,7 +18,7 @@
     <normaloff>:/icon/icons/mActionConflate.png</normaloff>:/icon/icons/mActionConflate.png</iconset>
   </property>
   <property name="toolTip">
-   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   <string/>
   </property>
   <property name="whatsThis">
    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QGIS plugin for conflation&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -153,7 +153,7 @@
         <item>
          <widget class="QRadioButton" name="mrbSnapVertex">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check if vertex snapping should be used&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check fo vertex snapping algorithm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string>Snap Vertices</string>
@@ -163,7 +163,7 @@
         <item>
          <widget class="QRadioButton" name="mrbCovAlign">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check if coverage alignment should be used&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check for coverage alignment algorithm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string>Coverage Alignment</string>
@@ -174,6 +174,9 @@
          <widget class="QRadioButton" name="mrbLineMatch">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check for line matcher algorithm (note that this is only  testing version)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string>Match Lines (testing)</string>

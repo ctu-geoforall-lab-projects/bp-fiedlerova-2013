@@ -282,6 +282,8 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     QgsGeometryMap geomMap;
     TGeomLayer::iterator it = mGeosNew.begin();
 
+    QList<QgsFeatureId> delFeatures;
+
     // next feature in the layer
     while ( featureIt.nextFeature( myFeature ) )
     {
@@ -301,14 +303,27 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         // get new geometry if it is changed
         if ( (*it).isChanged() )
         {
+            // delete feature with empty geometry
+            if ( (*it).getGEOSGeom()->isEmpty() )
+            {
+                delFeatures.push_back( fid );
+            }
+
             // insert new geometry to the map of geometries
             QString wktGeom = QString::fromStdString((*it).getWKTGeom());
             geomMap.insert( fid, *(geom->fromWkt( wktGeom )) );
+
         }
 
         it++;
         delete geom;
 
+    }
+
+    // delete required features
+    if (deleteFeatures.size() > 0)
+    {
+        mNewLayer->dataProvider()->deleteFeatures( delFeatures );
     }
 
     // change geometries of features
@@ -397,6 +412,11 @@ void QgsConflateProvider::align()
 
 void QgsConflateProvider::lineMatch()
 {
+
+    if( mSubLayer->geometryType() != QGis::Line )
+    {
+        return;
+    }
 
     // transfer ref and sub geometry
     bool isRef = true;

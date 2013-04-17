@@ -11,13 +11,12 @@ CoverageAlignment::CoverageAlignment()
     matchingPoints = NULL;
     matchingPointsRef = NULL;
     ttin = NULL;
-    //addVertices = false;
     found = 0;
 
 } // default constructor
 
 
-CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol)//, bool addVer )
+CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol)
 {
     refLayer = ref;
     subLayer = sub;
@@ -25,7 +24,6 @@ CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double t
     matchingPoints = NULL;
     matchingPointsRef = NULL;
     ttin = NULL;
-    //addVertices = addVer;
     found = 0;
 
 } // constructor
@@ -33,9 +31,9 @@ CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double t
 
 CoverageAlignment::~CoverageAlignment()
 {
-   if (matchingPoints) delete matchingPoints;
-   if (matchingPointsRef) delete matchingPointsRef;
-   if (ttin) delete ttin;
+   //if (matchingPoints) delete matchingPoints;
+   //if (matchingPointsRef) delete matchingPointsRef;
+   //if (ttin) delete ttin;
 
 } // destructor
 
@@ -53,6 +51,7 @@ void CoverageAlignment::findMatchingFeatures()
     size_t size = newLayer.size();
     for ( size_t i = 0; i < size; i++ )
     {
+
         if ( !newLayer[i].isMatch() )
         {
             matcher.setMatch( &newLayer[i] );
@@ -69,6 +68,7 @@ void CoverageAlignment::findMatchingFeatures()
 
 void CoverageAlignment::chooseMatchingPoints()
 {
+
     matchingPoints = new CoordinateArraySequence();
     matchingPointsRef = new CoordinateArraySequence();
 
@@ -82,11 +82,6 @@ void CoverageAlignment::chooseMatchingPoints()
         // closest point only if geometry has a matching one
         if ( newLayer[i].isMatch() )
         {
-
-            /*if ( addVertices )
-            {
-                addVerticesToGeometry( newLayer[i] );
-            }*/
 
             Geometry* g1 = newLayer[i].getGEOSGeom();
             Geometry* g2 = newLayer[i].getMatched();
@@ -104,40 +99,14 @@ void CoverageAlignment::chooseMatchingPoints()
     mfPoints->toVector( vc );
     addCornerPoints( vc );
 
+    delete mfPoints;
+
 } // void CoverageAlignment::chooseMatchingPoints()
-
-
-/*void CoverageAlignment::addVerticesToGeometry( GEOCGeom & g ) // TOO SLOW
-{
-
-    // geometry
-    Geometry *geom = g.getGEOSGeom();
-    GeometryEditor geomEdit( geom->getFactory() );
-
-    // number of points to be added
-    size_t n = geom->getNumPoints(); //g.getMatched()->getNumPoints() - geom->getNumPoints();
-
-    std::cout << g.getGEOSGeom()->getNumPoints() << " "<< n << " n\n";
-
-    // create and set geometry editor
-    AddVerticesGeometryEditorOperation myOp;
-    myOp.setWay(false);
-    myOp.setTolDist(tolDistance/100);
-    myOp.setNumber(n);
-
-    // set geometry to edited one
-    g.setGEOSGeom( geomEdit.edit( geom , &myOp ) );
-
-    // check if geometry was changed
-    g.setChanged( true );
-
-    //std::cout << g.getGEOSGeom()->getNumPoints() << "\n";
-
-}*/ // void CoverageAlignment::addVerticesToGeometry( GEOCGeom & g )
 
 
 void CoverageAlignment::findClosestPoints( const Geometry *g1, const Geometry *g2 )
 {
+
     CoordinateSequence *c1 = g1->getCoordinates();
     CoordinateSequence *c2 = g2->getCoordinates();
 
@@ -204,16 +173,17 @@ void CoverageAlignment::addCornerPoints( vector<Coordinate>& vc )
 {
 
     // don't add point if there is no reason
-    if ( matchingPoints->size() < 3 )
+    if ( matchingPoints->size() < 1 )
     {
         return;
     }
 
+
     // find max and min coordinates
-    double maxX = (*max_element( vc.begin(), vc.end(), SortByX() )).x; //+ tolDistance;
-    double maxY = (*max_element( vc.begin(), vc.end(), SortByY() )).y; //+ tolDistance;
-    double minX = (*min_element( vc.begin(), vc.end(), SortByX() )).x; //+ tolDistance;
-    double minY = (*min_element( vc.begin(), vc.end(), SortByY() )).y; // + tolDistance;
+    double maxX = (*max_element( vc.begin(), vc.end(), SortByX() )).x;
+    double maxY = (*max_element( vc.begin(), vc.end(), SortByY() )).y;
+    double minX = (*min_element( vc.begin(), vc.end(), SortByX() )).x;
+    double minY = (*min_element( vc.begin(), vc.end(), SortByY() )).y;
 
     // corner points
     Coordinate c1, c2, c3, c4;
@@ -241,6 +211,7 @@ void CoverageAlignment::addCornerPoints( vector<Coordinate>& vc )
 
 void CoverageAlignment::deleteRepeated( vector<Coordinate> & vc)
 {
+
     vector<Coordinate>::iterator it = vc.begin();
 
     // delete repeated points from matching points
@@ -318,22 +289,17 @@ void CoverageAlignment::createTIN()
 
     }
 
-    // just test
-    for (size_t k = 0; k < tSize; k++)
-    {
-        GEOCGeom gt;
-        gt.setGEOSGeom(tin1->getGeometryN(k)->clone());
-        tin.push_back( gt );
-    }
-
     // for clear memory
     gf.destroyGeometry(tin1);
+    if (matchingPoints) delete matchingPoints;
+    if (matchingPointsRef) delete matchingPointsRef;
 
 } // void CoverageAlignment::createTIN()
 
 
 void CoverageAlignment::correspondingPoints( const CoordinateSequence * c, CoordinateSequence * c2 )
 {
+
     size_t cSize = c->size();
 
     // transfer coordinates to vector
@@ -386,21 +352,24 @@ void CoverageAlignment::transform()
         }
 
     }
+
 } // void CoverageAlignment::transform()
 
 
 void CoverageAlignment::align()
 {
-    qDebug("CoverageAlignment::align: Entering.");
 
     // repeat until no new matches are found
-    //do
-    //{
-        //found = 0;
-        tin.clear();
+    do
+    {
+        found = 0;
 
         // find matching points
         findMatchingFeatures();
+        if (found == 0)
+        {
+            break;
+        }
         qDebug("CoverageAlignment::align: Matching feature done.");
 
         chooseMatchingPoints();
@@ -414,12 +383,11 @@ void CoverageAlignment::align()
         transform();
         qDebug("CoverageAlignment::align: Transform done.");
 
-     /*   subLayer = newLayer;
+        subLayer = newLayer;
         matchingPoints = NULL;
         matchingPointsRef = NULL;
-        ttin = NULL;
 
-    } while ( found != 0 );*/
+    } while ( found != 0 );
 
 } // void CoverageAlignment::align()
 

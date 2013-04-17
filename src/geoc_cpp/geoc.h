@@ -16,9 +16,8 @@ namespace geoc {
     namespace alg {
         class VertexSnapper;
         class MatchingGeometry;
-        class FeatureSnapper;
         class CoverageAlignment;
-        //class LineMatcher;
+        class LineMatcher;
     }
     namespace tin {
         class Triangle;
@@ -35,10 +34,8 @@ namespace geoc {
 #include "matchinggeometry.h"
 #include "triangulation.h"
 #include "coveragealignment.h"
-#include "featuresnapper.h"
 #include "aligngeometryeditoroperation.h"
-//#include "addverticesgeometryeditoroperation.h"
-//#include "linematcher.h"
+#include "linematcher.h"
 
 #include  <QtGui>
 

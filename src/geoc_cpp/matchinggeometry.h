@@ -35,7 +35,7 @@ public:
 
     /** Constructor
       */
-    MatchingGeometry( TGeomLayer *l, double tol = 0 ): geometrySet(l), tolDistance(tol) {}
+    MatchingGeometry( TGeomLayer *l, double tol = 0 ): geometrySet(l), tolDistance(tol), sIndex(NULL) {}
 
     /** Destructor
       */

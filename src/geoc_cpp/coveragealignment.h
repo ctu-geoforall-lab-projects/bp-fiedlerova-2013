@@ -38,7 +38,7 @@ public:
 
     /** Constructor.
       */
-    CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol = 0);//, bool addVer = false );
+    CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double tol = 0);
 
     /** Destructor.
       */
@@ -56,17 +56,9 @@ public:
       */
     void setTolDistance( double tol ){ tolDistance = tol; }
 
-    /** Indicates if vertices may be added to features.
-      */
-    //void setAddVertices( bool yes ) { addVertices = yes; }
-
     /** Find matching features in ref and sub layer.
       */
     void findMatchingFeatures();
-
-    /** Add vertices to the geometry according to number of matching geom
-      */
-    //void addVerticesToGeometry( GEOCGeom & g );
 
     /** Choose matching points for triangulation.
       */
@@ -117,9 +109,6 @@ public:
       */
     vector<int> getInvalidGeometries() { return invalids; }
 
-    /**
-      */
-    TGeomLayer getTIN(){ return tin;}
 
 private:
 
@@ -131,8 +120,6 @@ private:
     CoordinateSequence *matchingPointsRef;
     TTin *ttin;
     vector<int> invalids;
-    TGeomLayer tin;
-    //bool addVertices;
     int found;
 
 };

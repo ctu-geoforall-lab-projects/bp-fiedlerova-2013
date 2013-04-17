@@ -29,7 +29,7 @@ void MatchingGeometry::buildIndex()
     {
         const Geometry* g = geometrySet->at(i).getGEOSGeom();
         const Envelope* env = g->getEnvelopeInternal();
-        sIndex->insert(env, (void*)g );
+        sIndex->insert( env, (void*)g );
     }
 
 } // void VertexSnapper::buildIndex()
@@ -45,6 +45,7 @@ void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 
 void  MatchingGeometry::closeGeometries( const Geometry *geom )
 {
+
     // create spatial index
     buildIndex();
 
@@ -140,7 +141,6 @@ bool MatchingGeometry::setMatch( GEOCGeom *geom )
         {
             Geometry *boundaryB = boundary( geom->getGEOSGeom() );
             Geometry *bufferBoundaryB = buffer( boundaryB );
-
             // if boundary buffer of one contains boundary of the other -> geometries are similar
             if ( contains( bufferBoundaryA, boundaryB ) && contains( bufferBoundaryB, boundaryA ) )
             {
@@ -154,7 +154,6 @@ bool MatchingGeometry::setMatch( GEOCGeom *geom )
                 f.destroyGeometry(boundaryB);
                 f.destroyGeometry(bufferBoundaryA);
                 f.destroyGeometry(bufferBoundaryB);
-
                 return true;
             }
 
@@ -173,6 +172,7 @@ bool MatchingGeometry::setMatch( GEOCGeom *geom )
     f.destroyGeometry(bufferA);
     f.destroyGeometry(boundaryA);
     f.destroyGeometry(bufferBoundaryA);
+
 
     return false;
 

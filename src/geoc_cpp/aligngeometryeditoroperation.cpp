@@ -69,6 +69,7 @@ bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
             idPoints2 = t->getCorrespondingTriangle();
 
             delete searchEnv;
+            f.destroyGeometry(p);
             f.destroyGeometry(g);
             return true;
         }
@@ -78,6 +79,7 @@ bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
     }
 
     delete searchEnv;
+    f.destroyGeometry(p);
     return false;
 
 } // bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
