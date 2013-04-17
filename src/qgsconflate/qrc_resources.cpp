@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Resource object code
 **
-** Created: Wed Apr 17 14:06:14 2013
+** Created: Wed Apr 17 14:29:13 2013
 **      by: The Resource Compiler for Qt version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost!
@@ -10,7 +10,7 @@
 #include <QtCore/qglobal.h>
 
 static const unsigned char qt_resource_data[] = {
-  // /host/Users/Tereza/Documents/CVUT-FSv/BP/bp-fiedlerova/src/qgsconflate/icons/mActionConflate.png
+  // /host/Users/Tereza/Documents/CVUT-FSv/BP/src/qgsconflate/icons/mActionConflate.png
   0x0,0x0,0x6,0x4d,
   0x89,
   0x50,0x4e,0x47,0xd,0xa,0x1a,0xa,0x0,0x0,0x0,0xd,0x49,0x48,0x44,0x52,0x0,

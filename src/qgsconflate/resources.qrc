@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/icon">
+    <qresource prefix="/icon/">
         <file>icons/mActionConflate.png</file>
     </qresource>
 </RCC>
