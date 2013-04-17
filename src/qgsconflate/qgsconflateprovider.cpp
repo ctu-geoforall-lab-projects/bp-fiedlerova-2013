@@ -1,13 +1,16 @@
+// QT includes
+#include <QTranslator>
+
 // local includes
 #include "qgsconflateprovider.h"
 
-// QGis includes
-#include <qgsvectorlayer.h>
+// QGIS includes
 #include <qgsogrprovider.h>
 #include <qgsvectorfilewriter.h>
 #include <qgsvectorlayerfeatureiterator.h>
 #include <qgsproject.h>
 #include <qgsgeometry.h>
+
 
 QgsConflateProvider::QgsConflateProvider()
 {
@@ -15,19 +18,17 @@ QgsConflateProvider::QgsConflateProvider()
     mRefLayer = NULL;
     mSubLayer = NULL;
     mNewLayer = NULL;
-    mTinLayer = NULL;
 
-    tolDistance = 0;
+    mTolDistance = 0;
 
-}
+} // constructor
+
 
 QgsConflateProvider::~QgsConflateProvider()
 {
-    /*if(mRefLayer) delete mRefLayer;
-    if(mSubLayer) delete mSubLayer;
-    if(mNewLayer) delete mNewLayer;
-*/
-}
+
+} // destructor
+
 
 bool QgsConflateProvider::createEmptyLayer( QString uri )
 {
@@ -37,7 +38,7 @@ bool QgsConflateProvider::createEmptyLayer( QString uri )
 
     // parameters of new vector layer
     QString *errorMessage = NULL;
-    QgsFields fields = mSubLayer->pendingFields(); //mSubLayer->dataProvider()->fields();
+    QgsFields fields = mSubLayer->dataProvider()->fields();
     QGis::WkbType wkbType = mSubLayer->wkbType();
     QgsCoordinateReferenceSystem srs = (mSubLayer->crs());
 
@@ -48,20 +49,25 @@ bool QgsConflateProvider::createEmptyLayer( QString uri )
 
     // create empty layer
     QgsVectorLayerImport::ImportError ierror = QgsOgrProvider::createEmptyLayer(uri, fields, wkbType, &srs,
-                                                true, oldToNewAttrIdxMap, errorMessage, options); // some memory error here
+                                                true, oldToNewAttrIdxMap, errorMessage, options);
 
     // return false if error
     if( ierror )
     {
-        QMessageBox::warning(0,"Error", "Error while creating layer", QMessageBox::Ok);
+        QMessageBox::warning( 0, QTranslator::tr("Error"), QTranslator::tr("Error while creating layer"),
+                              QMessageBox::Ok);
+
         delete options;
         delete oldToNewAttrIdxMap;
+
         return false;
     }
 
-    qDebug( "QgsConflateProvider::createEmptyLayer: Empty vector layer as .shp created." );
+    qDebug( "QgsConflateProvider::createEmptyLayer: Empty shapefile created." );
+
     delete options;
     delete oldToNewAttrIdxMap;
+
     return true;
 
 } // bool QgsConflateProvider::createEmptyLayer()
@@ -108,8 +114,41 @@ bool QgsConflateProvider::copyLayer( QString uri )
 
     // create empty layer
     int rank = 0;
-    if (uri.isEmpty())
-        uri = newUri( QgsProject::instance()->readPath( mSubLayer->name() ), rank ); //QgsProject::instance()->homePath(), rank);//mSubLayer->source()+"_copy.shp";
+    QString name;
+
+    if ( uri.isEmpty())
+    {
+        uri = newUri( QgsProject::instance()->readPath( mSubLayer->name() ), rank );
+        name = mSubLayer->name()+"("+QString::number(rank)+")";
+    }
+    // extract name
+    else
+    {
+        if ( uri.rightRef(4) != ".shp" )
+        {
+                uri.append(".shp");
+        }
+
+        // extract name of layer from uri
+        int uriSize = uri.size();
+        for (int i = uriSize; i > 0; i--)
+        {
+            if ( uri[i] == QChar::fromAscii('/') )
+            {
+                name = uri.right( uriSize-i-1 );
+                name.remove( name.size()-4, 4); // remove .shp from name
+                break;
+            }
+
+        }
+
+        if (name.isEmpty()) // for relative paths
+        {
+            name = uri;
+            name.remove( name.size()-4, 4);
+        }
+
+    }
 
     if ( !createEmptyLayer( uri ) )
     {
@@ -117,14 +156,12 @@ bool QgsConflateProvider::copyLayer( QString uri )
     }
 
     //new layer
-    mNewLayer = new QgsVectorLayer(uri, mSubLayer->name()+"("+QString::number(rank)+")", mSubLayer->providerType(), "ogr");
-    qDebug( "QgsConflateProvider::copyLayer: New vector layer created." );
-
+    mNewLayer = new QgsVectorLayer(uri, name, mSubLayer->providerType(), "ogr");
 
     // copy features from subject layer to the new layer
     QgsFeature myFeature;
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
-    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator(mSubLayer, request); // feature iterator
+    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator(mSubLayer, request);
     featureIt.rewind(); // reset iterator to the start position
     QList<QgsFeature> features;
 
@@ -162,6 +199,22 @@ bool QgsConflateProvider::copyLayer( QString uri )
 } // bool QgsConflateProvider::copyLayer()
 
 
+bool QgsConflateProvider::checkLayersType()
+{
+    QGis::GeometryType typeRef = mRefLayer->geometryType();
+    QGis::GeometryType typeSub = mSubLayer->geometryType();
+
+    if ( typeRef == QGis::UnknownGeometry || typeSub == QGis::UnknownGeometry
+         || typeRef == QGis::NoGeometry || typeSub == QGis::NoGeometry)
+    {
+        return false;
+    }
+
+    return typeRef == typeSub;
+
+} // bool QgsConflateProvider::checkLayersType()
+
+
 void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
 {
 
@@ -182,9 +235,8 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
     myGeosLayer->clear();
 
     // transfer geometry of each feature from subject layer to geos
-
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
-    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( myLayer, request ); // feature iterator
+    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( myLayer, request );
     featureIt.rewind(); // reset iterator to the start position
 
     QgsFeature myFeature;
@@ -195,9 +247,9 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
         QgsGeometry *geom = myFeature.geometry();
 
         // transfer qgis geometry to geos
-        MyGEOSGeom geos;
+        GEOCGeom geos;
         geos.setFeatureId( myFeature.id() );
-        //geos.setGEOSGeom( GEOSGeom_clone(geom->asGeos()) ); // some memory error here
+        //geos.setGEOSGeom( GEOSGeom_clone(geom->asGeos()) );
         geos.setGEOSGeomFromWKT( (geom->exportToWkt()).toStdString() );
 
         // add geometry to the list of geos geometries
@@ -205,14 +257,13 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
 
     }
 
-    qDebug("QgsConflateProvider::transferGeometrytoGeos: GEOMETRY TRANSFERED");
+    qDebug("QgsConflateProvider::transferGeometrytoGeos: GEOMETRY TRANSFERED TO GEOC.");
 
 } // bool QgsConflateProvider::transferGeometryToGeos()
 
 
 bool QgsConflateProvider::transferGeometryFromGeos()
 {
-    // AFTER DOING SOMETHING WITH GEOMETRY IN GEOS FORMAT
 
     // some tests
     int caps = mNewLayer->dataProvider()->capabilities();
@@ -225,11 +276,11 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     // change geometry in the layer according to GEOS geometry
     QgsFeature myFeature;
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
-    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( mNewLayer, request ); // feature iterator
+    QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator( mNewLayer, request );
     featureIt.rewind(); // reset iterator to the start position
 
     QgsGeometryMap geomMap;
-    TGeomLayer::iterator it = mGeosNew.begin(); // geometry iterator
+    TGeomLayer::iterator it = mGeosNew.begin();
 
     // next feature in the layer
     while ( featureIt.nextFeature( myFeature ) )
@@ -243,7 +294,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         // check if fid are the same for both new and old geometry
         if( fid != (*it).getFeatureId() )
         {
-            qDebug("QgsConflateProvider::transferGeometryFromGeos: different feature ids");
+            qDebug("QgsConflateProvider::transferGeometryFromGeos: different feature ids.");
             break;
         }
 
@@ -251,7 +302,8 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         if ( (*it).isChanged() )
         {
             // insert new geometry to the map of geometries
-            geomMap.insert( fid, *(geom->fromWkt( QString::fromStdString((*it).getWKTGeom()) )) );//(*it).getFeatureId(), geom );
+            QString wktGeom = QString::fromStdString((*it).getWKTGeom());
+            geomMap.insert( fid, *(geom->fromWkt( wktGeom )) );
         }
 
         it++;
@@ -280,8 +332,6 @@ void QgsConflateProvider::vertexSnap()
     transferGeometrytoGeos( isRef );
     transferGeometrytoGeos( !isRef );
 
-    // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
-
     VertexSnapper vs = VertexSnapper();
 
     // set geometries of layers to vertex snapper
@@ -289,63 +339,25 @@ void QgsConflateProvider::vertexSnap()
     vs.setSubGeometry( mGeosSub );
 
     // set tolerance distance
-    vs.setTolDistance( tolDistance );
+    vs.setTolDistance( mTolDistance );
 
     // snap vertices from subject layer to the reference layer
     vs.snap();
-    qDebug("QgsConflateProvider::vertexSnap: SNAP DONE");
 
     // set new geometry
     mGeosNew = vs.getNewGeometry();
 
     // get ids of invalid geometries and write them to the protocol
     vector<int> invalids = vs.getInvalidGeometries();
-    writeProtocol(invalids);
+    writeProtocol(invalids, QTranslator::tr("Snap Vertices"));
 
     // transfer geometry back
     if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
     {
-        qDebug("QgsConflateProvider::vertexSnap: SNAPPING DONE");
+        qDebug("QgsConflateProvider::vertexSnap: SNAPPING DONE.");
     }
 
 } // void QgsConflateProvider::vertexSnap()
-
-void QgsConflateProvider::featureSnap()
-{
-    // transfer ref and sub geometry
-    bool isRef = true;
-    transferGeometrytoGeos( isRef );
-    transferGeometrytoGeos( !isRef );
-
-    // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
-
-    FeatureSnapper fs = FeatureSnapper();
-
-    // set geometries of layers to vertex snapper
-    fs.setRefGeometry( mGeosRef );
-    fs.setSubGeometry( mGeosSub );
-
-    // set tolerance distance
-    fs.setTolDistance( tolDistance );
-
-    // snap vertices from subject layer to the reference layer
-    fs.snap();
-    qDebug("QgsConflateProvider::featureSnap: SNAP DONE");
-
-    // set new geometry
-    mGeosNew = fs.getNewGeometry();
-
-    // write protocol
-    vector<int> invalids;
-    writeProtocol( invalids );
-
-    // transfer geometry back
-    if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
-    {
-        qDebug("QgsConflateProvider::featuerSnap: SNAPPING DONE");
-    }
-
-} // void QgsConflateProvider::featureSnap()
 
 
 void QgsConflateProvider::align()
@@ -356,49 +368,83 @@ void QgsConflateProvider::align()
     transferGeometrytoGeos( isRef );
     transferGeometrytoGeos( !isRef );
 
-    // DO SOMETHING WITH GEOMETRY IN GEOS FORMAT
-
+    // set geometries of layers for coverage alignment
     CoverageAlignment ca = CoverageAlignment();
-
-    // set geometries of layers to vertex snapper
     ca.setRefGeometry( mGeosRef );
     ca.setSubGeometry( mGeosSub );
 
     // set tolerance distance
-    ca.setTolDistance( tolDistance );
+    ca.setTolDistance( mTolDistance );
 
-    // snap vertices from subject layer to the reference layer
+    // align subject layer to reference layer
     ca.align();
-    qDebug("QgsConflateProvider::conflate: CONFLATE DONE");
 
     // set new geometry
     mGeosNew = ca.getNewGeometry();
 
-    // just test
-    mTin = ca.getTIN();
-    showTin();
-
     // get ids of invalid geometries and write them to the protocol
     vector<int> invalids = ca.getInvalidGeometries();
-    writeProtocol(invalids);
+    writeProtocol(invalids, QTranslator::tr("Coverage Alignment"));
 
     // transfer geometry back
     if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
     {
-        qDebug("QgsConflateProvider::conflate: CONFLATION DONE SUCESSFULY");
+        qDebug("QgsConflateProvider::align: ALIGNMENT DONE.");
     }
 
-} // void QgsConflateProvider::conflate()
+} // void QgsConflateProvider::align()
 
 
-void QgsConflateProvider::writeProtocol( const vector<int> &invalids )
+void QgsConflateProvider::lineMatch()
+{
+
+    // transfer ref and sub geometry
+    bool isRef = true;
+    transferGeometrytoGeos( isRef );
+    transferGeometrytoGeos( !isRef );
+
+    LineMatcher lm = LineMatcher();
+
+    // set geometries of layers to line matcher
+    lm.setRefGeometry( mGeosRef );
+    lm.setSubGeometry( mGeosSub );
+
+    // set tolerance distance
+    lm.setTolDistance( mTolDistance );
+
+    // match lines of two layers
+    lm.match();
+
+    // set new geometry
+    mGeosNew = lm.getNewGeometry();
+
+    // get ids of invalid geometries and write them to the protocol
+    vector<int> invalids = lm.getInvalidGeometries();
+    writeProtocol(invalids, QTranslator::tr("Line Matcher"));
+
+    // transfer geometry back
+    if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )
+    {
+        qDebug("QgsConflateProvider::lineMatch: MATCHING DONE SUCESSFULY");
+    }
+
+} // void QgsConflateProvider::lineMatch()
+
+
+void QgsConflateProvider::writeProtocol( const vector<int> &invalids, QString method )
 {
     mProtocol.clear();
 
     // some general informations
-    mProtocol = "Conflation protocol\n\nreference layer:\t\t"+mRefLayer->name()+"\nsubject layer:\t\t"+mSubLayer->name()+
-            "\nnumber of processed features:\t"+QString::number(mGeosNew.size())+"\nnumber of invalid features:\t"+  // note: number of processed feature is not exactly right
-            QString::number(invalids.size())+"\n\nids of invalid features (needs to be repaired manually):";
+    mProtocol = "Conflation protocol\n\nreference layer:\t\t"+mRefLayer->name()+
+            "\nsubject layer:\t\t"+mSubLayer->name()+
+            "\nnew layer:\t\t\t"+mNewLayer->name()+
+            "\ndistance tolerance:\t\t"+QString::number(mTolDistance)+
+            "\nconflation method:\t\t"+method+
+            "\n\nnumber of processed features:\t"+QString::number(mGeosNew.size())+
+            "\nnumber of invalid features:\t"+QString::number(invalids.size())+
+            "\n\nids of invalid features (needs to be repaired manually):";
+
 
     // add list of invalid features
     for ( size_t i = 0; i < invalids.size(); i++ )
@@ -406,45 +452,14 @@ void QgsConflateProvider::writeProtocol( const vector<int> &invalids )
         mProtocol.append( "\n"+QString::number(invalids[i]) );
     }
 
-    if ( invalids.size() > 10 )
+    if ( invalids.size() > 5)
     {
-        mProtocol.append("\n\nNOTE: The high number of invalid features can be caused by too large tolerance distance or by combining "
-                         "two layers with very different precision. Please try conflation again with different settings or check if data"
-                         "are topologically correct.");
+        mProtocol.append("\n\nNOTE: The high number of invalid features can be caused by "
+                         "too large tolerance distance or by combining two layers with very "
+                         "different precision. Please try conflation again with different "
+                         "settings or check if data are topologically correct.");
     }
 
-    mProtocol.append("\n\nend of protocol");
+    mProtocol.append(QTranslator::tr("\n\nend of protocol"));
 
-} // void QgsConflateProvider::writeProtocol( const vector<int> &invalids ) const
-
-
-// just for test
-void QgsConflateProvider::showTin()
-{
-    int rank = 0;
-    QString uri = newUri( QgsProject::instance()->readPath( mSubLayer->name() ), rank ); //QgsProject::instance()->homePath(), rank);//mSubLayer->source()+"_copy.shp";
-
-    createEmptyLayer( uri );
-
-    //new layer
-    mTinLayer = new QgsVectorLayer(uri, "tin", mSubLayer->providerType(), "ogr");
-
-    // copy features from tin  to the tin layer
-    QList<QgsFeature> features;
-
-    for (size_t i = 0; i < mTin.size(); i++)
-    {
-        QgsFeature myFeature;
-        QgsGeometry *g = NULL;
-        myFeature.setGeometry( *(g->fromWkt( QString::fromStdString(mTin.at(i).getWKTGeom()) )) );
-
-        // add feature to the list
-
-        features.push_back( myFeature );
-    }
-
-
-    mTinLayer->dataProvider()->addFeatures(features);
-
-
-} // void QgsConflateProvider::showTin()
+} // void QgsConflateProvider::writeProtocol( const vector<int> &invalids, QString method )

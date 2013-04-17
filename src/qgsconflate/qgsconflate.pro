@@ -1,6 +1,6 @@
 QGIS_DIR = /opt/Quantum-GIS
 OGR_API_DIR = /usr/include/gdal
-#GEOC_DIR = /opt/geoc
+#GEOC_DIR = /opt/geoc_bez_idx
 GEOC_DIR = /opt/geoc_cpp
 QGIS_PLUGIN_DIR = /opt/qgis_plugins
 
@@ -58,3 +58,6 @@ SOURCES += \
 
 FORMS += \
     dialog.ui
+
+RESOURCES += \
+    resources.qrc

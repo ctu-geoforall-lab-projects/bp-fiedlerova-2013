@@ -4,14 +4,11 @@
 // Qt includes
 #include <QMessageBox>
 
-// QGis includes
-#include <qgsmapcanvas.h>
-#include <qgsvectorlayer.h>
+// QGIS includes
 #include <qgsmaplayerregistry.h>
 #include <qgsogrprovider.h>
 #include <qgsvectorfilewriter.h>
 #include <qgsvectorlayerfeatureiterator.h>
-#include <qgsproject.h>
 
 // GEOS includes
 #include <geos_c.h>
@@ -27,6 +24,23 @@ Dialog::Dialog(QWidget *parent, Qt::WFlags fl, QgisInterface * iface) :
 
     // conflate provider
     mConflate = new QgsConflateProvider();
+
+    // load layers to combo boxes
+    loadLayers();
+
+} // constructor
+
+
+Dialog::~Dialog()
+{
+
+    delete mConflate;
+
+}  // destructor
+
+
+void Dialog::loadLayers()
+{
 
     // load map layers to the QMap container
     QMap<QString, QgsMapLayer*> mapLayers = QgsMapLayerRegistry::instance()->mapLayers();
@@ -47,13 +61,7 @@ Dialog::Dialog(QWidget *parent, Qt::WFlags fl, QgisInterface * iface) :
         this->mcbSubjects->insertItem( 0, vl->name() );
     }
 
-} // constructor
-
-
-Dialog::~Dialog()
-{
-    delete mConflate;
-}  // destructor
+} // void Dialog::loadLayers()
 
 
 QgsVectorLayer* Dialog::selectedLayer(int index)
@@ -87,61 +95,122 @@ QgsVectorLayer* Dialog::selectedLayer(int index)
 } // QgsVectorLayer* Dialog::selectedLayer(int index)
 
 
-void Dialog::on_processButton_clicked()
+bool Dialog::setConflation()
 {
-    // clear protocol
-    this->mTextEdit->clear();
-    this->mlabelStatus->setText("Conflating, please, wait.");
+    QgsVectorLayer* refLayer = selectedLayer(0);
+    QgsVectorLayer* subLayer = selectedLayer(1);
+
+    if ( !refLayer || !subLayer )
+    {
+        return false;
+    }
 
     // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
-    mConflate->setRefVectorLayer( selectedLayer(0) );
-    mConflate->setSubVectorLayer( selectedLayer(1) );
+    mConflate->setRefVectorLayer( refLayer );
+    mConflate->setSubVectorLayer( subLayer );
 
-    this->mlabelStatus->setText("Copying subject layer.");
-    // copy subject layer and conflate
-    if( mConflate->copyLayer() )
+    if ( !mConflate->checkLayersType() )
     {
-        qDebug( "Dialog::onokButtonclicked: Layer was copied." );
+        QMessageBox::warning( 0, tr("Warnig"), tr("Layers must have the same "
+                              "geometry type."), QMessageBox::Ok);
+        return false;
+    }
 
-        if ( mrbSnapVertex->isChecked() )
-        {
-            mConflate->vertexSnap();
-        }
-        else if ( mrbSnapFeature->isChecked() )
-        {
-            mConflate->featureSnap();
+    if ( this->mLineEdit->text().isEmpty() )
+    {
+        QMessageBox::information( 0, tr("Information"), tr("No output selected, new layer "
+                                  "will be saved to current directory."), QMessageBox::Ok);
+    }
 
-        }
-        else if ( mrbConflate->isChecked() )
-        {
-            mConflate->align();
-        }
+    return mConflate->copyLayer( this->mLineEdit->text() );
 
-        QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();
+} // bool Dialog::setConflation()
 
-        if ( myLayer && myLayer->isValid())
-        {
-            // add new layer to the layer registry
-            QgsMapLayerRegistry::instance()->addMapLayers( QList<QgsMapLayer *>() << myLayer);
-        }
-        else
-        {
-            QMessageBox::information(0,"Information","New layer was created but cannot be added to the layer tree"
-                                     "because it is not valid. Please add it manually.", QMessageBox::Ok);
-        }
 
-        // set protocol
-        mProtocol = mConflate->getProtocol();
-        this->mTextEdit->setPlainText(mProtocol);
+void Dialog::conflate()
+{
+    // do conflation according to selected method
+    if ( mrbSnapVertex->isChecked() )
+    {
+        mConflate->vertexSnap();
+    }
+    else if ( mrbCovAlign->isChecked() )
+    {
+        mConflate->align();
+    }
+    else if ( mrbLineMatch->isChecked() )
+    {
+        mConflate->lineMatch();
+    }
+
+
+} // void Dialog::conflate()
+
+
+void Dialog::addLayer()
+{
+    QgsVectorLayer *myLayer = mConflate->getNewVectorLayer();
+
+    if ( myLayer && myLayer->isValid())
+    {
+        // add new layer to the layer registry
+        QgsMapLayerRegistry::instance()->addMapLayers( QList<QgsMapLayer *>() << myLayer);
+        QMessageBox::information( 0, tr("Information"), tr("Conflation done. See protocol "
+                                  "for further information"), QMessageBox::Ok);
     }
     else
     {
-        qDebug( "Dialog::on_okButton_clicked: Unable to copy subject layer for conflation." );
-        QMessageBox::information(0,"Information","Unable to copy subject layer for conflation.", QMessageBox::Ok);
+        QMessageBox::warning( 0, tr("Warning"), tr("New layer was created but cannot "
+                              "be added to the layer tree because it is not valid. Please"
+                              " add it manually to repair."), QMessageBox::Ok);
     }
 
-    this->mlabelStatus->setText("Conflation done.");
+} // void Dialog::addLayer()
+
+
+void Dialog::on_processButton_clicked()
+{
+    this->update();
+
+    // clear protocol
+    this->mTextEdit->clear();
+
+    if ( mcbReferences->count() == 0 || mcbSubjects->count() == 0 )
+    {
+       QMessageBox::information( 0, tr("Information"), tr("Please, add layers for conflation "
+                              "to current project first."), QMessageBox::Ok);
+    }
+    else if ( !mrbSnapVertex->isChecked() && !mrbCovAlign->isChecked() )
+    {
+        QMessageBox::information( 0, tr("Information"), tr("Please select conflation "
+                              "method."), QMessageBox::Ok);
+    }
+    else
+    {
+        // copy subject layer and conflate
+        if( setConflation() )
+        {
+            // change cursor
+            this->setCursor(Qt::WaitCursor);
+
+            // do conflation and show result
+            conflate();
+            addLayer();
+
+            // restore cursor
+            this->setCursor(Qt::ArrowCursor);
+
+            // set protocol
+            mProtocol = mConflate->getProtocol();
+            this->mTextEdit->setPlainText(mProtocol);
+        }
+        else
+        {
+            QMessageBox::warning( 0, tr("Warning"), tr("Unable to copy subject layer for "
+                                      "conflation. Conflation failed."), QMessageBox::Ok);
+        }
+    }
 
 } // void Dialog::on_okButton_clicked()
 
@@ -152,3 +221,31 @@ void Dialog::on_closeButton_clicked()
     this->close();
 
 } // void Dialog::on_closeButton_clicked()
+
+
+void Dialog::on_selectButton_clicked()
+{
+
+    // select file where to save result
+    QString filename = QFileDialog::getSaveFileName( this, tr("Save shapefile"), "",
+                                                     tr("(*.shp);;All Files (*)"));
+
+    // set name to the text field
+    this->mLineEdit->setText(filename);
+
+} // void Dialog::on_selectButton_clicked()
+
+
+void Dialog::on_refreshButton_clicked()
+{
+    // clear
+    mLineEdit->clear();
+    mTextEdit->clear();
+
+    mcbReferences->clear();
+    mcbSubjects->clear();
+
+    // refresh list of layers
+    loadLayers();
+
+} // void Dialog::on_refreshButton_clicked()

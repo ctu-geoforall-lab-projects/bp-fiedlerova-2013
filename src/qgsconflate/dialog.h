@@ -5,15 +5,16 @@
 #include <QDialog>
 #include <QtGui>
 
-// QGis includes
+// QGIS includes
 #include <qgisinterface.h>
-#include <qgsmaplayer.h>
-#include <qgsgeometry.h>
 
 // Local includes
 #include "ui_dialog.h"
 #include "qgsconflateprovider.h"
 #include "geoc.h"
+
+
+/** Class which provides GUI for plugin. */
 
 class Dialog : public QDialog, private Ui::Dialog
 {
@@ -30,6 +31,22 @@ public:
      */
     QgsVectorLayer* selectedLayer( int index );
 
+    /** Load opened layers to combo boxes.
+      */
+    void loadLayers();
+
+    /** Set conflation parameters from dialog and copy layer.
+      * @return True if layer was copied succesfully.
+      */
+    bool setConflation();
+
+    /** Do the conflation.
+      */
+    void conflate();
+
+    /** Add new layer to the layer registry.
+      */
+    void addLayer();
 
 private slots:
 
@@ -38,6 +55,11 @@ private slots:
 
     /** Close dialog. */
     void on_closeButton_clicked();
+
+    /** Select where to save layer. */
+    void on_selectButton_clicked();
+
+    void on_refreshButton_clicked();
 
 private:
 

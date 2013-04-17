@@ -1,12 +1,21 @@
 #ifndef QGSCONFLATEPROVIDER_H
 #define QGSCONFLATEPROVIDER_H
 
-// QGis includes
+// QGIS includes
 #include <qgsmaplayer.h>
 #include <qgsvectorlayer.h>
 
 // Local includes
 #include "geoc.h"
+
+using namespace geoc;
+using namespace geoc::geo;
+using namespace geoc::alg;
+using namespace geoc::edit;
+using namespace geoc::tin;
+
+
+/** Class providing conflate functionality of plugin */
 
 class QgsConflateProvider
 {
@@ -52,7 +61,11 @@ public:
     /** Copy subject layer to the mNewLayer.
      *  @return true if copied layer is valid
      */
-    bool copyLayer( QString uri = "");
+    bool copyLayer( QString uri );
+
+    /** Check if layers are of the same type.
+      */
+    bool checkLayersType();
 
     /** Transfers qgis geometry to geos.
      *  @param theLayer Layer which geometry has to be transfered.
@@ -67,15 +80,15 @@ public:
     /** Snap vertices */
     void vertexSnap();
 
-    /** Snap features */
-    void featureSnap();
-
     /** Coverage alignment */
     void align();
 
+    /** Line matching */
+    void lineMatch();
+
     /** Set distance tolerance for snapping.
       */
-    void setTolDistance( double dist ){ tolDistance = dist; }
+    void setTolDistance( double dist ){ mTolDistance = dist; }
 
     /** Get text protocol about computation
       */
@@ -83,11 +96,7 @@ public:
 
     /** Write protocol about computation and given invalid geometries.
       */
-    void writeProtocol( const vector<int> &invalids );
-
-    /** TIN for conflation
-      */
-    void showTin();
+    void writeProtocol( const vector<int> &invalids, QString method );
 
 private:
 
@@ -97,10 +106,9 @@ private:
     TGeomLayer mGeosSub;
     TGeomLayer mGeosRef;
     TGeomLayer mGeosNew;
-    double tolDistance;
+    double mTolDistance;
     QString mProtocol;
-    TGeomLayer mTin;
-    QgsVectorLayer *mTinLayer;
+
 };
 
 #endif // QGSCONFLATEPROVIDER_H

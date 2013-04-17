@@ -14,6 +14,8 @@
 //Local includes
 #include "dialog.h"
 
+/** Class for creating plugin and loading it to QGIS. */
+
 class QgsConflatePlugin : public QObject, public QgisPlugin
 {
 

@@ -1,7 +1,7 @@
 //Qt includes
-#include <QAction>
+#include <QTranslator>
 
-//QGis includes
+//QGIS includes
 #include <qgisinterface.h>
 
 //Local includes
