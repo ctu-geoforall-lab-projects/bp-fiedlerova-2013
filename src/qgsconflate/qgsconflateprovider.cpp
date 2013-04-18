@@ -20,6 +20,7 @@ QgsConflateProvider::QgsConflateProvider()
     mNewLayer = NULL;
 
     mTolDistance = 0;
+    correct = false;
 
 } // constructor
 
@@ -282,7 +283,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
     QgsGeometryMap geomMap;
     TGeomLayer::iterator it = mGeosNew.begin();
 
-    QList<QgsFeatureId> delFeatures;
+    QgsFeatureIds delFeatures;
 
     // next feature in the layer
     while ( featureIt.nextFeature( myFeature ) )
@@ -306,7 +307,7 @@ bool QgsConflateProvider::transferGeometryFromGeos()
             // delete feature with empty geometry
             if ( (*it).getGEOSGeom()->isEmpty() )
             {
-                delFeatures.push_back( fid );
+                delFeatures.insert(fid);
             }
 
             // insert new geometry to the map of geometries
@@ -320,15 +321,15 @@ bool QgsConflateProvider::transferGeometryFromGeos()
 
     }
 
-    // delete required features
-    if (deleteFeatures.size() > 0)
-    {
-        mNewLayer->dataProvider()->deleteFeatures( delFeatures );
-    }
-
     // change geometries of features
     if( geomMap.size() > 0 && mNewLayer->dataProvider()->changeGeometryValues( geomMap) )
     {
+        // delete required features
+        if (delFeatures.size() > 0)
+        {
+           mNewLayer->dataProvider()->deleteFeatures( delFeatures );
+        }
+
         qDebug("QgsConflateProvider::transferGeometryFromGeos: GEOMETRY TRANSFERED BACK");
         return true;
     }
@@ -353,8 +354,9 @@ void QgsConflateProvider::vertexSnap()
     vs.setRefGeometry( mGeosRef );
     vs.setSubGeometry( mGeosSub );
 
-    // set tolerance distance
+    // set tolerance distance and other
     vs.setTolDistance( mTolDistance );
+    vs.setRepair(correct);
 
     // snap vertices from subject layer to the reference layer
     vs.snap();
@@ -388,8 +390,9 @@ void QgsConflateProvider::align()
     ca.setRefGeometry( mGeosRef );
     ca.setSubGeometry( mGeosSub );
 
-    // set tolerance distance
+    // set tolerance distance and other
     ca.setTolDistance( mTolDistance );
+    ca.setRepair( correct );
 
     // align subject layer to reference layer
     ca.align();
@@ -429,8 +432,10 @@ void QgsConflateProvider::lineMatch()
     lm.setRefGeometry( mGeosRef );
     lm.setSubGeometry( mGeosSub );
 
-    // set tolerance distance
+    // set tolerance distance and other
     lm.setTolDistance( mTolDistance );
+    lm.setRepair( correct );
+    lm.setMatchTolerance( mMatchTol );
 
     // match lines of two layers
     lm.match();

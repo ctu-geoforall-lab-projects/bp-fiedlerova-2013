@@ -86,9 +86,14 @@ public:
     /** Line matching */
     void lineMatch();
 
-    /** Set distance tolerance for snapping.
+    /** Set distance tolerance for conflation.
       */
     void setTolDistance( double dist ){ mTolDistance = dist; }
+
+    /** Set if geometry correction is wanted */
+    void setRepair( bool repair ){ correct = repair; }
+
+    void setMatchCriterium( double tol ){ mMatchTol = tol; }
 
     /** Get text protocol about computation
       */
@@ -107,7 +112,9 @@ private:
     TGeomLayer mGeosRef;
     TGeomLayer mGeosNew;
     double mTolDistance;
+    double mMatchTol;
     QString mProtocol;
+    bool correct;
 
 };
 

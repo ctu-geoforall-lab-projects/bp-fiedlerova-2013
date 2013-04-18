@@ -59,7 +59,11 @@ private slots:
     /** Select where to save layer. */
     void on_selectButton_clicked();
 
+    /** Refresh values in comboBoxes and more. */
     void on_refreshButton_clicked();
+
+    /** Enable or disable other elements for line match. */
+    void on_mrbLineMatch_toggled(bool checked);
 
 private:
 

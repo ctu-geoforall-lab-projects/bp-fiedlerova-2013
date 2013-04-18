@@ -107,13 +107,15 @@ bool Dialog::setConflation()
 
     // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
+    mConflate->setRepair( this->mchbRepair->isChecked() );
     mConflate->setRefVectorLayer( refLayer );
     mConflate->setSubVectorLayer( subLayer );
 
     if ( !mConflate->checkLayersType() )
     {
-        QMessageBox::warning( 0, tr("Warnig"), tr("Layers must have the same "
-                              "geometry type."), QMessageBox::Ok);
+        QMessageBox::warning( 0, tr("Warnig"), tr("Geometry type warning. (Layers must "
+                             "have the same geometry type. Line is needed for Match Lines."),
+                              QMessageBox::Ok);
         return false;
     }
 
@@ -141,6 +143,7 @@ void Dialog::conflate()
     }
     else if ( mrbLineMatch->isChecked() )
     {
+        mConflate->setMatchCriterium( this->mSpinBoxMatch->value()/100.0);
         mConflate->lineMatch();
     }
 
@@ -181,7 +184,7 @@ void Dialog::on_processButton_clicked()
        QMessageBox::information( 0, tr("Information"), tr("Please, add layers for conflation "
                               "to current project first."), QMessageBox::Ok);
     }
-    else if ( !mrbSnapVertex->isChecked() && !mrbCovAlign->isChecked() )
+    else if ( !mrbSnapVertex->isChecked() && !mrbCovAlign->isChecked() && !mrbLineMatch->isChecked() )
     {
         QMessageBox::information( 0, tr("Information"), tr("Please select conflation "
                               "method."), QMessageBox::Ok);
@@ -249,3 +252,12 @@ void Dialog::on_refreshButton_clicked()
     loadLayers();
 
 } // void Dialog::on_refreshButton_clicked()
+
+
+void Dialog::on_mrbLineMatch_toggled(bool checked)
+{
+    this->mLabelMatch->setEnabled(checked);
+    this->mSpinBoxMatch->setEnabled(checked);
+
+} // void Dialog::on_mrbLineMatch_toggled(bool checked)
+
