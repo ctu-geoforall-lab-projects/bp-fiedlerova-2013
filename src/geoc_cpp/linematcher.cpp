@@ -63,32 +63,37 @@ void LineMatcher::match()
             matchLine( &newGeom, closeLines );
             newGeometry[i] = newGeom;
 
-            if( !newGeometry[i].getGEOSGeom()->isValid() )
+            // repair geometry if wanted
+            if (correct)
             {
-                // repair geometry if wanted
-                if (correct)
-                {
-                    repair(&newGeometry[i]);
+                repair(&newGeometry[i]);
 
-                    if( !newGeometry[i].getGEOSGeom()->isValid() )
-                    {
-                        qDebug("VertexSnapper::snapVertices: Geom is not valid.");
-                        invalids.push_back(newGeometry[i].getFeatureId());
-                    }
-                }
-                else
+                if( !newGeometry[i].getGEOSGeom()->isValid() )
                 {
                     qDebug("VertexSnapper::snapVertices: Geom is not valid.");
                     invalids.push_back(newGeometry[i].getFeatureId());
                 }
+                else if ( newGeom.getGEOSGeom()->isEmpty() )
+                {
+                    qDebug("LineMatcher::match: Geom is empty.");
+                }
             }
-            else if ( newGeom.getGEOSGeom()->isEmpty() )
+            else
             {
-                qDebug("LineMatcher::match: Geom is empty.");
-            }
-        }
+                if( !newGeometry[i].getGEOSGeom()->isValid() ){
+                    qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+                    invalids.push_back(newGeometry[i].getFeatureId());
+                }
+                else if ( newGeom.getGEOSGeom()->isEmpty() )
+                {
+                    qDebug("LineMatcher::match: Geom is empty.");
+                }
 
-    }
+            }
+
+        } // if
+
+    } // for
 
 } // void LineMatcher::match()
 

@@ -15,13 +15,13 @@ CoordinateSequence* GeometryCorrectionOperation::edit(const CoordinateSequence *
         coord = coordRem;
     }
 
-    // remove dead branches
-    removeDeadBranch(coord);
-
     // repair crossing
     if (coord->size() > 3)
     {
         removeCrosses(coord);
+
+        // remove dead branches
+        removeDeadBranch(coord);
     }
 
     return coord;
@@ -37,9 +37,10 @@ void GeometryCorrectionOperation::removeDeadBranch( CoordinateSequence *line )
         // line has a dead branch, if points i and i+2 are equal
         if ( (abs(line->getX(i) - line->getX(i+2)) < 1e-12) && (abs(line->getY(i) - line->getY(i+2)) < 1e-12) )
         {
-            if (line->size() > 4)
+            if ( line->size() > 4 )
             {
                 line->deleteAt(i+1);
+                i--;
             }
             else
             {
