@@ -12,6 +12,7 @@ namespace geoc {
         class VertexGeometryEditorOperation;
         class FeatureGeometryEditorOperation;
         class AffineTransformation;
+        class GeometryCorrectionOperation;
     }
     namespace alg {
         class VertexSnapper;
@@ -36,6 +37,7 @@ namespace geoc {
 #include "coveragealignment.h"
 #include "aligngeometryeditoroperation.h"
 #include "linematcher.h"
+#include "geometrycorrectionoperation.h"
 
 #include  <QtGui>
 

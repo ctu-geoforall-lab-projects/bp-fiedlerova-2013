@@ -56,6 +56,9 @@ public:
       */
     void setTolDistance( double tol ){ tolDistance = tol; }
 
+    /** Set if geometry correction is wanted */
+    void setRepair( bool repair ){ correct = repair; }
+
     /** Find matching features in ref and sub layer.
       */
     void findMatchingFeatures();
@@ -109,6 +112,10 @@ public:
       */
     vector<int> getInvalidGeometries() { return invalids; }
 
+    /** Repair geometry.
+      */
+    void repair( GEOCGeom * g );
+
 
 private:
 
@@ -121,6 +128,7 @@ private:
     TTin *ttin;
     vector<int> invalids;
     int found;
+    bool correct;
 
 };
 

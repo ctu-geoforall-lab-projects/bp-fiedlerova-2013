@@ -36,10 +36,18 @@ public:
       */
     void setSubGeometry(TGeomLayer & sub){ subGeometry = sub; }
 
-    /** Set distance tolerance for snapping.
-      * @param tol Maximal distance for snapping.
+    /** Set distance tolerance for matching.
+      * @param tol Maximal distance for matching.
       */
     void setTolDistance(double tol){ tolDistance = tol; }
+
+    /** Set matching tolerance.
+      * @param tol Minimal tolerance for match.
+      */
+    void setMatchTolerance(double tol){ matchTolerance = tol; }
+
+    /** Set if geometry correction is wanted */
+    void setRepair( bool repair ){ correct = repair; }
 
     /** Get new geometry.
       * @return New layer geometry.
@@ -111,6 +119,9 @@ public:
       */
     vector<int> getInvalidGeometries() { return invalids; }
 
+    /** Repair geometry.
+      */
+    void repair( GEOCGeom * g );
 
 private:
 
@@ -121,6 +132,7 @@ private:
     vector<int> invalids;
     double tolDistance;
     double matchTolerance;
+    bool correct;
 
 };
 

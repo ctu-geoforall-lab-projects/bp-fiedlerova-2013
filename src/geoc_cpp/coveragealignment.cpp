@@ -12,6 +12,7 @@ CoverageAlignment::CoverageAlignment()
     matchingPointsRef = NULL;
     ttin = NULL;
     found = 0;
+    correct = false;
 
 } // default constructor
 
@@ -347,8 +348,23 @@ void CoverageAlignment::transform()
         // check validity
         if( !newLayer[i].getGEOSGeom()->isValid() )
         {
-            qDebug("CoverageAlignment::transform: Geom is not valid.");
-            invalids.push_back( newLayer[i].getFeatureId() );
+            // repair geometry if wanted
+            if (correct)
+            {
+                repair(&newLayer[i]);
+
+                if( !newLayer[i].getGEOSGeom()->isValid() )
+                {
+                    qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+                    invalids.push_back(newLayer[i].getFeatureId());
+                }
+            }
+            else
+            {
+                qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+                invalids.push_back(newLayer[i].getFeatureId());
+            }
+
         }
 
     }
@@ -386,10 +402,26 @@ void CoverageAlignment::align()
         subLayer = newLayer;
         matchingPoints = NULL;
         matchingPointsRef = NULL;
+        invalids.clear();
 
     } while ( found != 0 );
 
 } // void CoverageAlignment::align()
+
+
+void CoverageAlignment::repair( GEOCGeom *geom )
+{
+
+    // create and set geometry editor
+    GeometryCorrectionOperation myOp;
+
+    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
+
+    // set geometry to edited one
+    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
+
+} // void CoverageAlignment::repair( GEOCGeom *g )
+
 
 } // namespace geoc
 } // namespace alg

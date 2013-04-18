@@ -71,6 +71,9 @@ public:
       */
     void setTolDistance(double tol){ tolDistance = tol; }
 
+    /** Set if geometry correction is wanted */
+    void setRepair( bool repair ){ correct = repair; }
+
     /** Get new geometry of subject layer.
       * @return Changed geometry of subject layer.
       */
@@ -94,6 +97,10 @@ public:
       */
     vector<int> getInvalidGeometries() { return invalids; }
 
+    /** Repair geometry.
+      */
+    void repair( GEOCGeom * g );
+
 private:
 
     TGeomLayer refGeometry;
@@ -102,6 +109,7 @@ private:
     double tolDistance;
     SpatialIndex* sIndex;
     vector<int> invalids;
+    bool correct;
 
 };
 

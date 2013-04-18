@@ -8,6 +8,7 @@ LineMatcher::LineMatcher()
     sIndex = NULL;
     tolDistance = 0;
     matchTolerance = 0.7;
+    correct = false;
 
 } // constructor
 
@@ -62,9 +63,24 @@ void LineMatcher::match()
             matchLine( &newGeom, closeLines );
             newGeometry[i] = newGeom;
 
-            if( !newGeom.getGEOSGeom()->isValid() )
+            if( !newGeometry[i].getGEOSGeom()->isValid() )
             {
-                qDebug("LineMatcher::match: Geom is not valid.");
+                // repair geometry if wanted
+                if (correct)
+                {
+                    repair(&newGeometry[i]);
+
+                    if( !newGeometry[i].getGEOSGeom()->isValid() )
+                    {
+                        qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+                        invalids.push_back(newGeometry[i].getFeatureId());
+                    }
+                }
+                else
+                {
+                    qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+                    invalids.push_back(newGeometry[i].getFeatureId());
+                }
             }
             else if ( newGeom.getGEOSGeom()->isEmpty() )
             {
@@ -355,6 +371,20 @@ void LineMatcher::buildIndex()
     }
 
 } // void LineMatcher::buildIndex()
+
+
+void LineMatcher::repair( GEOCGeom *geom )
+{
+
+    // create and set geometry editor
+    GeometryCorrectionOperation myOp;
+
+    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
+
+    // set geometry to edited one
+    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
+
+} // void LineMatcher::repair( GEOCGeom *g )
 
 } // namespace alg
 } // namespace geoc

@@ -17,7 +17,8 @@ SOURCES += \
     triangle.cpp \
     coveragealignment.cpp \
     aligngeometryeditoroperation.cpp \
-    linematcher.cpp
+    linematcher.cpp \
+    geometrycorrectionoperation.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
@@ -30,7 +31,8 @@ HEADERS += geoc.h\
     aligngeometryeditoroperation.h \
     sort.h \
     geocgeom.h \
-    linematcher.h
+    linematcher.h \
+    geometrycorrectionoperation.h
 
 
 unix:LIBS += -L/usr/local/lib \

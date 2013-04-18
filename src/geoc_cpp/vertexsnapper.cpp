@@ -8,6 +8,7 @@ VertexSnapper::VertexSnapper()
 {
     sIndex = NULL;
     tolDistance = 0;
+    correct = false;
 
 } // constructor
 
@@ -106,12 +107,40 @@ void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
     // check validity
     if( !geom->getGEOSGeom()->isValid() )
     {
-        qDebug("VertexSnapper::snapVertices: Geom is not valid.");
-        invalids.push_back(geom->getFeatureId());
+        // repair geometry if wanted
+        if (correct)
+        {
+            repair(geom);
+
+            if( !geom->getGEOSGeom()->isValid() )
+            {
+                qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+                invalids.push_back(geom->getFeatureId());
+            }
+        }
+        else
+        {
+            qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+            invalids.push_back(geom->getFeatureId());
+        }
+
     }
 
 } // void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
 
+
+void VertexSnapper::repair( GEOCGeom *geom )
+{
+
+    // create and set geometry editor
+    GeometryCorrectionOperation myOp;
+
+    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
+
+    // set geometry to edited one
+    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
+
+} // void VertexSnapper::repair( GEOCGeom *g )
 
 } //namespace geoc
 } //namespace alg
