@@ -111,6 +111,7 @@ public:
       */
     vector<int> getInvalidGeometries() { return invalids; }
 
+
 private:
 
     TGeomLayer refGeometry;

@@ -83,7 +83,9 @@ void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & cl
     const CoordinateSequence * line = geos::geom::CoordinateSequence::removeRepeatedPoints(
                                       gline->getGEOSGeom()->getCoordinates() );
     const GeometryFactory *gf = gline->getGEOSGeom()->getFactory();
+    CoordinateSequence * newLine = new CoordinateArraySequence();
     vector<Geometry *> vc;
+    size_t lastId = 0;
 
     // for each segment
     for (size_t i = 0; i < line->size()-1; i++ )
@@ -100,15 +102,33 @@ void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & cl
         if ( match )
         {
             CoordinateSequence * result = meanSegment( segment, match );
-            vc.push_back( gf->createLineString(result) );
+
+            // check if there are following segments
+            if ( lastId == i )
+            {
+                newLine->add( result, false, true );
+            }
+            else
+            {
+                vc.push_back( gf->createLineString(newLine) );
+                newLine = result;
+            }
+
+            lastId = i+1;
+
         }
 
         delete segment;
     }
 
+    // add also last part of line
+    vc.push_back( gf->createLineString(newLine) );
+
     // create new line from matched segments
     gline->setGEOSGeom( gf->createMultiLineString( vc ) );
     gline->setChanged( true );
+
+    delete newLine;
 
 } // void LineMatcher::matchLine( GEOCGeom * line, vector<CoordinateSequence *> & closeLines )
 
@@ -290,7 +310,7 @@ double LineMatcher::isClose( const CoordinateSequence * c1, const CoordinateSequ
     double smin;
     if ( (s1 > matchTolerance) && (s2 > matchTolerance) && (s3 > matchTolerance))
     {
-        smin = (s1+s2+2.0*s3)/3.0;  // distance criterium is the most important
+        smin = (s1+s2+2.0*s3)/4.0;  // distance criterium is the most important
     }
     else
     {
