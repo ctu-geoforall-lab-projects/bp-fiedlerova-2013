@@ -341,9 +341,9 @@ Tento problém úzce souvisí s~volbou toleranční vzdálenosti. Při dodržen�
 o~nejkratším segmentu  se mu lze téměř vyhnout (stále mohou vznikat nevalidní 
 geometrie u~příliš úzkých, protáhlých tvarů apod.). 
 
-Pravděpodobně by bylo možné nevalidní geometrie automaticky opravit např. výměnou
-vrcholů způsobujících křížení hran. Nyní je oprava těchto geometrií ponechána 
-na~uživateli.
+%Pravděpodobně by bylo možné nevalidní geometrie automaticky opravit např. výměnou
+%vrcholů způsobujících křížení hran. Nyní je oprava těchto geometrií ponechána 
+%na~uživateli.
 
 \subsubsection{Volba počtu iterací}
 
@@ -367,4 +367,70 @@ dokud jsou nacházeny nové dvojice pasujících prvků. Tento postup je   % zat
 v~knihovně \textit{GEOC} implementován bez možnosti kontroly mezi iteracemi. 
 
 
+\section{Line Matcher}
+\label{problemy-lm}
 
+\subsubsection*{Navázání linií}
+Při určování podobných segmentů v~rámci jedné linie nastává problém jejich
+navázání. V~závislosti na~nastavení funkce mohou při napojení výsledných
+segmentů vznikat na~linii nežádoucí \uv{zuby} (viz obrázek \ref{fig:toothpic}). % viz obrázek
+Tento problém v~algoritmu nebyl vyřešen, jelikož nelze jednoduše rozhodnout, 
+kdy se jedná o~nesprávný tvar linie a~kdy je výsledek takto korektní.
+Aby nevznikaly pouze samostatné nenavazující segmenty, byly i~přes toto
+riziko napojovány.
+
+\label{toothpic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=300pt]{./pictures/tooth.pdf}
+      \caption{Příklad situace, kdy vzniká \uv{zub}}
+      \label{fig:toothpic}
+  \end{figure}
+
+\section{Automatická oprava nevalidních geometrií}
+\label{problemy-opravy}
+
+Jak již bylo uvedeno výše, častým problémem u~všech algoritmů je vznik
+nevalidních prvků. Proto byla do knihovny \textit{GEOC} přidána třída
+\texttt{Geometry\-Correction\-Operation}, kterou lze pro dodatečnou 
+opravu nově vzniklých geometrií použít. Ne vždy je však jednoduché 
+rozhodnout, jak geometrii změnit, aby výsledek odpovídal skutečnosti. 
+V~programu proto byla aplikována jedna možnost způsobu opravy 
+a~na~uživateli ponecháno rozhodnutí, zda automatickou korekci využít.
+
+Automaticky je možné opravit tyto dvě chyby v~geometrii:
+
+\begin{itemize}
+ \item Křížení segmentů
+	\subitem Změněna orientace hrany či hran mezi křížícími se úseky.
+% obrázek
+\label{crospic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=300pt]{./pictures/crossing.pdf}
+      \caption{Oprava křížících se segmentů}
+      \label{fig:crossing}
+  \end{figure}
+
+ \item Slepé větve
+	\subitem Vyřešeno odstraněním bodu na~konci větve.
+
+\label{deadpic}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=300pt]{./pictures/dead-branch.pdf}
+      \caption{Oprava slepých větví}
+      \label{fig:dead-branch}
+  \end{figure}
+% obrázek
+\end{itemize}
+
+Samozřejmě existuje více možností, jak výše uvedené chyby opravit.
+U~křížících se polygonů se často používá také pouhé přidání vrcholů
+do~místa průsečíku segmentů. Tím vznikne validní geometrie a~nezmění
+se přitom její tvar. Vzhledem k~tomu, že u~úprav prováděných 
+s~polygony při slučování map, vznikají křížením většinou spíše drobné
+\uv{výstupky}, je použité řešení přijatelné. Navíc funkci pro opravu
+geometrií přidáním bodů obsahuje většina GIS programů, takže není
+pro uživatele složité je po~spojení dat v~rámci \textit{postprocessingu}
+aplikovat.
