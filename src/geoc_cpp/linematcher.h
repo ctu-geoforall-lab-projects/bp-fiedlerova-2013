@@ -83,7 +83,7 @@ public:
       * @param c2 CoordinateSequence with points of the  second tested segment.
       * @return How much given segments are matched in percents.
       */
-    double isClose( const CoordinateSequence * c1, const CoordinateSequence  * c2) const;
+    double similarity( const CoordinateSequence * c1, const CoordinateSequence  * c2) const;
 
     /** Compute segment length
       * @param segment CoordinateSequence with two points of segment.
@@ -123,6 +123,10 @@ public:
       */
     void repair( GEOCGeom * g );
 
+    /** The longest line in dataset.
+      */
+    void longestLine();
+
 private:
 
     TGeomLayer refGeometry;
@@ -132,6 +136,7 @@ private:
     vector<int> invalids;
     double tolDistance;
     double matchTolerance;
+    double diffMax;
     bool correct;
 
 };

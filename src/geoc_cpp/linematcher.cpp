@@ -8,6 +8,7 @@ LineMatcher::LineMatcher()
     sIndex = NULL;
     tolDistance = 0;
     matchTolerance = 0.7;
+    diffMax = 0;
     correct = false;
 
 } // constructor
@@ -26,6 +27,9 @@ void LineMatcher::match()
 
     // build spatial index
     buildIndex();
+
+    // set diffMax
+    longestLine();
 
     for ( size_t i = 0; i < subGeometry.size(); i++ )
     {
@@ -64,7 +68,7 @@ void LineMatcher::match()
             newGeometry[i] = newGeom;
 
             // repair geometry if wanted
-            if (correct)
+            if ( correct && !newGeometry[i].getGEOSGeom()->isValid() )
             {
                 repair(&newGeometry[i]);
 
@@ -122,16 +126,17 @@ void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & cl
         // get mean segment
         if ( match )
         {
+
             CoordinateSequence * result = meanSegment( segment, match );
 
             // check if there are following segments
             if ( lastId == i )
             {
-                newLine->add( result, false, true );
+               newLine->add( result, false, true );
             }
             else
             {
-                vc.push_back( gf->createLineString(newLine) );
+                vc.push_back( gf->createLineString( newLine) );
                 newLine = result;
             }
 
@@ -222,9 +227,9 @@ double LineMatcher::closestSegment( CoordinateSequence * seg, CoordinateSequence
         double d = a.distance(b);
 
         // compute match only if segments are close enough
-        if (d <= tolDistance )
+        if (d < tolDistance )
         {
-            double coef = isClose( seg, lseg );
+            double coef = similarity( seg, lseg );
 
             if ( coef > matchCoef )
             {
@@ -240,7 +245,6 @@ double LineMatcher::closestSegment( CoordinateSequence * seg, CoordinateSequence
         delete lseg;
 
     } // for
-
 
     return matchCoef;
 
@@ -271,6 +275,8 @@ double LineMatcher::segmentLength(const CoordinateSequence *seg ) const
 
 double LineMatcher::segmentAngle( const CoordinateSequence *s1, const CoordinateSequence *s2 ) const
 {
+    double PRECISION = 1e-12;
+
     double ux = s1->getX(1)-s1->getX(0);
     double uy = s1->getY(1)-s1->getY(0);
     double vx = s2->getX(1)-s2->getX(0);
@@ -285,14 +291,26 @@ double LineMatcher::segmentAngle( const CoordinateSequence *s1, const Coordinate
     double angle;
 
     // null vector
-    if ( nom == 0 )
+    if ( abs(nom) < PRECISION )
     {
         angle = INFINITY;
     }
     // compute deviation
     else
     {
-        angle = abs( acos( (ux*vx+uy*vy)/nom ) );
+        double cosinus = (ux*vx+uy*vy)/nom;
+        if ( abs(cosinus-1) < PRECISION ) // cos is 1
+        {
+            angle = 0;
+        }
+        else if ( abs(cosinus+1) < PRECISION ) // cos is -1
+        {
+            angle = M_PI;
+        }
+        else
+        {
+            angle = abs( acos( cosinus ) );
+        }
     }
 
     return angle;
@@ -300,7 +318,7 @@ double LineMatcher::segmentAngle( const CoordinateSequence *s1, const Coordinate
 } // double LineMatcher::segmentAngle( CoordinateSequence *s1, CoordinateSequence *s2 )
 
 
-double LineMatcher::isClose( const CoordinateSequence * c1, const CoordinateSequence * c2) const
+double LineMatcher::similarity( const CoordinateSequence * c1, const CoordinateSequence * c2) const
 {
     // angle
     double dev = segmentAngle( c1, c2 );
@@ -312,13 +330,13 @@ double LineMatcher::isClose( const CoordinateSequence * c1, const CoordinateSequ
 
     // distance criterium
     double dist1 = c1->getAt(0).distance( c2->getAt(0) );
-    double dist2 = c1->getAt(0).distance( c2->getAt(0) );
+    double dist2 = c1->getAt(1).distance( c2->getAt(1) );
     double dist = (dist1+dist2)/2.0;
 
     // max and min differences and deviations in dataset - set from data, not like this
     double devMax = M_PI/2;
     double devMin = 0;
-    double diffMax = max( length1, length2 );//+tolDistance;
+    //double diffMax = max( length1, length2 );//+tolDistance;
     double diffMin = 0;
     double distMax = tolDistance;
     double distMin = 0;
@@ -326,12 +344,12 @@ double LineMatcher::isClose( const CoordinateSequence * c1, const CoordinateSequ
     // match criterium
     double s1 = ( diffMax-diff )/( diffMax-diffMin );
     double s2 = ( devMax-dev )/( devMax-devMin );
-    double s3 = ( distMax-dist )/( distMax-distMin );
+    double s3 = ( distMax-dist )/( distMax-distMin );  
 
     double smin;
     if ( (s1 > matchTolerance) && (s2 > matchTolerance) && (s3 > matchTolerance))
     {
-        smin = (s1+s2+2.0*s3)/4.0;  // distance criterium is the most important
+        smin = (s1+s2+s3)/3.0;  // distance criterium is the most important
     }
     else
     {
@@ -341,7 +359,7 @@ double LineMatcher::isClose( const CoordinateSequence * c1, const CoordinateSequ
     // return in % how much they match
     return smin;
 
-} // double LineMatcher::isClose(CoordinateSequence * c1, CoordinateSequence * c2)
+} // double LineMatcher::similarity(CoordinateSequence * c1, CoordinateSequence * c2)
 
 
 CoordinateSequence* LineMatcher::meanSegment( CoordinateSequence * s1, CoordinateSequence *s2 )
@@ -390,6 +408,25 @@ void LineMatcher::repair( GEOCGeom *geom )
     geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
 
 } // void LineMatcher::repair( GEOCGeom *g )
+
+
+void LineMatcher::longestLine()
+{
+
+    for ( size_t i = 0; i < subGeometry.size(); i++ )
+    {
+        CoordinateSequence *cs = subGeometry[i].getGEOSGeom()->getCoordinates();
+        for ( size_t j = 0; j < cs->size()-1; j++ )
+        {
+            double dl = cs->getAt(j).distance(cs->getAt(j+1));
+            if ( dl > diffMax )
+            {
+                diffMax = dl;
+            }
+        }
+    }
+
+} // double LineMatcher::longestLine()
 
 } // namespace alg
 } // namespace geoc
