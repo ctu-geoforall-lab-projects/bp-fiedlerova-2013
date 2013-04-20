@@ -25,7 +25,7 @@
 %\onehalfspacing
 \usepackage[compact]{titlesec}
 \titleformat{\subsubsection}{\normalfont\bfseries}{\thesection}{1em}{}
-\titlespacing*{\subsubsection}{0pt}{15pt}{10pt}
+\titlespacing*{\subsubsection}{0em}{1em}{0.5em}
 
 \usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
 
@@ -33,6 +33,11 @@
 
 \usepackage{cmap}           % pro správné mapování znaků v pdf na Unicode
 \usepackage[T1]{fontenc}    % totéž  
+
+\usepackage{textcomp}
+
+\usepackage{amsmath} % pro aligned
+\addtolength{\jot}{1em} % 
 
 \usepackage[
     nohyperlinks    % Nebudou tvořeny hypertextové odkazy do seznamu zkratek
@@ -64,7 +69,7 @@
 
 \usepackage{enumitem} % pro nastavení číslování
 %\setlist{noitemsep} % bez mezer mezi položkami
-\setlist{\itemsep=5pt,\topsep=10pt,\parsep=0pt, \parskip=0pt} % nastaveni mezer mezi položkami a před seznamem -- NEFUNGUJE!!
+\setlist{\itemsep=0.2em,\topsep=0.5em,\parsep=0em, \parskip=0em} % nastaveni mezer mezi položkami a před seznamem -- NEFUNGUJE!!
 \setlist{leftmargin=*} % bez odsazení
 
 

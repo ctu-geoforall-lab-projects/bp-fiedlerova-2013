@@ -209,9 +209,6 @@ následujícím způsobem.
 
 %% ML: doplnit ilustraci .. obrázek obal. zón
 
-
-
-
 \subsection{Implementace} % text asi přepsat 
 \label{ca-implementace}
 % popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
@@ -247,3 +244,93 @@ To zajišťuje reálnější výsledky i~v situacích, kdy hustota vrcholů v~ob
 datasetech je velmi rozdílná.
 
 % poznámka o výhodách a nevýhodách využití u liniových a polygon. datech
+
+
+\section{LineMatcher}
+\label{line matcher}
+
+Častým předmětem spojování vektorových dat jsou liniové mapy silnic, cest apod.
+Proto byl do~knihovny doplněn i~algoritmus \textit{Line Matcher}, který je
+určen speciálně pro liniové vrstvy. Výrazný rozdíl oproti předchozím algoritmům
+je také fakt, že tento nezarovnává jednu vrstvu ke~druhé, ale výsledkem je
+průměr z~odpovídajících si prvků obou vrstev. Nezáleží tedy na~tom, která 
+z~vrstev je referenční. Prvky se zde nemyslí celé linie, ale pouze jejich
+segmenty.
+
+\subsection{Popis algoritmu}
+\label{lm-algoritmus}
+
+Jak je uvedeno výše, tento algoritmus pracuje pouze se~segmenty jednotlivých
+linií, a~to z~toho důvodu, že jedna dlouhá linie, může být v~jiném datasetu
+rozdělena na~několik menších například přerušením na~křižovatkách. Pro každou
+linii jednoho datasetu je pak provedeno následující. 
+
+\begin{enumerate}
+ \item Ke~každému segmentu linie jsou nalezeny blízké linie z~druhého datasetu.
+       Stejně jako u~předchozích, i~zde je blízkost definována zvolenou toleranční
+       vzdáleností.
+ \item Testovaný segment je dále porovnáván s~každým segmentem z~těchto blízkých
+       linií na~základě kritérií \ref{crit} uvedených níže.
+ \item Pokud je splněna předem zvolená hodnota podobnosti segmentů pro všechna 
+       kritéria $s_1,s_2,s_3$ je jako výsledná podobnost určena hodnota $s$.
+ \item Z~opovídajících segmentů je nalezen takový, jehož podobnost s~testovaným
+       je největší.
+ \item Výsledný segment je průměrem ze~dvou nejlépe si odpovídajících segmentů.
+\end{enumerate}
+
+\subsubsection*{Kritéria pro určení odpovídajících si liniových segmentů}
+První dvě kritéria dle [odkaz na literaturu] nejlépe určují podobnost dvou % odkaz na lit. arcgis report
+linií. Třetí kritérium bylo přidáno pro praktické použití tak, aby se neurčovaly
+pouze podobné prvky, ale i~prvky blízké. %Ve~výsledku mu pak byla přiřazena největší 
+% váha, jelikož při této úloze je blízkost segmentů důležitá.
+Jednotlivá kritéria určující podobnost mohou nabývat hodnot od~$0$ do~$1$,
+kde $1$ znamená naprostou shodu.
+
+\begin{equation}
+ \begin{aligned}
+ s_1 &= \frac{ \Delta l_{max} - \Delta l }{ \Delta l_{max} - \Delta l_{min}} \\ 
+ s_2 &= \frac{ \alpha_{max} - \alpha }{ \alpha_{max} - \alpha_{min}} \\ 
+ s_3 &= \frac{ d_{max} - d }{ d_{max} - d_{min}} \\ 
+ s &= \frac{s_1+s_2+s_3}{3}
+ \label{crit}
+ \end{aligned}
+\end{equation}
+
+Hodnoty $\Delta l_{max}$, $\Delta l_{min}$ udávají maximální a~minimální rozdíl délek
+segmentů v~celém datasetu, $\Delta l$ je pak rozdíl délek porovnávaných segmentů.
+$\alpha$ udává odchylku dvou segmentů. Hodnota $\alpha_{max}$ ve většině případů může
+být zvolena $90^{\circ}$, $\alpha_{min}$ pak $O^\circ$. Proměnná $d$ ve~třetím 
+kritériu reprezentuje vzdálenost segmentů, která je spočtena jako průměr vzdáleností
+jejich počátečních a~koncových bodů. Jelikož se porovnávají pouze blízké segmenty,
+$d_{max}$ je rovno toleranční vzdálenosti, $d_{min}$ by pak mělo odpovídat nejmenší
+vzdálenosti krajních bodů dvojice segmentů z~obou datasetů.
+
+
+\subsection{Implementace} % text asi přepsat 
+\label{lm-implementace}
+% odkazy na literaturu, dokumentaci
+Veškeré funkce pro tento algoritmus jsou obsaženy ve~třídě \texttt{Line\-Matcher}.
+
+Funkce \texttt{match} hledá postupně ke~každé linii blízké linie z~druhého datasetu.
+Následně předá výsledky tohoto hledání funkci \texttt{match\-Line}, která ke~každému
+segmentu linie, nalezne prostřednictvím metody \texttt{matching\-Segment} odpovídající
+segment mezi předanými blízkými prvky. Pokud k~nějakému úseku linie není určen
+žádný dostatečně podobný, je zde linie přerušena. Z~původního jednoduchého liniového
+prvku tak může vzniknout multiprvek. 
+
+Výpočet kritérií podobnosti segmentů se nachází v~metodě \texttt{similarity}. 
+
+\subsection{Využití}
+\label{lm-vyuziti}
+
+\texttt{LineMatcher} lze využít pro spojování liniových vrstev. Map různých cest, 
+silnic, tras atd. existuje velké množství i~díky rozvoji technologií GNSS. Právě
+k~jejich slučování slouží \texttt{LineMatcher}. Hodí se i~pro vyhledání společných 
+prvků obsažených ve~dvou datasetech. Příkladem aplikace takové je určení
+cyklotras vedoucích po~silnici z~vrstvy silnic a~cyklotras. 
+
+Vzhledem k~požadavku co nejobecnějšího využití je výsledkem tohoto algoritmu
+průměr z~odpovídajících si prvků.  Někdy by však bylo vhodnější nechat prvkům
+původní polohu, pouze vymazat ty nepasující. Naopak může být požadavkem také
+ponechání i neodpovídajících si prvků apod. Různýmí drobnými modifikacemi
+by se tedy dalo dosáhnout lepšího využití pro nějaký konkrétní případ.
