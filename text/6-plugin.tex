@@ -112,9 +112,11 @@ dokumentaci k~pluginu. % doplnit odkazy na přílohy
 	vrstev a~toleranční vzdálenost. 
  \item Dále je zavolána funkce vytvořené třídy pro zarovnání datasetů. Při volbě 
 	při\-chycení vrcholů \textit{Snap vertices} v~dialogu je použita třída 
-	\texttt{VertexSnapper} a~metoda \texttt{snap}, při volbě zarovnání 
-	vrstev \textit{Coverage Alignment} pak třída \texttt{Cove\-rage\-Align\-ment} 
-	a~metoda \texttt{align}. Výsledek je uložen do~nového vektoru geometrií.
+	\texttt{Vertex\-Snapper} a~metoda \texttt{snap}, při volbě zarovnání 
+	vrstev \textit{Coverage Alignment} třída \texttt{Cove\-rage\-Align\-ment} 
+	a~metoda \texttt{align}, poslední možností je \textit{Match Lines}, která
+	využívá třídu \texttt{Line\-Matcher} a~její funkci \texttt{match}. 
+	Výsledek je uložen do~nového vektoru geometrií.
  \item Na závěr je upravena geometrie nové vrstvy (kopie upravované vrstvy) dle
 	výsledků úprav provedených algoritmy knihovny \textit{GEOC}.
  \item Nová vrstva se automaticky přidá do~aktuálního projektu v~QGISu a~zobrazí
@@ -139,7 +141,7 @@ v~jiných verzích se může způsob načtení modulu, popř. i~jiné činnosti 
 
 \subsection{Instalace}
 \label{prirucka-instalace}
-Instalace ... Je potřeba knihovna \textit{GEOC} ..
+Instalace ... %Je potřeba knihovna \textit{GEOC} ..
 
 
 \subsection{Načtení zásuvného modulu}
@@ -164,22 +166,19 @@ k~zásuvným modulům (Settings~$\rightarrow$~Options$\rightarrow$~System~$\righ
 \subsection{Spuštění a nastavení dialogu}
 \label{prirucka-spusteni}
 
+\subsubsection{Výběr vstupních vrstev}
 Před spuštěním dialogu \textit{Conflate} je třeba mít v~aktuálním projektu 
-načteny vrstvy, které chceme zpracovávat. Po~otevření dialogu je třeba provést 
-výběr \textbf{referenční vrstvy} (\textit{Reference Layer}) a~\textbf{upravované 
-vrstvy} (\textit{Subject Layer}). Referenční vrstva je obvykla ta s~vyšší 
-přesností, která se nebude měnit. Upravovanou vrstvu naopak chceme zarovnat 
-k~vrstvě referenční.
+načteny vrstvy, které chceme zpracovávat. Pokud přidáme vrstvu až po~otevření
+dialogu, lze ji načíst do~výběru vrstev tlačítkem \textit{Refresh}.
+Po~otevření dialogu je třeba provést výběr \textbf{referenční vrstvy} 
+(\textit{Reference Layer}) a~\textbf{upravované vrstvy} (\textit{Subject Layer}). 
+Referenční vrstva je obvykla ta s~vyšší přesností, která se nebude měnit. 
+Upravovanou vrstvu naopak chceme zarovnat k~vrstvě referenční. 
+Obě vrstvy by měly být stejného geometrického typu (polygon~-~polygon, 
+linie~-~linie, bod~-~bod).
 
-Dále je třeba nastavit \textbf{toleranční vzdálenost} (\textit{Distance 
-Tolerance}) v~jednotkách projektu. Tato vzdálenost udává, v~jaké maximální 
-vzdálenosti mohou být odpovídající si prvky z~obou vrstev a~zároveň, jak 
-moc se tedy může cílová vrstva měnit. V~ideálním případě by tato vzdálenost 
-neměla přesahovat nejkratší segment geometrie všech prvků upravované vrstvy 
-(tzn. nejkratší úsek linie, nejkratší stranu polygonu). Nevhodná volba této 
-vzdálenosti může vést ke~vzniku nevalidních geometrií či nereálným výsledkům.
-
-Nakonec je nutné zvolit způsob zpracování (\textit{Select the way of conflation}). 
+\subsubsection{Možnosti zpracování}
+Dále je nutné zvolit způsob zpracování (\textit{Select the way of conflation}). 
 Na~výběr jsou tyto metody:
 \begin{itemize}
  \item \textbf{Přichycení vrcholů} (\textit{Snap Vertices}) - tato metoda vyhledá 
@@ -194,21 +193,60 @@ Na~výběr jsou tyto metody:
 	prvků. Obecně je možné s~touto metodou dosáhnout přesnějších a~často
 	reálnějších výsledků, avšak na~úkor času zpraco\-vání.
 % obrázek, jak funguje ?
+ \item \textbf{Napasování linií} (\textit{Match lines} - tato metoda vyhledá
+	odpovídající si úseky linií ze dvou různých vrstev. Takto nalezené
+	páry zprůměruje a~vytvoří z~nich nové linie. Při volbě tohoto způsobu
+	zpracování nezáleží na~tom, která vrstva je referenční a~která upravovaná.
+	Napasování linií lze použít pouze na~dvojice liniových vrstev.
 \end{itemize}
 
+Poté je třeba nastavit \textbf{toleranční vzdálenost} (\textit{Distance 
+Tolerance}) v~jednotkách projektu. Tato vzdálenost udává, v~jaké maximální 
+vzdálenosti mohou být odpovídající si prvky z~obou vrstev a~zároveň, jak 
+moc se tedy může cílová vrstva měnit. V~ideálním případě by tato vzdálenost 
+neměla přesahovat nejkratší segment geometrie všech prvků upravované vrstvy 
+(tzn. nejkratší úsek linie, nejkratší stranu polygonu). Nevhodná volba této 
+vzdálenosti může vést ke~vzniku nevalidních geometrií či nereálným výsledkům.
+
+U~poslední metody (\textit{Match Lines}) se zviditelní ještě možnost nastavení
+\textit{Matching criterium}. Jedná se o~minimální podobnost dvou segmentů,
+která musí být dodržena pro jejich spárování. Tato hodnota se udává v~procentech.
+Při zadání $100 \%$ jsou výsledkem pouze naprosto totožné segmenty. Kritérium
+podobnosti se počítá na základě úhlu mezi segmenty, vzdálenosti jejich koncových
+bodů a~rozdílu jejich délek. 
+ 
 Volba toleranční vzdálenosti a~metody zarovnání může výrazně ovlivnit rychlost 
 zpracování, je proto doporučeno volit raději vždy menší vzdálenost a~jednodušší
-metodu a~teprve po zobrazení výsledků případně parametry změnit. Po~nastavení 
-všech parametrů se stisknutím tlačítka \textit{Process} spustí zpracování. 
+metodu a~teprve po zobrazení výsledků případně parametry změnit.
 
+Poslední nastavovanou možností je automatická oprava geometrie zaškrtnutím 
+\textit{Try to repair invalid geometries}. Při této volbě se program pokusí
+opravit nově vzniklé nevalidní geometrie. Opravováno je pouze křížení úseků
+v~polygonu a~tzv. \uv{slepé větve}. Automatická oprava však může ovlivnit
+přesnost výsledku a~někdy i~vytvořit topologické chyby, proto je třeba ji
+používat opatrně.
+
+Po~nastavení všech parametrů (včetně výstupní vrstvy - viz dále) se stisknutím 
+tlačítka \textit{Process} spustí zpracování. 
+
+\subsubsection{Výstupní vrstva}
+
+Před spuštěním zpracování lze ještě nastavit název a~cestu, kam se má uložit
+výsledný soubor. Upravená vrstva se vždy uloží jako nová vrstva ve~formátu 
+\textit{shapefile}. Do~pole \textit{Output shapefile} lze zadat cestu k~výstupnímu
+souboru, popřípadě ji vybrat pomocí tlačítka \textit{Browse} (\textit{Procházet})
+vpravo. 
+
+Pokud zadáte pouze název výstupní vrstvy nebo toto pole necháte prázdné, 
+uloží se nová vrstva do~aktuálního adresáře pod daným názvem nebo pod názvem
+upravované vrstvy s~příslušným pořadovým číslem. 
 
 \subsection{Výsledek}
 \label{prirucka-vysledek}
 
-Upravená vrstva se uloží jako nová vrstva formátu \textit{shapefile} do~aktuálního 
-adresáře a~zároveň se automaticky přidá do~otevřeného projektu v~QGISu.
+Upravená vrstva se automaticky přidá do~otevřeného projektu v~QGISu.
 
-V~dialogu zásuvného modulu se do~textového pole vypíše protokol o~zpracování.
+V~dialogu zásuvného modulu se do~textového pole vlevo vypíše protokol o~zpracování.
 Formát protokolu je popsán na~obrázku \ref{fig:protokol}.  
 
 \label{protokol}
