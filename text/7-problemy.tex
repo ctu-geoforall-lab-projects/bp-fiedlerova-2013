@@ -228,14 +228,15 @@ Vzhledem k~principu tohoto algoritmu mohou při jeho použití vznikat nevalidn�
 geometrie, to je takové, jejichž segmenty se vzájemně protínají apod. 
 To se nejčastěji stává u~protáhlých úzkých prvků a~jiných speciálních tvarů. 
 Příkladem může být situace uvedená na~obrázku \ref{fig:vs-nevalidni}, 
-kde růžový polygon je prvkem přichycen k~referenční fialové vrstvě, 
+kde žlutý polygon je prvkem přichycen k~referenční modré vrstvě, 
 ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného tvaru vzniká nežádoucí 
 křížení.
 
 \label{vsinvalid}
   \begin{figure}[hbt]
     \centering
-      \includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
+      \input{./pictures/vs-invalid.pdf_tex}
+      %\includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
       \caption{Vznik nevalidní geometrie při přichycení vrcholů}
       \label{fig:vs-nevalidni}
   \end{figure} 
@@ -382,7 +383,8 @@ riziko napojovány.
 \label{toothpic}
   \begin{figure}[hbt]
     \centering
-      \includegraphics[width=300pt]{./pictures/tooth.pdf}
+      \input{./pictures/tooth.pdf_tex}
+      %\includegraphics[width=300pt]{./pictures/tooth.pdf}
       \caption{Příklad situace, kdy vzniká \uv{zub}}
       \label{fig:toothpic}
   \end{figure}
@@ -407,7 +409,8 @@ Automaticky je možné opravit tyto dvě chyby v~geometrii:
 \label{crospic}
   \begin{figure}[hbt]
     \centering
-      \includegraphics[width=300pt]{./pictures/crossing.pdf}
+      \input{./pictures/crossing.pdf_tex}
+      %\includegraphics[width=300pt]{./pictures/crossing.pdf}
       \caption{Oprava křížících se segmentů}
       \label{fig:crossing}
   \end{figure}
