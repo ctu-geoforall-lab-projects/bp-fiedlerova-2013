@@ -23,7 +23,7 @@ zvolit jednu z~těchto možností (popř. i~nějakých dalších).
 
 % FORMÁTOVÁNÍ !!!!!!!!
 \begin{itemize}
- \itemsep5pt  \parskip0pt \parsep0pt % to by tu vůbec nemělo být
+% \itemsep5pt  \parskip0pt \parsep0pt % to by tu vůbec nemělo být
  \item export nevalidních či bodových prvků do nové vrstvy 
  \item smazání všech nyní bodových prvků
  \item zrušení provedeného přichycení u~nevalidních prvků
@@ -38,14 +38,14 @@ nejkratších segmentů prvků dané vrstvy. Tato funkce by se navíc dala
 použít i~pro zpracování pomocí \texttt{Coverage\-Alignment}.
 
 
-\section{MatchingGeometry}
-\label{mg-vyvoj}
+%\section{MatchingGeometry}
+%\label{mg-vyvoj}
 
 % různá kritéria pro polygony, linie, body
 
 
-\section{CoverageAlignment}
-\label{ca-vyvoj}
+%section{CoverageAlignment}
+%label{ca-vyvoj}
 
 % přidání bodů do geometrií, pokud je mezi prvkem ref. a sub. vrstvy příliš velký rozdíl
 
@@ -56,12 +56,28 @@ použít i~pro zpracování pomocí \texttt{Coverage\-Alignment}.
 % vylepšení algoritmu pro nalezení odpovídajících si bodů pro vrcholy tinu tak, aby měl
 % správný tvar a velikost
 
+\section{Zpracování po~dlaždicích}
+\label{dlazdice-vyvoj}
+
+ % zpracování po dlaždicích
+Větší efektivita při zpracování rozsáhlých dat je v~GIS aplikacích
+zajištěna většinou jejich zpracováním po~částech. Je možné
+si data rozdělit na~pravidelné dlaždice a~každou tuto část upravovat
+samostatně. Ještě vhodnější způsob u~této aplikace je %(dle Freitas, Alfonso)
+rozdělení dat pomocí shlukových algoritmů a~následné rozdělení
+na~jednotlivá pole Voronoi teselací\footnote{rozdělení roviny 
+na~nepravidelné Voronoi polygony, které jsou duální k~trojúhelníkům
+\zk{DT}}.
+
+Bez tohoto postupu je využití programu omezeno pouze na~menší data.
+
 
 \section{Další algoritmy}
+\label{dalsi-vyvoj}
 
-% line matcher
-
-% úprava topologie před samotným spojením
+Zatím jsou v~knihovně \textit{GEOC} implementovány pouze některé
+základní algoritmy pro slučování map. V~rámci dalšího vývoje by
+bylo možné postupně doplňovat další pro její širší využití.
 
 % zahrnutí atributů
 V~současné době je v~oblasti slučování vektorových map 
@@ -71,7 +87,15 @@ k~atributům prvků. Zakomponování tohoto přístupu do~algoritmu
 pro určení odpovídajících si prvků je proto logicky vhodným 
 dalším krokem jeho vývoje.
 
-\section{Plugin}
- % umožnit uživateli vybrat, kam chce vrstvu uložit a v jakém formátu
- % zpracování po dlaždicích
- % místo protokolu -
+% úprava topologie před samotným spojením
+
+\section{Zásuvný modul \textit{Conflate}}
+
+U~zásuvného modulu by bylo vhodné usnadnit uživateli vyhledání
+a~opravu výsledných nevalidních geometrií. Nyní si musí sám
+vyhledat prvky dle identifikátorů v~protokolu. Ideálně by
+mohl být po kliknutí na~daný identifikátor v~okně projektu zobrazen
+a~označen příslušný prvek.
+
+Co se týče protokolu, lze ještě doplnit možnost jeho uložení
+do~textového souboru.
