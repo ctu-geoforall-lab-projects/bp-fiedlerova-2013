@@ -6,7 +6,7 @@
 
 QGIS_DIR = /opt/Quantum-GIS
 OGR_API_DIR = /usr/include/gdal
-GEOC_DIR = /opt/geoc
+GEOC_DIR = /opt/geoc_cpp
 QGIS_PLUGIN_DIR = /opt/qgsconflate
 
 TEMPLATE = app
@@ -30,6 +30,7 @@ unix:LIBS += -L/usr/lib \
     -lproj \
     -logrprovider \
     -lgeoc \
+    -lgeos_c \
     -lqgsconflate \
 
 INCLUDEPATH += $$QGIS_DIR/src/ui \
