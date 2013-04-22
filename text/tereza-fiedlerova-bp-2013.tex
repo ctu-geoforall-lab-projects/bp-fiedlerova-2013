@@ -26,7 +26,8 @@
 \usepackage[compact]{titlesec}
 \titleformat{\subsubsection}{\normalfont\bfseries}{\thesection}{1em}{}
 \titlespacing*{\subsubsection}{0em}{1em}{0.5em}
-\raggedbottom
+
+\raggedbottom % nehlídá stejnou velikost stránek -> neroztahuje mezery mezi obrázky apod.
 
 \usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
 
@@ -34,6 +35,8 @@
 
 \usepackage{cmap}           % pro správné mapování znaků v pdf na Unicode
 \usepackage[T1]{fontenc}    % totéž  
+
+\usepackage{float} % pro umístění obrázků apod.
 
 \usepackage{textcomp}
 
@@ -195,6 +198,7 @@
 \include{7-problemy}
 %\include{8-testovani}
 \include{9-vyvoj}
+\include{10-zaver}
 
 % Vysázení seznamu zkratek
 \include{zkratky}
@@ -216,7 +220,7 @@
 \seznampriloh
 
 % Vložení souboru 'text/prilohy' s přílohami
-%\include{text/prilohy}
+\include{prilohy}
 
 % Konec dokumentu
 \end{document}

@@ -1,6 +1,51 @@
 \chapter{Úvod}
 \label{1-uvod}
 
+Tato bakalářská práce se zabývá tématem slučování vektorových map
+(\textit{vector - to - vector conflation}).
 
-Tato práce se zabývá 'vector-to-vector conflation'.
-% SEPSAT !
+Spojování geografických dat z~různých zdrojů je jedním z~aktuálních
+problémů v~oblasti GIS. S~rostoucí dostupností digitálních dat začala
+vzrůstat i~potřeba tato data kombinovat a~porovnávat. Na~internetu
+je volně k~dispozici spousta různých prostorových datasetů. Jejich
+přesnost, úplnost, atributy a~další vlastnosti jsou však velmi odlišné.
+Některé jsou geometricky přesné, ale neobsahují potřebné atributy nebo
+některé žádoucí detaily. Méně přesné mapy s~potřebnými informacemi
+lze upravit pomocí těch přesnějších, abychom získali požadovaný
+výsledek. To a~veškeré podobné úlohy, které nás napadnou, jsou 
+předmětem slučování map.
+
+Pod anglickým pojmem \textit{conflation} se skrývá mnoho různých
+procesů, úloh a~činností. Jejich cílem může být obohacení jedné 
+mapy o~atributy či prvky z~mapy druhé, aktualizace datasetu, kombinace 
+dvou map o~stejné přesnosti, detekce změn a jiné. Záměrem je vždy 
+vytvoření nové mapy, z~níž lze vyčíst informace, které by nebylo možné
+získat pouze z~jednoho vstupního zdroje.
+
+Vzhledem k~velkému množství datasetů a~jejich rozsahu je automatizace
+výše uvedených úloh logickým a~nevyhnutelným krokem. Ne vždy je však
+automatické zpracování zárukou úspěchu. Každý algoritmus má své limity
+a~nikdy nelze identifikovat $100\%$ odpovídajících si prvků. To může
+být ještě sníženo nejednoznačností a~kvalitou vstupních dat. Proto
+je stále třeba dodatečná ruční úprava a~kontrola dat. Ta je však
+oproti úspoře času díky automatickému zpracování často zanedbatelná.
+
+Výstupem práce má být zásuvný modul, který umožní spojení
+vektorových map. Hlavním cílem je však vyhledání způsobů
+řešení tohoto problému a~implementace některých z~nich.
+Předpokládá se, že vznikne knihovna s~algoritmy pro slučování
+vektorových dat, kterou bude možné dále rozšiřovat a~doplňovat
+další funkcionalitu. Zásuvný modul bude využívat tuto knihovnu
+a~s~jejím rozšiřováním bude možné i~sem přidávat další funkce.   
+
+V~následující kapitole bude podrobněji popsána problematika 
+slučování map (\textit{conflation}). V~kapitole \ref{3-nastroje}
+pak budou představeny některé existující nástroje v~této oblasti.
+Po~krátkém výčtu použitých technologií (kapitola \ref{4-technologie})
+už se bude práce zabývat samotnou tvorbou knihovny a~zásuvného
+modulu. Kapitola \ref{5-geoc} bude popisovat jednotlivé algoritmy
+nově vznikající knihovny a~jejich implementaci. Následovat
+bude popis zásuvného modulu a~jeho funkcionality včetně
+ukázek jeho použití (kapitola \ref{6-plugin}). Poslední dvě kapitoly
+budou věnovány řešení problémů a~nápady na~další vývoj 
+a~vylepšení vzniklé aplikace.  
