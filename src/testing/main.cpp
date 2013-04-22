@@ -3,9 +3,12 @@
 
 #include <QString>
 
+#include <qgsapplication.h>
 #include <qgsmaplayer.h>
 #include <qgsvectorlayer.h>
 #include <qgsproviderregistry.h>
+
+#include <geos_c.h>
 
 #include "qgsconflateprovider.h"
 
