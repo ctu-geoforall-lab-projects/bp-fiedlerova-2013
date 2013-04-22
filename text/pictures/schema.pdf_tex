@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{427.5871582bp}%
+    \setlength{\unitlength}{427.78481445bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,13 +48,13 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.15278506)%
+  \begin{picture}(1,0.13326766)%
     \put(0,0){\includegraphics[width=\unitlength]{./pictures/schema.pdf}}%
-    \put(0.0116949,0.08102648){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflatePlugin}}}%
-    \put(0.43581531,0.08648595){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Dialog}}}%
-    \put(0.71984203,0.07829674){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflateProvider}}}%
-    \put(0.03349723,0.00981729){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{zásuvný modul}}}%
-    \put(0.37774448,0.00981729){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{grafické rozhraní}}}%
-    \put(0.7598591,0.01213532){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{funkcionalita}}}%
+    \put(0.03752909,0.07771871){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflatePlugin}}}%
+    \put(0.45295257,0.07656385){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Dialog}}}%
+    \put(0.7340145,0.07971295){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflateProvider}}}%
+    \put(0.05554316,0.00937606){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{zásuvný modul}}}%
+    \put(0.39868684,0.00843154){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{grafické rozhraní}}}%
+    \put(0.77306855,0.01263758){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{funkcionalita}}}%
   \end{picture}%
 \endgroup%
