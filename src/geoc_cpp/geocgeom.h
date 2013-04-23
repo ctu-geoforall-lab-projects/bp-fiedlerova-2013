@@ -87,6 +87,8 @@ private:
 
 };
 
+typedef std::vector< GEOCGeom > TGeomLayer;
+
 } // namespace geoc
 } // namespace geo
 
