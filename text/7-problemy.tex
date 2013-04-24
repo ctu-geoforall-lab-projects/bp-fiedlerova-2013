@@ -80,7 +80,7 @@ zpracovávaných dat.
 \label{problemy-test}
 Porovnání rychlosti bylo provedeno nad dvojicí polygonových vrstev\linebreak[5] 
 \texttt{vyber\_CR} a~\texttt{vyber\_obce}, které obsahují polygony obcí části 
-ČR, a~nad dvojicí liniových vrstev \texttt{zel1} a~\texttt{zel2} obsahující 
+ČR, a~nad dvojicí li\-niových vrstev \texttt{zel1} a~\texttt{zel2} obsahující 
 výběr železnic ve~Středočeském kraji. Použity byly pouze tyto výběry, nikoliv 
 data z~celé České republiky, jelikož na~tak velkých datasetech zpracování 
 bez prostorových indexů může trvat poměrně dlouho (jeden pokus tak trvá 
@@ -92,10 +92,19 @@ s~použitím prostorových indexů a~bez jejich použití. Kompletní výsledky 
 jsou uvedeny v~tabulkách v~příloze \ref{priloha-testovani}. Zde uvádím jen přehled 
 výsledků testování.
 
-\begin{table}
+\begin{table}[H]
  \centering
-\begin{tabular}{ll}
- 
+\begin{tabular}{|c|cc|cc|}
+\hline
+  & \multicolumn{2}{|c}{VertexSnapper} & \multicolumn{2}{|c|}{CoverageAlignment} \\
+ toleranční vzálenost & 100 m & 1000 m & 100/1000 m & 10 000 m \\
+\hline
+\hline
+ polygonová data & 20.9 $\rightarrow$ 0.8 s& 22.6 $\rightarrow$ 0.7 s& 
+ 4.7 $\rightarrow$ 0.5 s& 4.9 $\rightarrow$ 0.5 s\\
+ liniová data & 38.4 $\rightarrow$ 1.1 s& 39.0 $\rightarrow$ 1.8 s& 
+ 10.5 $\rightarrow$ 0.7 s& 10.5 $\rightarrow$ 4.2 s\\
+\hline
 \end{tabular}
   \caption{Výsledky testování}
   \label{tab:vysledky}
@@ -316,7 +325,8 @@ Automaticky je možné opravit tyto dvě chyby v~geometrii:
 \label{deadpic}
   \begin{figure}[hbt]
     \centering
-      \includegraphics[width=300pt]{./pictures/dead-branch.pdf}
+      \input{./pictures/dead-branch.pdf_tex}
+      %\includegraphics[width=300pt]{./pictures/dead-branch.pdf}
       \caption{Oprava slepých větví}
       \label{fig:dead-branch}
   \end{figure}
@@ -330,5 +340,6 @@ se přitom její tvar. Vzhledem k~tomu, že u~úprav prováděných
 s~polygony při slučování map, vznikají křížením většinou spíše drobné
 \uv{výstupky}, je použité řešení přijatelné. Navíc funkci pro opravu
 geometrií přidáním bodů obsahuje většina GIS programů, takže není
-pro uživatele složité je po~spojení dat v~rámci \textit{postprocessingu}
-aplikovat.
+pro uživatele složité ji po~spojení dat v~rámci \textit{postprocessingu}
+aplikovat. Stejně tak se ručně musí opravit další chyby jako je 
+otvor v~polygonu dotýkající se vnějšího okraje atd.

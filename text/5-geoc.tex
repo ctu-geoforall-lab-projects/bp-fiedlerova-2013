@@ -33,7 +33,7 @@ a~\texttt{geos::geom::Coordinate}, která pak reprezentuje samostatný bod.
 Při zpracování vrstev z~více zdrojů někdy stačí pouze upřesnit polohu či tvar 
 prvků z~cílové vrstvy tak, aby se přiblížil prvkům z~vrstvy referenční. 
 \mbox{Není-li} podrobnost obou datasetů příliš rozdílná, lze využít jednoduchého 
-postupu \textbf{přichycení blízkých vrcholů}.
+postupu \textbf{přichycení blízkých vrcholů}. % inspirace JCS
 
 \subsection{Popis algoritmu}
 \label{vs-algoritmus}
@@ -72,9 +72,11 @@ blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je n�
 Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční je 
 implementován ve~třídách \texttt{Vertex\-Snapper} 
 a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí aplikaci 
-stačí po~předání vstupních parametrů třídě \texttt{Vertex\-Snapper} zavolat 
-funkci \texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových 
-indexů sestavených metodou \texttt{build\-Index()} třídy 
+stačí po~předání vstupních parametrů (k~tomu slouží metody 
+\texttt{setRefGeometry()}, \texttt{setSubGeometry()} 
+a~\texttt{setTolDistance()}) třídě \texttt{Vertex\-Snapper} zavolat funkci 
+\texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových indexů 
+sestavených metodou \texttt{build\-Index()} třídy 
 \texttt{Spatial\-Index\-Builder}.
 
 Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices()}. Uvnitř této
@@ -88,6 +90,9 @@ geometrie.
 
 Pro zjištění validity geometrií je volána metoda \texttt{isValid()} třídy
 \texttt{geos::geom::\-Geometry}.
+
+Výsledné geometrie lze získat zavoláním metody \texttt{getNewGeometry()},
+která vrací vektor s~interní reprezentací geometrií.
 
 
 \subsection{Využití}
@@ -145,7 +150,7 @@ k~vrstvě druhé}. Tento způsob je složitější než výše uvedené přichyt
 V~knihovně \textit{GEOC} je využit opět pro~úpravu jedné vrstvy na~základě vrstvy 
 referenční. Do~upravované vrstvy nejsou žádné prvky přidávány ani z~ní vymazávány,
 pouze jde o~jejich modifikaci. Velmi podobný algoritmus se však dá použít 
-i~ke~kombinaci dvou vrstev. 
+i~ke~kombinaci dvou vrstev. % inspirace Saalfeld
 
 \subsection{Popis algoritmu}
 \label{ca-algoritmus}
@@ -181,7 +186,7 @@ Nejčastější používaný postup při~spojování vektorových map je násled
 \label{capic}
   \begin{figure}[H]
     \centering
-      \def\svgwidth{350pt}
+      \def\svgwidth{400pt}
       \input{./pictures/ca-princip.pdf_tex}
       %\includegraphics[width=350pt]{./pictures/ca-princip.pdf}
       \caption{Postup zarovnání vrstev}
@@ -234,8 +239,9 @@ následujícím způsobem.
 
 \subsection{Implementace}
 \label{ca-implementace}
-Algoritmus je opět implementován pod jedinou metodou \texttt{align()} třídy
-\texttt{Coverage\-Alignment}. Ta postupně volá metody provádějící jednotlivé
+Algoritmus je opět implementován pod jedinou metodou \texttt{align()} 
+třídy \texttt{Coverage\-Alignment}, kterou je možné zavolat po~nastavení
+základních parametrů. Ta postupně volá metody provádějící jednotlivé
 kroky algoritmu.
 
 Nejdříve je třeba nalézt odpovídající si prvky. K~tomu slouží třída 
@@ -332,7 +338,7 @@ kde $1$ znamená naprostou shodu.
 Hodnoty $\Delta l_{max}$, $\Delta l_{min}$ udávají maximální a~minimální rozdíl délek
 segmentů v~celém datasetu, $\Delta l$ je pak rozdíl délek porovnávaných segmentů.
 $\alpha$ udává odchylku dvou segmentů. Hodnota $\alpha_{max}$ ve většině případů může
-být zvolena $90^{\circ}$, $\alpha_{min}$ pak $O^\circ$. Proměnná $d$ ve~třetím 
+být zvolena $90^{\circ}$, $\alpha_{min}$ pak $0^\circ$. Proměnná $d$ ve~třetím 
 kritériu reprezentuje vzdálenost segmentů, která je spočtena jako průměr vzdáleností
 jejich počátečních a~koncových bodů. Jelikož se porovnávají pouze blízké segmenty,
 $d_{max}$ je rovno toleranční vzdálenosti, $d_{min}$ by pak mělo odpovídat nejmenší
