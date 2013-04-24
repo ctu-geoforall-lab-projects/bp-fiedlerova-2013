@@ -145,6 +145,41 @@ v~sekundách.
 \end{table} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                 PŘÍLOHA - UML DIAGRAMY TŘÍD                                   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\chapter{UML diagramy tříd}
+\label{priloha-diagramy}
+
+Následující UML diagramy zobrazují třídy spojené s~jednotlivými 
+algoritmy a~jejich nejdůležitější atributy a~metody.
+
+\label{uml-vs}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=430pt]{./pictures/uml-vs.pdf}
+      \caption{UML diagram tříd pro VertexSnapper}
+      \label{fig:uml-vs}
+  \end{figure}
+
+\label{uml-ca}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=430pt]{./pictures/uml-ca.pdf}
+      \caption{UML diagram tříd pro CoverageAlignment}
+      \label{fig:uml-ca}
+  \end{figure}
+
+\label{uml-lm}
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=430pt]{./pictures/uml-lm.pdf}
+      \caption{UML diagram tříd pro LineMatcher}
+      \label{fig:uml-lm}
+  \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                 PŘÍLOHA - UŽIVATELSKÁ PŘÍRUČKA                                %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -241,7 +276,9 @@ Poslední nastavovanou možností je \textbf{automatická oprava geometrie}
 program pokusí opravit nově vzniklé nevalidní geometrie. Opravováno je pouze 
 křížení úseků v~polygonu a~tzv. \uv{slepé větve}. Automatická oprava však 
 může ovlivnit přesnost výsledku a~někdy i~vytvořit topologické chyby, proto 
-je třeba ji používat opatrně.
+je třeba ji používat opatrně. Při volbě \textit{Match Lines} není tato možnost
+dostupná, jelikož uvedené situace nejsou u~liniových geometrií považovány
+za~chybné.
 
 Po~nastavení všech parametrů (včetně výstupní vrstvy - viz dále) se stisknutím 
 tlačítka \textit{Process} spustí zpracování. 

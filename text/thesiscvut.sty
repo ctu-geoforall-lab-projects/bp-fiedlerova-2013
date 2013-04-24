@@ -547,13 +547,12 @@ na t\'{e}ma \uv{\nazev@cz} jsem vypracovala samostatn\v{e}. Pou\v{z}itou literat
 	  \fi
 	} %
 }
+
 \addto\captionsenglish{%
    \def\listfigurename{Seznam obrázků}%
-%   \def\listoftables{Seznam tabulek}%
 }%
 
 %% Predefinovani seznamu tabulek
-
 \newcommand{\seznamtabulek}{
 	{ % vlozene prostredi z duvodu pagestyle
 	  \cleardoublepage
@@ -567,6 +566,11 @@ na t\'{e}ma \uv{\nazev@cz} jsem vypracovala samostatn\v{e}. Pou\v{z}itou literat
 	  \fi
 	} %
 }
+
+\addto\captionsenglish{%
+  \def\listtablename{Seznam tabulek}%
+}
+
 
 %% Predefinovani seznamu zkratek a symbolu
 \ifTT@cvutstyle
