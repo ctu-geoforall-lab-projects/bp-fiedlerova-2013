@@ -49,7 +49,7 @@
   \global\let\svgscale\undefined%
   \makeatother%
   \begin{picture}(1,0.23109205)%
-    \put(0,0){\includegraphics[width=\unitlength]{dead-branch.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength]{./pictures/dead-branch.pdf}}%
     \put(0.07418305,0.18962455){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Slepá větev}}}%
     \put(0.63472745,0.19073663){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Oprava}}}%
   \end{picture}%
