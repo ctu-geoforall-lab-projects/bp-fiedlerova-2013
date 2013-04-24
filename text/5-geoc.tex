@@ -16,6 +16,16 @@ Podrobný popis jednotlivých tříd a~jejich metod je podrobněji popsán v~dok
 
 % úvodní poznámky, proč samost. knihovna (aby se to dalo využít i jinde než v mém pluginu)
 % co popisuje kapitola, vyjmenování algoritmů, jakou funkcionalitu by měla zajišťovat (stručně)
+\section{Reprezentace geometrie}
+\label{reprezentace-geom}
+
+Pro reprezentaci geometrie a~prostorové analýzy \textit{GEOC} využívá
+knihovnu \textit{GEOS}. Geometrie prvků je představována třídou 
+\texttt{geos::geom::Geometry}. Kromě samotné geometrie je v~algoritmech
+často potřeba pracovat se~seznamem bodů jednoho či více prvků. V~těchto
+případech je využita třída \texttt{geos::geom::CoordinateSequence}
+a~\texttt{geos::geom::Coordinate}, která pak reprezentuje samostatný bod.
+
 
 \section{Vertex Snapper} 
 \label{vertexsnapper}
@@ -48,7 +58,7 @@ blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je n�
 
 % obrázek ilustrujici postup zpracovani
 \label{vspic}
-  \begin{figure}[hbt]
+  \begin{figure}[h!]
     \centering
       %\includegraphics[width=300pt]{./pictures/vs-princip.pdf}
       \input{./pictures/vs-princip.pdf_tex}
@@ -63,17 +73,21 @@ Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční je
 implementován ve~třídách \texttt{Vertex\-Snapper} 
 a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí aplikaci 
 stačí po~předání vstupních parametrů třídě \texttt{Vertex\-Snapper} zavolat 
-funkci \texttt{snap}. Ta vyhledá blízké prvky s~využitím prostorových 
-indexů sestavených metodou \texttt{build\-Index} téže třídy.
+funkci \texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových 
+indexů sestavených metodou \texttt{build\-Index()} třídy 
+\texttt{Spatial\-Index\-Builder}.
 
-Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices}. Uvnitř této
+Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices()}. Uvnitř této
 metody se vytvoří instance  třídy \texttt{Vertex\-Geometry\-Editor\-Operation},
-která edituje příslušnou geometrii přichycením blízkých vrcholů.
-\texttt{Vertex\-Geometry\-Editor\-Operation} je potomkem třídy 
+která edituje příslušnou geometrii přichycením blízkých vrcholů v~metodě
+\texttt{edit()}. \texttt{Vertex\-Geometry\-Editor\-Operation} je potomkem třídy 
 \texttt{geos::\-operation::\-Coordinate\-Operation}, která je \textit{inter\-face}
 \footnote{rozhraní třídy, kde jsou deklarovány pouze abstraktní metody bez
 implementace, není možné vytvořit instanci této třídy} třídou pro editaci 
 geometrie.
+
+Pro zjištění validity geometrií je volána metoda \texttt{isValid()} třídy
+\texttt{geos::geom::\-Geometry}.
 
 
 \subsection{Využití}
@@ -165,8 +179,9 @@ Nejčastější používaný postup při~spojování vektorových map je násled
 
 % obrázek ilustrujici postup zpracovani, vč. tinu apod.
 \label{capic}
-  \begin{figure}[hbt]
+  \begin{figure}[H]
     \centering
+      \def\svgwidth{350pt}
       \input{./pictures/ca-princip.pdf_tex}
       %\includegraphics[width=350pt]{./pictures/ca-princip.pdf}
       \caption{Postup zarovnání vrstev}
@@ -188,9 +203,10 @@ následujícím způsobem.
     na~obrázku \ref{fig:buffer}. V~opačném případě si prvky neodpovídají.
 
 \label{bfpic}
-  \begin{figure}[hbt]
+  \begin{figure}[H]
     \centering
-      \scriptsize
+      \small
+      \def\svgwidth{400pt}
       \input{./pictures/buffer-test.pdf_tex}
       %\includegraphics[width=300pt]{./pictures/buffer-test.pdf}
       \caption{Porovnání prvků na základě jejich obalových zón}
@@ -202,9 +218,10 @@ následujícím způsobem.
     podmínka, pak jsou prvky označeny za~odpovídající si.
 
 \label{bf2pic}
-  \begin{figure}[hbt]
+  \begin{figure}[H]
     \centering
-      \scriptsize
+      \small
+      \def\svgwidth{400pt}
       \input{./pictures/buffer-boundary.pdf_tex}
       %\includegraphics[width=300pt]{./pictures/buffer-boundary.pdf}
       \caption{Porovnání prvků na základě obalových zón jejich hranic}
@@ -215,23 +232,33 @@ následujícím způsobem.
 
 %% ML: doplnit ilustraci .. obrázek obal. zón
 
-\subsection{Implementace} % text asi přepsat 
+\subsection{Implementace}
 \label{ca-implementace}
-% popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
-Veškeré zpracování je opět schováno pod jedinou funkcí \texttt{align} třídy
+Algoritmus je opět implementován pod jedinou metodou \texttt{align()} třídy
 \texttt{Coverage\-Alignment}. Ta postupně volá metody provádějící jednotlivé
 kroky algoritmu.
 
 Nejdříve je třeba nalézt odpovídající si prvky. K~tomu slouží třída 
 \texttt{Matching\-Geometry}, která k~dané geometrii najde odpovídající
-(\texttt{set\-Match}). Obdobně jako u~\texttt{Vertex\-Snapper} je i~zde 
-využito prostorových indexů, které jsou vytvořeny metodou 
-\texttt{build\-Index}. Určení blízkých bodů je pak provedeno prostřednictvím
-funkcí \texttt{choose\-Matching\-Points, \-find\-Closest\-Points,
-\-clean\-Matching\-Points} třídy \texttt{Co\-ve\-ra\-ge\-Align\-ment}.
+(\texttt{set\-Match()}). Obdobně jako u~\texttt{Vertex\-Snapper} je i~zde 
+při hledání blízkých prvků využíváno prostorových indexů, které jsou 
+vytvořeny metodou \texttt{SpatialndexBuilder::build\-Index()}. Testy
+obalových zón jsou prováděny za~pomoci prostorových funkcí 
+\texttt{buffer()}, která vytvoří obalovou zónu, \texttt{getBoundary()},
+která vrací hranici geometrie, a~konečně \texttt{contains()}, která
+testuje, zda jedna geometrie obsahuje druhou. Všechny jsou přitom
+metodami \texttt{geos::geom::Geometry}.
 
-Třetím krokem je vytvoření TINu metodou \texttt{create\-TIN}, která k~tomu
-využívá třídu \texttt{Tri\-an\-gu\-la\-tion}.  
+Určení blízkých bodů je pak provedeno prostřednictvím metody 
+\texttt{choose\-Matching\-Points()}, která dále využívá
+\texttt{find\-Closest\-Points()} a~\texttt{clean\-Matching\-Points()} 
+třídy \texttt{Coverage\-Alignment}.
+
+Třetím krokem je vytvoření trojúhelníkové sítě metodou
+\texttt{create\-TIN()}, která k~tomu využívá třídu 
+\texttt{Tri\-an\-gu\-la\-tion}.  Ta pouze aplikuje třídu 
+\texttt{geos::triangu\-late::Delaunay\-Triangulation\-Builder}, kde je 
+vytvářen \zk{TIN} ze~zadaných bodů.
 
 Konečně je provedena postupně transformace všech prvků. Funkce pro
 transformaci poskytuje třída \texttt{Affine\-Trans\-for\-mation},
@@ -312,19 +339,22 @@ $d_{max}$ je rovno toleranční vzdálenosti, $d_{min}$ by pak mělo odpovídat 
 vzdálenosti krajních bodů dvojice segmentů z~obou datasetů.
 
 
-\subsection{Implementace} % text asi přepsat 
+\subsection{Implementace}
 \label{lm-implementace}
-% odkazy na literaturu, dokumentaci
+
 Veškeré funkce pro tento algoritmus jsou obsaženy ve~třídě \texttt{Line\-Matcher}.
 
-Funkce \texttt{match} hledá postupně ke~každé linii blízké linie z~druhého datasetu.
-Následně předá výsledky tohoto hledání funkci \texttt{match\-Line}, která ke~každému
-segmentu linie, nalezne prostřednictvím metody \texttt{matching\-Segment} odpovídající
+Funkce \texttt{match()} hledá postupně ke~každé linii blízké linie z~druhého datasetu.
+Následně předá výsledky tohoto hledání metodě \texttt{match\-Line()}, která ke~každému
+segmentu linie, nalezne prostřednictvím metody \texttt{matching\-Segment()} odpovídající
 segment mezi předanými blízkými prvky. Pokud k~nějakému úseku linie není určen
 žádný dostatečně podobný, je zde linie přerušena. Z~původního jednoduchého liniového
-prvku tak může vzniknout multiprvek. 
+prvku tak může vzniknout multiprvek. Pro vytváření nových geometrií jsou využívány
+metody \texttt{createLineString()} a~\texttt{createMultiLineString()} třídy 
+\texttt{geos::geom::GeometryFactory} knihovny \textit{GEOS}.
+ 
 
-Výpočet kritérií podobnosti segmentů se nachází v~metodě \texttt{similarity}. 
+Výpočet kritérií podobnosti segmentů se nachází v~metodě \texttt{similarity()}. 
 
 \subsection{Využití}
 \label{lm-vyuziti}

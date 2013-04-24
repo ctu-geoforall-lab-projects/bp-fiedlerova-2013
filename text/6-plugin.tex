@@ -17,25 +17,26 @@ v~tomto jazyce.
 % libqgis*.so, které jsou publikovány pod licencí GNU GPL, musí být tyto
 % moduly pod stejnou licencí.
 
-C++ zásuvné moduly QGISu jsou dynamické knihovny (.so nebo .dll
-\footnote{ přípona .so se používá v~Linuxu, přípona .dll pod systémem Windows}).
-Načtení modulu v~QGISu probíhá za~běhu programu. Při startu programu 
-\textit{Správce zásuvných modulů (Plugin Manager)} vyhledá všechny soubory 
-s~danou příponou ve~složce se~zásuvnými moduly (v Linuxu nejčastěji /lib/qgis
-nebo /usr/lib/qgis/plugins), popřípadě v~dalších složkách, jejichž umístění
+C++ zásuvné moduly QGISu jsou dynamické knihovny (\textit{.so} nebo 
+\textit{.dll} \footnote{ přípona \textit{.so} se používá v~Linuxu, přípona 
+\textit{.dll} pod systémem Windows}). Načtení modulu v~QGISu probíhá za~běhu 
+programu. Při startu programu \textit{Správce zásuvných modulů 
+(Plugin Manager)} vyhledá všechny soubory s~danou příponou ve~složce 
+se~zásuvnými moduly (v Linuxu nejčastěji /lib/qgis nebo 
+/usr/lib/qgis/plugins), popřípadě v~dalších složkách, jejichž umístění
 je definováno v~uživatelském nastavení, a~načte je.
 
 Pro správné načtení musí zásuvný modul obsahovat následující.
 
 \begin{enumerate}
- \item Funkce \texttt{classFactory}, která vytvoří instanci daného pluginu.
- \item Metoda \texttt{initGui}, jejímž prostřednictvím jsou zobrazeny prvky 
+ \item Funkce \texttt{classFactory()}, která vytvoří instanci daného pluginu.
+ \item Metoda \texttt{initGui()}, jejímž prostřednictvím jsou zobrazeny prvky 
 	uživatelského rozhraní (ikona apod.) v~nabídce \textit{Zásuvné moduly 
 	(Plugins)} a~v~liště nástrojů.
- \item Metoda \texttt{unload}, která odstraní alokované elementy a~samotnou
+ \item Metoda \texttt{unload()}, která odstraní alokované elementy a~samotnou
 	instanci třídy zásuvného modulu (pomocí destruktoru) při ukončení 
 	programu.
- \item Další externí C ~funkce (\texttt{na\-me, descrip\-tion}) pro správné
+ \item Další externí C ~funkce (\texttt{na\-me(), descrip\-tion()}) pro správné
 	zobrazení ve~\textit{Správci zásuvný modulů}.
 \end{enumerate}
 
@@ -69,7 +70,7 @@ protokolu apod.
 
 \vspace{0.5cm}
 \label{schema}
-  \begin{figure}[hbt]
+  \begin{figure}[h]
     \centering
       \input{./pictures/schema.pdf_tex}
       %\includegraphics[width=350pt]{./pictures/schema.pdf}
@@ -93,7 +94,7 @@ dokumentaci k~pluginu. % doplnit odkazy na přílohy
  \item Dalším krokem je výběr vrstev a~nastavení možností uživatelem.
  \item Po~spuštění zpracování se nejdříve zkopíruje upravovaná vrstva 
 	(\textit{Subject layer}) do~nové vektorové vrstvy pomocí funkce 
-	\texttt{copyLayer}. Formát nové vrstvy je vždy \textit{shapefile}
+	\texttt{copyLayer()}. Formát nové vrstvy je vždy \textit{shapefile}
 	\footnote{ESRI Shapefile je datový formát pro ukládání vektorových 
 	  prostorových dat  vyvinutý firmou Esri, jedná se o~jeden 
 	  z~nejrozšířenějších formátů dat pro geografické informační systémy,
@@ -113,10 +114,10 @@ dokumentaci k~pluginu. % doplnit odkazy na přílohy
 	vrstev a~toleranční vzdálenost. 
  \item Dále je zavolána funkce vytvořené třídy pro zarovnání datasetů. Při volbě 
 	při\-chycení vrcholů \textit{Snap vertices} v~dialogu je použita třída 
-	\texttt{Vertex\-Snapper} a~metoda \texttt{snap}, při volbě zarovnání 
+	\texttt{Vertex\-Snapper} a~metoda \texttt{snap()}, při volbě zarovnání 
 	vrstev \textit{Coverage Alignment} třída \texttt{Cove\-rage\-Align\-ment} 
-	a~metoda \texttt{align}, poslední možností je \textit{Match Lines}, která
-	využívá třídu \texttt{Line\-Matcher} a~její funkci \texttt{match}. 
+	a~metoda \texttt{align()}, poslední možností je \textit{Match Lines}, která
+	využívá třídu \texttt{Line\-Matcher} a~její metoda \texttt{match()}. 
 	Výsledek je uložen do~nového vektoru geometrií.
  \item Na závěr je upravena geometrie nové vrstvy (kopie upravované vrstvy) dle
 	výsledků úprav provedených algoritmy knihovny \textit{GEOC}.

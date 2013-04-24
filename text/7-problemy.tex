@@ -41,9 +41,14 @@ každý prvek z~jedné vrstvy s~každým prvkem z~vrstvy druhé. Je tedy třeba
 porovnat $n\cdot m$ dvojic, kde $n$ je počet prvků vrstvy první a~$m$ vrstvy 
 druhé. U~rozsáhlejších datasetů je tedy nutné provést poměrně velké množství 
 operací a~čas zpracování pak výrazně roste. Tento problém byl částečně vyřešen 
-využitím prostorových indexů. Díky tomu se porovnávají pouze dvojice prvků, 
+aplikací prostorových indexů\footnote{prostorové indexy jsou využívány pro 
+optimalizaci prostorových dotazů v~prostorových databázích}. Konkrétně byla 
+využita třída \texttt{geos::index::strtree::STRtree} knihovny \textit{GEOS} .
+Tato třída implementuje metodu indexování dat založenou na~\textit{R-Tree}
+\footnote{česky R-strom, prostorová stromová datová struktura využívající 
+minimální ohraničující obdélníky}. Díky tomu se porovnávají pouze dvojice prvků, 
 u~nichž to má smysl, tedy takové, jejichž minimální ohraničující obdélníky 
-(v~některých algoritmech rozšířené o~toleranční vzdálenost) se protínají.
+(v~některých algoritmech rozšířené o~toleranční vzdálenost) se protínají. 
 
 Použití prostorových indexů rychlost zpracování sice značně zvýšilo (viz 
 kapitola \ref{problemy-test}), ale stále trvá zpracování rozsáhlejších dat 
