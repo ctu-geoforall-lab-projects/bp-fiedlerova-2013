@@ -91,6 +91,8 @@ void GeometryCorrectionOperation::removeCrosses( CoordinateSequence *line )
 
                 i=0; // order of segments was changed, check it again
 
+
+
             } // if
         } // for
     }// for

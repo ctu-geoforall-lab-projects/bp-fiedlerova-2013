@@ -7,6 +7,13 @@ namespace geoc {
     namespace geo {
         class GEOCGeom;
     }
+    namespace tin {
+        class Triangle;
+        class Triangulation;
+    }
+    namespace idx {
+        class SpatialIndexBuilder;
+    }
     namespace edit {
         class AlignGeometryEditorOperation;
         class VertexGeometryEditorOperation;
@@ -20,15 +27,12 @@ namespace geoc {
         class CoverageAlignment;
         class LineMatcher;
     }
-    namespace tin {
-        class Triangle;
-        class Triangulation;
-    }
 }
 
 #include "geocgeom.h"
 #include "triangle.h"
 #include "sort.h"
+#include "spatialindexbuilder.h"
 #include "vertexsnapper.h"
 #include "vertexgeometryeditoroperation.h"
 #include "affinetransformation.h"

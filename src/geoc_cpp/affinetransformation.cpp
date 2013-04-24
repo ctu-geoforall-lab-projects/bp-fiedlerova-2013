@@ -14,8 +14,8 @@ AffineTransformation::AffineTransformation()
 
 AffineTransformation::~AffineTransformation()
 {
-    //if (identicPoints1) delete identicPoints1;
-    //if (identicPoints2) delete identicPoints2;
+    if (identicPoints1) delete identicPoints1;
+    if (identicPoints2) delete identicPoints2;
 
 } // destructor
 
@@ -40,7 +40,8 @@ double AffineTransformation::determinant()
 } // double AffineTransformation::determinant()
 
 
-void AffineTransformation::computeParameters2D( const double det, double &a1, double &a2, double &b1, double &b2)
+void AffineTransformation::computeParameters2D( const double det, double &a1, double &a2,
+                                                double &b1, double &b2)
 {
     // get coordinates of identical points in the first system
     double xA, yA, xB, yB, xC, yC;
@@ -77,7 +78,8 @@ void AffineTransformation::computeParameters2D( const double det, double &a1, do
     b1 = ( dxAB*dXAC - dxAC*dXAB )/det;
     b2 = ( dyAB*dYAC - dyAC*dYAB )/det;
 
-} // bool AffineTransformation::computeParameters2D( const double det, double &a1, double &a2, double &b1, double &b2)
+} // bool AffineTransformation::computeParameters2D( const double det, double &a1, double &a2,
+                                                    //double &b1, double &b2)
 
 
 void AffineTransformation::transformPoint2D( Coordinate *point )

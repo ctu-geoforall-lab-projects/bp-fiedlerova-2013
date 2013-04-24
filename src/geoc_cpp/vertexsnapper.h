@@ -8,11 +8,6 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/util/GeometryEditor.h>
-#include <geos/geom/LineString.h>
-#include <geos/geom/Point.h>
-#include <geos/geom/LinearRing.h>
-#include <geos/geom/Polygon.h>
-#include <geos/operation/distance/DistanceOp.h>
 #include <geos/geom/Envelope.h>
 #include <geos/index/strtree/STRtree.h>
 
@@ -26,7 +21,6 @@ using namespace std;
 using namespace geos;
 using namespace geos::geom;
 using namespace geos::geom::util;
-using namespace geos::operation::distance;
 using namespace geos::index;
 using namespace geos::index::strtree;
 
@@ -34,12 +28,13 @@ using namespace geoc;
 using namespace geoc::geo;
 using namespace geoc::alg;
 using namespace geoc::edit;
+using namespace geoc::idx;
 
 
 namespace geoc {
 namespace alg {
 
-typedef std::vector< GEOCGeom > TGeomLayer;
+//typedef std::vector< GEOCGeom > TGeomLayer;
 
 /** Class to snap vertices of one layer to the close vertices of the other layer. */
 
@@ -88,10 +83,6 @@ public:
       * @param closeCoord Coordinate sequence with close point from the reference layer.
       */
     void snapVertices( GEOCGeom * geom, CoordinateSequence * closeCoord );
-
-    /** Build spatial index.
-      */
-    void buildIndex();
 
     /** Get list of invalid geometries.
       */

@@ -15,6 +15,7 @@ using namespace geoc::geo;
 using namespace geoc::alg;
 using namespace geoc::edit;
 using namespace geoc::tin;
+using namespace geoc::idx;
 
 namespace geoc {
 namespace edit {
@@ -30,7 +31,7 @@ public:
 
     /** Constructor.
       */
-    AlignGeometryEditorOperation(): tin(NULL), sIndex(NULL), changed(false) {}
+    AlignGeometryEditorOperation(): ttin(NULL), sIndex(NULL), changed(false) {}
 
     /** Destructor
       */
@@ -38,7 +39,7 @@ public:
 
     /** Set TIN.
       */
-    void setTIN( TTin *t ){ tin = t; buildIndex(); }
+    void setTIN( TTin *t );
 
     /** Find identic points for given point - vertices of triangles
       */
@@ -48,9 +49,6 @@ public:
       */
     bool isChanged() { return changed; }
 
-    /** Build spatial index.
-      */
-    void buildIndex();
 
     /** Virtual function for editing geometry according to mCoord.
       * @param coordinates Not important.
@@ -60,7 +58,7 @@ public:
 
 private:
 
-    TTin *tin;
+    TTin *ttin;
     CoordinateSequence *idPoints1;
     CoordinateSequence *idPoints2;
     SpatialIndex *sIndex;

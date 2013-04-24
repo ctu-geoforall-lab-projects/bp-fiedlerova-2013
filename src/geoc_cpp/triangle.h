@@ -55,12 +55,6 @@ public:
       */
     CoordinateSequence* getCorrespondingTriangle(){ return correspondingT; }
 
-    /** Test whether point is inside triangle.
-      * @param point Tested point.
-      * @return true if point is inside this triangle.
-      */
-    bool isInside( const Coordinate *point ) const;
-
 private:
     CoordinateSequence* triangle;
     CoordinateSequence *correspondingT;

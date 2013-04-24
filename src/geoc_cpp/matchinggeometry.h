@@ -18,6 +18,7 @@ using namespace geos::index::strtree;
 using namespace geoc;
 using namespace geoc::geo;
 using namespace geoc::alg;
+using namespace geoc::idx;
 
 namespace geoc {
 namespace alg {
@@ -87,10 +88,6 @@ public:
       * @return True if some matching geometry was found.
       */
     bool setMatch( GEOCGeom *geom );
-
-    /** Build spatial index
-      */
-    void buildIndex();
 
 private:
 

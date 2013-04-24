@@ -26,7 +26,7 @@ void LineMatcher::match()
     newGeometry = subGeometry;
 
     // build spatial index
-    buildIndex();
+    sIndex = SpatialIndexBuilder::buildIndex(&refGeometry);
 
     // set diffMax
     longestLine();
@@ -379,26 +379,8 @@ CoordinateSequence* LineMatcher::meanSegment( CoordinateSequence * s1, Coordinat
 } // CoordinateSequence* LineMatcher::meanSegment( CoordinateSequence * s1, CoordinateSequence *s2 )
 
 
-void LineMatcher::buildIndex()
-{
-    // create new index
-    sIndex = new STRtree();
-
-    // add envelopes of geometries to index
-    size_t gSize = refGeometry.size();
-    for ( size_t i = 0; i < gSize; i++ )
-    {
-        const Geometry* g = refGeometry[i].getGEOSGeom();
-        const Envelope* env = g->getEnvelopeInternal();
-        sIndex->insert(env, (void*)g );
-    }
-
-} // void LineMatcher::buildIndex()
-
-
 void LineMatcher::repair( GEOCGeom *geom )
 {
-
     // create and set geometry editor
     GeometryCorrectionOperation myOp;
 

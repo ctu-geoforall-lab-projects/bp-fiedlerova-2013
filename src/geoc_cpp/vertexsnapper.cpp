@@ -20,31 +20,14 @@ VertexSnapper::~VertexSnapper()
 } // destructor
 
 
-void VertexSnapper::buildIndex()
-{
-    // create new index
-    //delete index;
-    sIndex = new STRtree();
-
-    // add envelopes of geometries to index
-    size_t gSize = refGeometry.size();
-    for ( size_t i = 0; i < gSize; i++ )
-    {
-        const Geometry* g = refGeometry[i].getGEOSGeom();
-        const Envelope* env = g->getEnvelopeInternal();
-        sIndex->insert(env, (void*)g );
-    }
-
-} // void VertexSnapper::buildIndex()
-
-
 void VertexSnapper::snap()
 {
 
     newGeometry = subGeometry;
 
     // build spatial index
-    buildIndex();
+    sIndex = SpatialIndexBuilder::buildIndex(&refGeometry);
+
 
     for ( size_t i = 0; i < subGeometry.size(); i++ )
     {

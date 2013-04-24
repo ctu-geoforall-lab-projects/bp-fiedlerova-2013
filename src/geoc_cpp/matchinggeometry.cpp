@@ -18,23 +18,6 @@ MatchingGeometry::~MatchingGeometry()
 } //destructor
 
 
-void MatchingGeometry::buildIndex()
-{
-    // create new index
-    sIndex = new STRtree();
-
-    // add envelopes of geometries to index
-    size_t gSize = geometrySet->size();
-    for ( size_t i = 0; i < gSize; i++ )
-    {
-        const Geometry* g = geometrySet->at(i).getGEOSGeom();
-        const Envelope* env = g->getEnvelopeInternal();
-        sIndex->insert( env, (void*)g );
-    }
-
-} // void VertexSnapper::buildIndex()
-
-
 void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 {
     // set the right geometrySet
@@ -47,7 +30,7 @@ void  MatchingGeometry::closeGeometries( const Geometry *geom )
 {
 
     // create spatial index
-    buildIndex();
+    sIndex = SpatialIndexBuilder::buildIndex(geometrySet);
 
     // reset close geometries
     closeSet.clear();

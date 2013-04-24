@@ -10,7 +10,15 @@ AlignGeometryEditorOperation::~AlignGeometryEditorOperation()
     if (sIndex) delete sIndex;
     /*if (idPoints1) delete idPoints1;
     if (idPoints2) delete idPoints2;
-    if (tin) delete tin;*/
+    if (ttin) delete ttin;*/
+}
+
+
+void AlignGeometryEditorOperation::setTIN(TTin *t)
+{
+    ttin = t;
+    sIndex = SpatialIndexBuilder::buildIndex(ttin);
+
 }
 
 CoordinateSequence* AlignGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *g )
@@ -84,25 +92,6 @@ bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
 
 } // bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
 
-
-void AlignGeometryEditorOperation::buildIndex()
-{
-    // create new index
-    //delete sIndex;
-    sIndex = new STRtree();
-
-    // add envelopes of geometries to index
-    size_t gSize = tin->size();
-    for ( size_t i = 0; i < gSize; i++ )
-    {
-        Geometry* g = tin->at(i).getTriangleGeom();
-        g->setUserData( (void*)(&tin->at(i)) );
-        const Envelope* env = g->getEnvelopeInternal();
-
-        sIndex->insert(env, (void*)g );
-    }
-
-} // void AlignGeometryEditorOperation::buildIndex()
 
 
 } //namespace geoc

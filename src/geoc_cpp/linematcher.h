@@ -7,6 +7,8 @@
 using namespace geoc;
 using namespace geoc::geo;
 using namespace geoc::alg;
+using namespace geoc::idx;
+
 
 namespace geoc{
 namespace alg{
@@ -65,11 +67,11 @@ public:
     void matchLine( GEOCGeom * line, vector<CoordinateSequence *> & closeLines );
 
     /** Find matching segment.
-      * @param geom Pointer to the segment geometry.
+      * @param geom Pointer to the segment coordinates.
       * @param closeLines Vector with with close lines from the reference layer.
       * @return Matching segment.
       */
-    CoordinateSequence  * matchSegment( CoordinateSequence  * geom, vector<CoordinateSequence *> & closeLines );
+    CoordinateSequence  * matchSegment( CoordinateSequence  * seg, vector<CoordinateSequence *> & closeLines );
 
     /** Find closest segment from line and return match criterium value
       * @param seg CoordinateSequence with points of tested segment.
@@ -110,10 +112,6 @@ public:
       * @param s2 Segment from reference layer.
       */
     bool checkDirection( CoordinateSequence * s1, CoordinateSequence * s2 );
-
-    /** Build spatial index.
-      */
-    void buildIndex();
 
     /** Get list of invalid geometries.
       */
