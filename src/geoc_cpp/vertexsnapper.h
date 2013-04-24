@@ -34,7 +34,6 @@ using namespace geoc::idx;
 namespace geoc {
 namespace alg {
 
-//typedef std::vector< GEOCGeom > TGeomLayer;
 
 /** Class to snap vertices of one layer to the close vertices of the other layer. */
 
@@ -87,10 +86,6 @@ public:
     /** Get list of invalid geometries.
       */
     vector<int> getInvalidGeometries() { return invalids; }
-
-    /** Repair geometry.
-      */
-    void repair( GEOCGeom * g );
 
 private:
 

@@ -15,7 +15,10 @@ VertexSnapper::VertexSnapper()
 
 VertexSnapper::~VertexSnapper()
 {
-    if (sIndex) delete sIndex;
+    if (sIndex)
+    {
+        delete sIndex;
+    }
 
 } // destructor
 
@@ -53,7 +56,6 @@ void VertexSnapper::snap()
                 // add coordinates from close features
                 closeCoord->add( searchGeom->getCoordinates(), true, true );
             }
-
         }
 
         // snap vertex if there are close points
@@ -64,7 +66,10 @@ void VertexSnapper::snap()
             newGeometry[i] = newGeom;
         }
 
-        delete closeCoord;
+        if (closeCoord)
+        {
+            delete closeCoord;
+        }
 
     }
 
@@ -87,43 +92,23 @@ void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
     // check if geometry was changed
     geom->setChanged( myOp.isChanged() );
 
-    // check validity
-    if( !geom->getGEOSGeom()->isValid() )
+    // repair geometry if wanted
+    if (correct)
     {
-        // repair geometry if wanted
-        if (correct)
-        {
-            repair(geom);
-
-            if( !geom->getGEOSGeom()->isValid() )
-            {
-                qDebug("VertexSnapper::snapVertices: Geom is not valid.");
-                invalids.push_back(geom->getFeatureId());
-            }
-        }
-        else
-        {
-            qDebug("VertexSnapper::snapVertices: Geom is not valid.");
-            invalids.push_back(geom->getFeatureId());
-        }
+        GeometryCorrectionOperation::repair(geom);
 
     }
 
+    // check validity
+    if( !geom->getGEOSGeom()->isValid() )
+    {
+        qDebug("VertexSnapper::snapVertices: Geom is not valid.");
+        invalids.push_back(geom->getFeatureId());
+    }
+
+
 } // void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
 
-
-void VertexSnapper::repair( GEOCGeom *geom )
-{
-
-    // create and set geometry editor
-    GeometryCorrectionOperation myOp;
-
-    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
-
-    // set geometry to edited one
-    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
-
-} // void VertexSnapper::repair( GEOCGeom *g )
 
 } //namespace geoc
 } //namespace alg

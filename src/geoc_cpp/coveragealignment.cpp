@@ -346,25 +346,16 @@ void CoverageAlignment::transform()
         newLayer[i].setChanged( myOp.isChanged() );
 
         // check validity
+        if (correct)
+        {
+            GeometryCorrectionOperation::repair(&newLayer[i]);
+        }
+
+        // check validity
         if( !newLayer[i].getGEOSGeom()->isValid() )
         {
-            // repair geometry if wanted
-            if (correct)
-            {
-                repair(&newLayer[i]);
-
-                if( !newLayer[i].getGEOSGeom()->isValid() )
-                {
-                    qDebug("VertexSnapper::snapVertices: Geom is not valid.");
-                    invalids.push_back(newLayer[i].getFeatureId());
-                }
-            }
-            else
-            {
-                qDebug("VertexSnapper::snapVertices: Geom is not valid.");
-                invalids.push_back(newLayer[i].getFeatureId());
-            }
-
+            qDebug("LineMatcher::match: Geom is not valid.");
+            invalids.push_back(newLayer[i].getFeatureId());
         }
 
     }
@@ -408,19 +399,6 @@ void CoverageAlignment::align()
 
 } // void CoverageAlignment::align()
 
-
-void CoverageAlignment::repair( GEOCGeom *geom )
-{
-
-    // create and set geometry editor
-    GeometryCorrectionOperation myOp;
-
-    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
-
-    // set geometry to edited one
-    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
-
-} // void CoverageAlignment::repair( GEOCGeom *g )
 
 
 } // namespace geoc

@@ -112,10 +112,6 @@ public:
       */
     vector<int> getInvalidGeometries() { return invalids; }
 
-    /** Repair geometry.
-      */
-    void repair( GEOCGeom * g );
-
 
 private:
 

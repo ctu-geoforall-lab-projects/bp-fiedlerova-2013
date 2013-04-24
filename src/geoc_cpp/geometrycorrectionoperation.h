@@ -53,6 +53,10 @@ public:
       */
     void removeCrosses( CoordinateSequence *line );
 
+    /** Repair geometry
+      */
+    static void repair( GEOCGeom *g );
+
 };
 
 } //namespace geoc

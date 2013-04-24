@@ -7,21 +7,26 @@ CoordinateSequence* GeometryCorrectionOperation::edit(const CoordinateSequence *
 {
     CoordinateSequence* coord = geom->getCoordinates();
 
-    // remove repeated points
-    CoordinateSequence *coordRem = CoordinateSequence::removeRepeatedPoints(coord);
-
-    if( coordRem->size() > 3 )
+    if (!geom->isValid())
     {
-        coord = coordRem;
-    }
 
-    // repair crossing
-    if (coord->size() > 3)
-    {
-        removeCrosses(coord);
+        // remove repeated points
+        CoordinateSequence *coordRem = CoordinateSequence::removeRepeatedPoints(coord);
 
-        // remove dead branches
-        removeDeadBranch(coord);
+        if( coordRem->size() > 3 )
+        {
+            coord = coordRem;
+        }
+
+        if (coord->size() > 3)
+        {
+            // remove dead branches
+            removeDeadBranch(coord);
+
+            // repair crossing
+            removeCrosses(coord);
+        }
+
     }
 
     return coord;
@@ -37,10 +42,11 @@ void GeometryCorrectionOperation::removeDeadBranch( CoordinateSequence *line )
         // line has a dead branch, if points i and i+2 are equal
         if ( (abs(line->getX(i) - line->getX(i+2)) < 1e-12) && (abs(line->getY(i) - line->getY(i+2)) < 1e-12) )
         {
+            qDebug("dead");
             if ( line->size() > 4 )
             {
                 line->deleteAt(i+1);
-                i--;
+                i=0;
             }
             else
             {
@@ -48,6 +54,16 @@ void GeometryCorrectionOperation::removeDeadBranch( CoordinateSequence *line )
             }
         }
     }// for
+
+    // dead branch in first point
+    if ( (abs(line->getX(1) - line->getX(line->size()-2)) < 1e-12) && (abs(line->getY(1) - line->getY(line->size()-2)) < 1e-12) )
+    {
+        if ( line->size() > 4 )
+        {
+            line->deleteAt(0);
+            line->setAt(line->getAt(0), line->size()-1);
+        }
+    }
 
 } // void GeometryCorrectionOperation::removeDeadBranch( CoordinateSequence *line )
 
@@ -76,13 +92,9 @@ void GeometryCorrectionOperation::removeCrosses( CoordinateSequence *line )
                 size_t k = i+1;
                 while( k < l )
                 {
-                    //if ( k < l )
-                    {
-                        Coordinate temp = line->getAt(k);
-                        line->setAt(line->getAt(l), k);
-                        line->setAt(temp, l);
-                        l--;
-                    }
+                    Coordinate temp = line->getAt(k);
+                    line->setAt(line->getAt(l), k);
+                    line->setAt(temp, l);
 
                     k++;
                     l--;
@@ -91,13 +103,24 @@ void GeometryCorrectionOperation::removeCrosses( CoordinateSequence *line )
 
                 i=0; // order of segments was changed, check it again
 
-
-
             } // if
         } // for
     }// for
 
 } // void GeometryCorrectionOperation::removeCrosses( CoordinateSequence *line )
+
+
+void GeometryCorrectionOperation::repair( GEOCGeom *geom )
+{
+    // create and set geometry editor
+    GeometryCorrectionOperation myOp;
+
+    GeometryEditor geomEdit( geom->getGEOSGeom()->getFactory() );
+
+    // set geometry to edited one
+    geom->setGEOSGeom( geomEdit.edit( geom->getGEOSGeom() , &myOp ) );
+
+} // void GeometryCorrectionOperation::repair( GEOCGeom *g )
 
 
 } //namespace geoc
