@@ -4,19 +4,37 @@
 Tato kapitola si klade za~cíl seznámit čtenáře s~technologiemi, které byly 
 při tvorbě zásuvného modulu a~externí knihovny využity. Uvedeny jsou pouze
 základní informace o~jednotlivých projektech, více podrobností pak lze
-nalézt na~uvedených internetových stránkách.
+nalézt na~uvedených oficiálních internetových stránkách projektů.
 
 
 \section{GEOS - Geometry Engine, Open Source}
 \label{geos}
 
-\textit{GEOS (Geometry Engine - Open Source)}
-\footnote{\url{http://trac.osgeo.org/geos/}} 
-je knihovna implementující 2D prostorové predikáty a funkce dle~OGC 
-specifikace \textit{Simple Features} pro~SQL. \textit{GEOS} je přepisem 
-knihovny \textit{Java Topology Suite} (viz kap. \ref{kap:jts}), do~jazyka 
-C++. Knihovna je projektem OSGeo (The Open Source Geospatial Foundation) 
-a~je dostupná pod licencí LGPL.
+\zkratka{GEOS}\footnote{\url{http://trac.osgeo.org/geos/}}  je přepisem 
+knihovny \zkratkatext{JTS} (viz kap. \ref{kap:jts}) do~jazyka C++. 
+Záměrem je poskytovat kompletní funkcionalitu \zk{JTS} pro~C++. Knihovna byla 
+původně vyvíjena firmou Refractions Research of Victoria, Canada. Nyní je
+projektem \zkratka{OSGeo}\footnote{\url{http://www.osgeo.org/}}  a~je 
+dostupná pod licencí \zkratka{LGPL}.
+
+Knihovna \zk{GEOS} implementuje třídy pro reprezentaci geometrických
+objektů (\texttt{Point, LineString, Polygon, MultiPoint, MultiLineString,
+MultiPolygon} a \texttt{GeometryCollection}). Umožňuje zjišťovat vztahy 
+mezi prostorovými objekty (test, zda se dva objekty protínají, dotýkají, 
+překrývají, jeden obsahuje druhý atd.), provádět prostorové operace 
+(výpočet vzdálenosti, plochy polygonu, konvexní obálky, obalové zóny, 
+sjednocení atd.). Obsahuje také třídy, které dokáží číst a~převádět
+\zkratka{WKT}\footnote{textový značkovací jazyk pro popis vektorové 
+geometrie geografických objektů apod.} a~\zkratka{WKB}\footnote{binární
+forma pro popis vektorové geometrie geografických objektů apod.} formáty. 
+Stejně jako knihovna \zk{JTS} se řídí specifikací \textit{Simple Features}
+pro \zk{SQL}. Obsahuje C~i~C++ API.
+
+% \texttt{Intersects, Touches, Disjoint, Crosses, Within, Contains,
+% Overlaps, Equals, Covers}
+% \texttt{Union, Distance,
+% Intersection, Symmetric Difference, Convex Hull, Envelope, Buffer, 
+% Simplify, Polygon Assembly, Valid, Area, Length}
 
 % \section{OGR Simple Feature Library}
 % \label{ogr}
@@ -30,46 +48,43 @@ a~je dostupná pod licencí LGPL.
 \section{Quantum GIS}
 \label{qgis}
 
-\textit{Quantum GIS} je \textit{open source} multiplatformní geografický 
-informační nástroj, který patří mezi~oficiální projekty \textit{Open Source 
-Geospatial Foundation}\footnote{\url{http://www.osgeo.org/}}. QGIS je 
-napsán v~jazyce C++, je publikován pod~licencí \textit{GNU General Public 
-License}\footnote{\url{http://www.gnu.org/licenses/gpl.html}}. Program slouží 
-ke~zpracování a~analýze vektorových i~rastrových dat. Kromě základní 
-funkcionality samotné aplikace, existuje ještě velké množství volně 
-dostupných zásuvných modulů, které umožňují poměrně široké využití 
-tohoto nástroje. Tyto moduly jsou psané v~jazycích C++ a~Python.
+\zkratka{QGIS} je \textit{open source} multiplatformní geografický 
+informační nástroj, který patří mezi~oficiální projekty \zk{OSGeo}.
+\zkratka{QGIS} je napsán v~jazyce C++, je publikován pod~licencí 
+\zkratka{GPL}\footnote{\url{http://www.gnu.org/licenses/gpl.html}}. 
+Program slouží ke~zpracování a~analýze vektorových i~rastrových dat. 
+Kromě základní funkcionality samotné aplikace, existuje ještě velké 
+množství volně dostupných zásuvných modulů, které umožňují poměrně 
+široké využití tohoto nástroje. Tyto moduly jsou psané v~jazycích 
+C++ a~Python.
  %% ML: kostrbate... opraveno
 
-Vývoj projektu QGIS začal v~roce 2002. Původní myšlenka vzešla z~potřeby 
-prohlížeče GIS dat pro operační systém GNU/Linux, který by podporoval většinu 
+Vývoj projektu \zk{QGIS} začal v~roce 2002. Původní myšlenka vzešla z~potřeby 
+prohlížeče \zk{GIS} dat pro operační systém GNU/Linux, který by podporoval většinu 
 existujících formátů. To vedlo k~vytvoření \textit{Quantum GIS} projektu. Úplně 
 první verze podporovala pouze \textit{PostGIS}\footnote{Prostorová nadstavba 
 databázového systému \textit{PostgreSQL}.} vrstvy, poměrně rychle však byla 
-doplněna podpora i~dalších datových formátů a~QGIS se z~pouhého prohlížecího 
+doplněna podpora i~dalších datových formátů a~\zk{QGIS} se z~pouhého prohlížecího 
 nástroje stal plnohodnotným geografickým informačním systémem.
 
 
-%\subsection{Zásuvné moduly}
-%\label{qgis plugins}
-
-
-\section{QT}
+\section{Qt projekt}
 \label{qt}
 
-\textit{Qt}\footnote{\url{http://qt.digia.com/}} je multiplatformní knihovna pro 
+Qt\footnote{\url{http://qt.digia.com/}} je multiplatformní knihovna pro 
 vývoj aplikací včetně grafického uživatelského rozhraní určená především 
 pro vývojáře pracující v~jazyce C++, existuje však i~pro některé další jazyky.
 
-Projekt \textit{Qt} byl vyvinut v~roce 1999 norskou společností Trolltech, 
-v~roce 2008 ho tato firma prodala firmě Nokia, až nakonec v~roce 2012 skončil 
-v~rukou společnosti Digia. Přes všechny tyto změny však zůstal jedním z~oblíbených
+Projekt Qt byl vyvinut v~roce 1999 norskou společností Trolltech, v~roce 
+2008 ho tato firma prodala firmě Nokia, až nakonec v~roce 2012 skončil v~rukou
+společnosti Digia. Přes všechny tyto změny však zůstal jedním z~oblíbených
 nástrojů pro vytváření desktopových a~mobilních aplikací s~grafickým rozhraním.
-\textit{Qt} je licencován pod \textit{open source} licencí GNU Lesser General 
-Public License~(LGPL)\footnote{\url{http://qt-project.org/doc/qt-4.8/lgpl.html}}).
+\textit{Qt} je licencován pod \textit{open source} licencemi \zk{LGPL} verze 2.1,
+\zk{GPL} verze 3.0, ale existuje i~komerční licence pro~vývoj proprietárních 
+projektů\footnote{\url{http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html}}.
 
 V~rámci projektu nevznikla pouze knihovna, ale i~řada nástrojů usnadňujících
 vývoj aplikací. Jedním z nich je i~program \textbf{Qt Creator}. Jedná se o~vývojové 
-prostředí~(\textit{IDE}) obsahující mimo jiné i~nástroj pro návrh grafického 
-rozhraní (\textit{UI~designer}) a~nástroje pro \textit{debugging}\footnote{debugging
- - testování, ladění počítačového programu}.
+prostředí~(\zkratka{IDE}) obsahující mimo jiné i~nástroj pro návrh grafického 
+rozhraní (\textit{\zk{UI}~designer}) a~nástroje pro \textit{debugging}
+\footnote{debugging - testování, ladění počítačového programu}.

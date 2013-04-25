@@ -3,12 +3,12 @@
 
 \section{Použití knihovny GEOS}
 \label{problemy-geos}
-Jako poměrně zásadní problém se ukázalo použití knihovny \textit{GEOS}. 
+Jako poměrně zásadní problém se ukázalo použití knihovny \zk{GEOS}. 
 Přestože tato knihovna je napsána v~jazyku C++, obsahuje \textit{wrapper} 
 v~podobě C~API. Hlavním důvodem toho je zajištění vyšší 
 stability. Při~použití C~API totiž není nutné vlastní aplikaci,
-která ho používá, při~každé změně v~knihovně \textit{GEOS} překompilovat. 
-Proto většina programů využívajících \textit{GEOS} a~mezi nimi i~Quantum 
+která ho používá, při~každé změně v~knihovně \zk{GEOS} překompilovat. 
+Proto většina programů využívajících \zk{GEOS} a~mezi nimi i~Quantum 
 GIS používají právě C~API. Nicméně to má i~své nevýhody. V~C~API bohužel 
 zatím není implementována veškerá funkcionalita C++~API. Některé chybějící 
 funkce lze obejít aplikací sice složitějšího postupu, nicméně výsledek je 
@@ -16,17 +16,16 @@ obdobný jako při~použití C++~API. Avšak jiná funkcionalita je pro~uživate
 C~API zcela nedostupná. Po~dlouhých úvahách\footnote{O~problému jsem napsala
 na~\textit{mailing-list} vývojářů \textit{GEOSu} a~odpovědí bylo uvedení 
 již zmíněných pro a~proti. Problém jsem následně prodiskutovala s~vedoucím 
-práce, který mi doporučil toto řešení.} bylo proto v~knihovně \textit{GEOC} 
+práce, který mi doporučil toto řešení.} bylo proto v~knihovně \zk{GEOC} 
 přistoupeno k~využití C++~API i~s~rizikem, že bude při~každé změně nutné 
 vše překompilovat. %% ML: odkaz pod carou - odkaz na diskuzi ML  
 
-S~tím souvisí i~další problém převodu geometrie. Jelikož v~programu QGIS je 
-používáno právě C~API, nelze GEOS geometrii jednoduše převést na~typ QGIS 
-geometrie. Tento problém byl vyřešen konverzí mezi těmito dvěma typy přes 
-WKT\footnote{textový značkovací jazyk pro popis vektorové 
-geometrie geografických objektů apod.}. Nevýhoda tohoto postupu je však 
-zpomalení běhu programu obzvláště u~rozsáhlejších datasetů. Toto by mělo
-být v~budoucnu vyřešeno vytvořením vlastního C~API.
+S~tím souvisí i~další problém převodu geometrie. Jelikož v~programu \zk{QGIS} 
+je používáno právě C~API, nelze \zk{GEOS} geometrii jednoduše převést na~typ 
+\zk{QGIS} geometrie. Tento problém byl vyřešen konverzí mezi těmito dvěma
+typy přes \zk{WKT}. Nevýhoda tohoto postupu je však zpomalení běhu programu 
+obzvláště u~rozsáhlejších datasetů. Toto by mělo být v~budoucnu vyřešeno 
+vytvořením vlastního C~API.
 %% ML toto budu vyreseno C API knihovny GEOC...
 
 
@@ -43,7 +42,7 @@ druhé. U~rozsáhlejších datasetů je tedy nutné provést poměrně velké mn
 operací a~čas zpracování pak výrazně roste. Tento problém byl částečně vyřešen 
 aplikací prostorových indexů\footnote{prostorové indexy jsou využívány pro 
 optimalizaci prostorových dotazů v~prostorových databázích}. Konkrétně byla 
-využita třída \texttt{geos::index::strtree::STRtree} knihovny \textit{GEOS} .
+využita třída \texttt{geos::index::strtree::STRtree} knihovny \zk{GEOS} .
 Tato třída implementuje metodu indexování dat založenou na~\textit{R-Tree}
 \footnote{česky R-strom, prostorová stromová datová struktura využívající 
 minimální ohraničující obdélníky}. Díky tomu se porovnávají pouze dvojice prvků, 
@@ -58,7 +57,7 @@ indexů nejen při vyhledávání blízkých prvků, ale i~při následném hled
 blízkých bodů. V~těchto případech nebyly prostorové indexy využity z~toho 
 důvodu, že pro reprezentaci bodů je v~algoritmech použita třída 
 \texttt{geos::geom::Coordinate}, pro níž však nejsou na~rozdíl 
-od~\texttt{geos::geom::Geometry} prostorové indexy v~knihovně \textit{GEOS} 
+od~\texttt{geos::geom::Geometry} prostorové indexy v~knihovně \zk{GEOS} 
 implementovány.
 
 
@@ -83,8 +82,7 @@ Porovnání rychlosti bylo provedeno nad dvojicí polygonových vrstev\linebreak
 ČR, a~nad dvojicí li\-niových vrstev \texttt{zel1} a~\texttt{zel2} obsahující 
 výběr železnic ve~Středočeském kraji. Použity byly pouze tyto výběry, nikoliv 
 data z~celé České republiky, jelikož na~tak velkých datasetech zpracování 
-bez prostorových indexů může trvat poměrně dlouho (jeden pokus tak trvá 
-kolem 45 min).
+bez prostorových indexů může trvat poměrně dlouho.
 
 Testovány byly vždy uvedené dvojice datasetů pro různé toleranční vzdálenosti,
 a~to při zpracování algoritmy \texttt{Vertex\-Snapper} a~\texttt{Coverage\-Alignment}
@@ -106,7 +104,8 @@ výsledků testování.
  10.5 $\rightarrow$ 0.7 s& 10.5 $\rightarrow$ 4.2 s\\
 \hline
 \end{tabular}
-  \caption{Výsledky testování}
+  \caption[Výsledky testování]{Výsledky testování - zrychlení algoritmů 
+	  při použití prostorových indexů}
   \label{tab:vysledky}
 \end{table}
 
@@ -160,7 +159,7 @@ vrcholy prvku přichytí pouze k~jednomu bodu. Tím vzniká z~linie či polygonu
 bodový prvek. K~této situaci dochází v případě volby velké toleranční 
 vzdálenosti v~poměru k~velikosti prvku. U~datasetů obsahujících prvky
 o~výrazně rozdílných velikostech se tomu nelze vždy vyhnout. V~knihovně
-\textit{GEOC} tento problém zatím není vyřešen. Nejjednodušší řešení, které
+\zk{GEOC} tento problém zatím není vyřešen. Nejjednodušší řešení, které
 by bylo možné implementovat je nabídnout uživateli, co s~takovými prvky provést.
 Na~výběr by byly tyto možnosti:
 \begin{itemize}
@@ -213,7 +212,7 @@ vrstvy, ke~kterým byl nalezen ekvivalent ve~vrstvě referenční. Tyto body maj
 v~obou systémech pro~transformaci totožné souřadnice. Tímto postupem se nejen 
 zajistí zpracování všech odpovídajících si prvků, ale také zarovnání prvků 
 i~v~případech, kdy se jako odpovídající určí pouze jeden či dva body, z~nichž 
-by bez této úpravy nebylo možné TIN sestrojit. Nevýhodou zvoleného řešení jsou 
+by bez této úpravy nebylo možné \zk{TIN} sestrojit. Nevýhodou zvoleného řešení jsou 
 nevhodné tvary trojúhelníků na okrajích sítě a~tím způsobené méně přesné zarovnání 
 v~těchto oblastech. Avšak i~přes tyto nevýhody jsou výsledky zarovnání datasetů 
 s~použitím rohových bodů přesnější. 
@@ -223,7 +222,7 @@ Vylepšením tohoto řešení by mohlo být použití bodů konvexní obálky pa
 prvků namísto pouze čtyř rohových bodů.
 % zjednodušení TINu -> odkaz na http://mapcontext.com/autocarto/proceedings/auto-carto-8/pdf/pages641-650.pdf
 
-Velký vliv na~tvar TINu má způsob volby blízkých bodů. V~některých programech
+Velký vliv na~tvar \zk{TIN} má způsob volby blízkých bodů. V~některých programech
 (např. ArcGIS) je proto tento krok přenechán uživateli. Počet dvojic bodů je
 sice obecně nižší, avšak jsou tak zvoleny pouze skutečně si odpovídající body
 a~jejich rozložení je většinou pravidelné. Výsledek je pak blíže skutečnosti
@@ -269,7 +268,7 @@ přičemž mezi jednotlivými cykly je vhodná kontrola operátora,
 který by měl odstranit případné hrubé chyby. Zároveň navrhuje jako podmínku
 počet nově nalezených odpovídajících si prvků. Cyklus se tedy opakuje,
 dokud jsou nacházeny nové dvojice pasujících prvků. Tento postup je   % zatím ještě ne
-v~knihovně \textit{GEOC} implementován bez možnosti kontroly mezi iteracemi. 
+v~knihovně \zk{GEOC} implementován bez možnosti kontroly mezi iteracemi. 
 
 
 \section{Line Matcher}
@@ -297,7 +296,7 @@ riziko napojovány.
 \label{problemy-opravy}
 
 Jak již bylo uvedeno výše, častým problémem u~všech algoritmů je vznik
-nevalidních prvků. Proto byla do knihovny \textit{GEOC} přidána třída
+nevalidních prvků. Proto byla do knihovny \zk{GEOC} přidána třída
 \texttt{Geometry\-Correction\-Operation}, kterou lze pro dodatečnou 
 opravu nově vzniklých geometrií použít. Ne vždy je však jednoduché 
 rozhodnout, jak geometrii změnit, aby výsledek odpovídal skutečnosti. 
@@ -339,7 +338,7 @@ do~místa průsečíku segmentů. Tím vznikne validní geometrie a~nezmění
 se přitom její tvar. Vzhledem k~tomu, že u~úprav prováděných 
 s~polygony při slučování map, vznikají křížením většinou spíše drobné
 \uv{výstupky}, je použité řešení přijatelné. Navíc funkci pro opravu
-geometrií přidáním bodů obsahuje většina GIS programů, takže není
+geometrií přidáním bodů obsahuje většina \zk{GIS} programů, takže není
 pro uživatele složité ji po~spojení dat v~rámci \textit{postprocessingu}
 aplikovat. Stejně tak se ručně musí opravit další chyby jako je 
 otvor v~polygonu dotýkající se vnějšího okraje atd.

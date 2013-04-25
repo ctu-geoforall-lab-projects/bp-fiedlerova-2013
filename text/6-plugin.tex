@@ -4,22 +4,22 @@
 \section{Tvorba QGIS zásuvného modulu}
 \label{plugin-tvorba}
 
-Do projektu Quantum GIS je možné psát zásuvné moduly v~jazycích C++ nebo Python.
+Do projektu \zkratkatext{QGIS} je možné psát zásuvné moduly v~jazycích C++ nebo Python.
 Dnes už jsou častější zásuvné moduly psané v~Pythonu, přesto se však objevují
-i~ty v~C++, a~to z následujících důvodů. QGIS jako takový je napsán v~tomto 
+i~ty v~C++, a~to z následujících důvodů. \zk{QGIS} jako takový je napsán v~tomto 
 jazyce. Jedná se o~objektově orientovaný jazyk, hodí se proto pro větší projekty. 
 Nevýhodou C++ pluginů je nutnost kompilace, kterou však vyváží výsledná větší 
 rychlost běhu aplikace.V~případě zásuvného modulu \textit{Conflate} byl jazyk 
-C++ zvolen i~z~důvodu použití knihovny \textit{GEOS}, která je psána rovněž 
+C++ zvolen i~z~důvodu použití knihovny \zk{GEOS}, která je psána rovněž 
 v~tomto jazyce.
 
 % zmínka o licenci? Vzhledem k tomu, že C++ pluginy většinou využívají knihovny
 % libqgis*.so, které jsou publikovány pod licencí GNU GPL, musí být tyto
 % moduly pod stejnou licencí.
 
-C++ zásuvné moduly QGISu jsou dynamické knihovny (\textit{.so} nebo 
+C++ zásuvné moduly \zk{QGIS}u jsou dynamické knihovny (\textit{.so} nebo 
 \textit{.dll} \footnote{ přípona \textit{.so} se používá v~Linuxu, přípona 
-\textit{.dll} pod systémem Windows}). Načtení modulu v~QGISu probíhá za~běhu 
+\textit{.dll} pod systémem Windows}). Načtení modulu v~\zk{QGIS}u probíhá za~běhu 
 programu. Při startu programu \textit{Správce zásuvných modulů 
 (Plugin Manager)} vyhledá všechny soubory s~danou příponou ve~složce 
 se~zásuvnými moduly (v Linuxu nejčastěji /lib/qgis nebo 
@@ -42,7 +42,7 @@ Pro správné načtení musí zásuvný modul obsahovat následující.
 
 V~modulu \textit{Conflate} jsou všechny tyto funkce obsaženy ve~třídě
 \texttt{Qgs\-Con\-flate\-Plugin}. 
-Podrobnější popis tvorby C++ pluginu lze najít v~\textit{QGIS Coding and 
+Podrobnější popis tvorby C++ pluginu lze najít v~\textit{\zk{QGIS} Coding and 
 Compilation Guide} % uvést odkaz na literaturu
 , odkud byly čerpány výše uvedené informace.
 
@@ -55,17 +55,17 @@ Compilation Guide} % uvést odkaz na literaturu
 \label{plugin-navrh}
 % návrh gui, funkčnost
 
-Zásuvný modul \textit{Conflate} pro QGIS, který je jedním z~výstupů této práce,
+Zásuvný modul \textit{Conflate} pro \zk{QGIS}, který je jedním z~výstupů této práce,
 umožňuje spojení vektorových datasetů. Pro tento proces úpravy vrstev využívá
-tříd a metod výše popsané knihovny \textit{GEOC}.
+tříd a metod výše popsané knihovny \zk{GEOC}.
 
 Modul se skládá celkem ze~tří tříd \texttt{QgsConflateProvider}, 
 \texttt{QgsConflatePlugin} a~ \texttt{QgsDialog}. Třída \texttt{QgsConflatePlugin} 
-obsahuje funkce pro vytvoření a~načtení zásuvného modulu do~QGISu tak, jak bylo 
+obsahuje funkce pro vytvoření a~načtení zásuvného modulu do~\zk{QGIS} tak, jak bylo 
 uvedeno v~kapitole \ref{plugin-tvorba}. Zobrazování a~interakci s~uživatelem 
 zajišťuje třída \texttt{QgsDialog}. Konečně třída \texttt{QgsConflateProvider} 
 se stará o~funkcionalitu aplikace a~obsahuje tak funkce využívající knihovnu 
-\textit{GEOC} i~další funkce pro kopírování vrstvy, změnu geometrie, výpis 
+\zk{GEOC} i~další funkce pro kopírování vrstvy, změnu geometrie, výpis 
 protokolu apod.
 
 \vspace{0.5cm}
@@ -85,8 +85,8 @@ protokolu apod.
 Následuje výčet činností probíhajících při spuštění a~použití \textit{Conflate}.
 Tento výčet má za~úkol pouze zprostředkovat čtenáři představu, jak modul funguje.
 Podrobný návod pro jeho použití z~hlediska uživatele je pak rozepsán v~příloze
-v~uživatelské příručce. Popis jednotlivých metod zas lze nalézt v~anglické
-dokumentaci k~pluginu. % doplnit odkazy na přílohy
+\ref{priloha-prirucka} v~uživatelské příručce. Popis jednotlivých metod zas 
+lze nalézt v~anglické dokumentaci k~zásuvnému modulu. % doplnit odkazy na přílohy
 
 \begin{enumerate}
  \item Při otevření dialogu se do~rozbalovací nabídky načtou názvy vrstev 
@@ -98,19 +98,19 @@ dokumentaci k~pluginu. % doplnit odkazy na přílohy
 	\footnote{ESRI Shapefile je datový formát pro ukládání vektorových 
 	  prostorových dat  vyvinutý firmou Esri, jedná se o~jeden 
 	  z~nejrozšířenějších formátů dat pro geografické informační systémy,
-	  přípona souborů v tomto formátu je .shp}.
+	  přípona souborů v tomto formátu je \textit{.shp}}.
 	Tato vrstva je vytvořena v~aktuální složce a~její název odpovídá vzoru 
 	\begin{center}
 	 \texttt{nazev\_puvodni\_vrstvy(nejnizsi\_nepouzite\_cislo).shp},
 	\end{center}
 	např. \texttt{subject(3).shp}.
  \item Poté je převedena geometrie prvků zvolených vrstev (upravovaná
-	a~referenční) na~reprezentaci geometrie knihovny \textit{GEOC},
+	a~referenční) na~reprezentaci geometrie knihovny \zk{GEOC},
 	tedy z~\texttt{Qgs\-Geo\-metry} na~\texttt{GEOC\-Geo\-metry}. 
 	Tyto geometrie 	jsou uloženy do~vektorů, které se pak předají 
-	třídám \textit{GEOC}.
+	třídám \zk{GEOC}.
  \item Jak už bylo naznačeno, je vytvořena instance příslušné třídy 
-	\textit{GEOC} a~té jsou předány parametry - vektory s~prvky vybraných
+	\zk{GEOC} a~té jsou předány parametry - vektory s~prvky vybraných
 	vrstev a~toleranční vzdálenost. 
  \item Dále je zavolána funkce vytvořené třídy pro zarovnání datasetů. Při volbě 
 	při\-chycení vrcholů \textit{Snap vertices} v~dialogu je použita třída 
@@ -120,8 +120,8 @@ dokumentaci k~pluginu. % doplnit odkazy na přílohy
 	využívá třídu \texttt{Line\-Matcher} a~její metoda \texttt{match()}. 
 	Výsledek je uložen do~nového vektoru geometrií.
  \item Na závěr je upravena geometrie nové vrstvy (kopie upravované vrstvy) dle
-	výsledků úprav provedených algoritmy knihovny \textit{GEOC}.
- \item Nová vrstva se automaticky přidá do~aktuálního projektu v~QGISu a~zobrazí
+	výsledků úprav provedených algoritmy knihovny \zk{GEOC}.
+ \item Nová vrstva se automaticky přidá do~aktuálního projektu v~\zk{QGIS} a~zobrazí
 	se v~panelu \textit{Vrstvy (Layers)}.
  \item Po~zpracování vrstvy se do textového okna dialogu vypíše protokol 
 	o~zpracování, který obsahuje název vstupních a~výstupních dat, počet

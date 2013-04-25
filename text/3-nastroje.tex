@@ -83,7 +83,7 @@ přesnosti.
 \subsection{ConfleX}
 \label{conflex}
 
-ConfleX je software pro~automatické spojování vektorových GIS dat,
+ConfleX je software pro~automatické spojování vektorových \zk{GIS} dat,
 který pro~automatizaci využívá umělou inteligenci. ConfleX umožňuje zpracování 
 i~takových případů, kdy se zdrojová mapa s~cílovou nepřekrývají nebo nejsou 
 topologicky identické. Systém porovnává každé dva segmenty z~obou map a~jejich
@@ -111,7 +111,7 @@ včetně jejich atributů.
 \subsection{MapMerger}
 \label{mapmerger}
 
-MapMerger je GIS nástroj firmy ESEA zaměřený na~slučování geometrie a~atributů
+MapMerger je \zk{GIS} nástroj firmy ESEA zaměřený na~slučování geometrie a~atributů
 vektorových map a~kontrolu kvality dat. Umožňuje převod atributů mezi dvěma 
 překrývajícími se mapami, navázání hranic dvou sousedících map, přidání prvků 
 z~jedné mapy do~druhé, synchronizaci mapy s~její aktualizovanou verzí, 
@@ -127,25 +127,25 @@ programy či zásuvné moduly k~větším projektům, pomocí nichž se dá prov
 nebo poloautomatické sloučení vektorových datasetů, případně jejich atributů. 
 Ovšem většinou je cesta k~dosažení cíle pomocí těchto nástrojů poměrně složitá 
 a~ne vždy jsou výsledky takové, jak bychom si představovali. Asi jediným 
-ucelenějším nástrojem je knihovna \textit{JCS} implementovaná jako kolekce 
+ucelenějším nástrojem je knihovna \zkratka{JCS} implementovaná jako kolekce 
 zásuvných modulů v~programu OpenJUMP.
 
 \subsection{JCS - Java Conflation Suite}
 \label{JCS}
 
-\textit{JCS} \footnote{\url{http://www.vividsolutions.com/jcs/}}
- je \textit{open source} knihovna napsaná v~jazyce Java, která 
-zahrnuje API a~soubor interaktivních nástrojů, které slouží ke~slučování 
-prostorových datasetů. Byla vyvinuta společností Vivid Solutions, Inc. 
-Obsahuje funkce umožňující provádění různých procesů spojených se~spojování
-vektorových map, které jsou zaměřeny především na~polygonové případně liniové
-datasety, co se týče bodových vrstev, je její funkcionalita poměrně omezená. 
-Knihovna \textit{JCS} je závislá na~knihovně \textit{JTS - Java Topology Suite},
-která poskytuje základní geometrické funkce pro~práci s~prostorovými
-daty. Obě knihovny jsou navrženy v~souladu s~OGC specifikací 
-\textit{Simple Features} \footnote{Specifikace týkající se 2D prostorových 
-predikátů a~funkcí}. \textit{JCS} vznikla v~rámci projektu JUMP Unified 
-Mapping Platform. Je poskytována pod~licencí LGPL.
+\zk{JCS}\footnote{\url{http://www.vividsolutions.com/jcs/}} je \textit{open source}
+knihovna napsaná v~jazyce Java, která zahrnuje API a~soubor interaktivních nástrojů, 
+které slouží ke~slučování prostorových datasetů. Byla vyvinuta společností Vivid 
+Solutions, Inc. Obsahuje funkce umožňující provádění různých procesů spojených 
+se~spojování vektorových map, které jsou zaměřeny především na~polygonové případně 
+liniové datasety, co se týče bodových vrstev, je její funkcionalita poměrně omezená. 
+Knihovna \zk{JCS} je závislá na~knihovně \zkratka{JTS}, která poskytuje základní 
+geometrické funkce pro~práci s~prostorovými daty. Obě knihovny jsou navrženy 
+v~souladu s~\zk{OGC} specifikací \textit{Simple Features}
+\footnote{\url{http://www.opengeospatial.org/standards/sfs}}, která popisuje
+způsob uložení geografických digitálních dat, prostorové vztahy a~funkce.  
+\zk{JCS} vznikla v~rámci projektu JUMP Unified Mapping Platform. Je poskytována 
+pod~licencí \zkratka{LGPL}\footnote{\url{http://www.gnu.org/licenses/lgpl.html}}.
 
 \subsubsection{Architektura}
 \label{jcspic}
@@ -158,12 +158,12 @@ Mapping Platform. Je poskytována pod~licencí LGPL.
   \end{figure}
 
 
-Knihovna \textit{JCS} používá pro~vizualizaci dat a~interakci JUMP WorkBench
-a~API. Pro~poskytování základní geometrické funkcionality je pak využíváno 
-knihovny \textit{JTS}. JUMP API umožňuje vstup a~výstup prostorových dat 
-a~další funkcionalitu s~nimi spojenou. Jádro \textit{JCS} tvoří Conflation API
+Knihovna \zk{JCS} používá pro~vizualizaci dat a~interakci JUMP WorkBench
+a~API. Poskytování základní geometrické funkcionality je pak zajištěno 
+knihovnou \zk{JTS}. JUMP API umožňuje vstup a~výstup prostorových dat 
+a~další funkcionalitu s~nimi spojenou. Jádro \zk{JCS} tvoří Conflation API
 obsahující algoritmy pro~kontrolu a~slučo\-vání prostorových dat 
-(\textit{conflation}). Funkce \textit{JCS} jsou v~projektu OpenJUMP 
+(\textit{conflation}). Funkce \zk{JCS} jsou v~projektu OpenJUMP 
 implementovány v~podobě kolekce zásuvných modulů - \textit{QA, Conflate, 
 RoadMatcher}.
 
@@ -176,11 +176,11 @@ s~prostorovými daty v~rastrové či vektorové podobě a~jejich atributy.
 \subsubsection{JTS - Java Topology Suite}
 \label{kap:jts}
 
-Knihovna \textit{JTS} je jedním ze~základních prvků projektu OpenJUMP.
-Je napsána v~jazyce Java a~poskytována pod~licencí LGPL. Obsahuje třídy 
+Knihovna \zk{JTS} je jedním ze~základních prvků projektu OpenJUMP.
+Je napsána v~jazyce Java a~poskytována pod~licencí \zk{LGPL}. Obsahuje třídy 
 pro~reprezentaci geometrických objektů a~základní funkce pro~práci 
-s~prostorovými daty dle~specifikace \textit{Simple Features} pro~SQL 
-od~OGC. Kromě tříd reprezentujících geometrické prvky dle~zmíněné
+s~prostorovými daty dle~specifikace \textit{Simple Features} pro~\zk{SQL} 
+od~\zk{OGC}. Kromě tříd reprezentujících geometrické prvky dle~zmíněné
 specifikace zahrnuje další podpůrné třídy pro~reprezentaci seznamu souřadnic,
 aplikaci geometrického filtru (např. při~transformaci), uchovávání informace
 o~maximální a~minimální souřadnici objektu a~jiné. Dále jsou součástí této 
@@ -190,23 +190,23 @@ oblasti atd.
 
 \subsubsection{Funkcionalita JCS} %% JINÝ NÁZEV?
 
-Projekt \textit{JCS} neumožňuje změnu souřadnicového systému. Proto je
+Projekt \zk{JCS} neumožňuje změnu souřadnicového systému. Proto je
 automaticky přepokládáno, že vrstvy vstupující do~zpracování mají stejný
 prostorový referenční systém. Souřadnice bodů výstupních vrstev mají vždy
 desetinnou přesnost.  %% JE TO SPRÁVNĚ ??
 
-Při většině výpočtů v~zásuvných modulech \textit{JCS} je využívána tzv. 
+Při většině výpočtů v~zásuvných modulech \zk{JCS} je využívána tzv. 
 Hausdorffova metrika. Na~rozdíl od~euklidovské metriky totiž nezkoumá jen
 nejkratší vzdálenost mezi prvky, ale i~vzdálenost největší.
 Zohledňuje tedy do~jisté míry i~topologické vztahy.  %% ML: Kostrbate... opraveno
 
 Na~výpočet je Hausdorffova vzdálenost poměrně složitá. Proto se v~algoritmech
-použitých v~\textit{JCS} používá spíše vrcholová Hausdorffova vzdálenost 
+použitých v~\zk{JCS} používá spíše vrcholová Hausdorffova vzdálenost 
 (\textit{Vertex Hausdorff Distance}), která není vztažena ke~geometrickému 
 prvku, ale pouze k~jeho vrcholům. Tato varianta Hausdorffovy vzdálenosti 
 ve~většině případů vrací stejně dobré výsledky. 
 
-Postup spojování vektorových datasetů pomocí knihovny \textit{JCS} je založen
+Postup spojování vektorových datasetů pomocí knihovny \zk{JCS} je založen
 na~na\-le\-zení geometrických rozdílů mezi~oběma mapami a~následném odstranění 
 těchto rozdílů.
 
@@ -262,7 +262,7 @@ s~tímto nástrojem řešit.
     mezi~liniovými prvky obou datasetů, které označíme za~odpovídající si.
     Poté je vytvořena nová vrstva silniční sítě, která obsahuje odpovídající
     si prvky, přičemž při~mírných odlišnostech použije liniové prvky z~přesnější
-    mapy. \textit{JCS} bohužel zatím neumožňuje automatické provedení této
+    mapy. \zk{JCS} bohužel zatím neumožňuje automatické provedení této
     úlohy. Pouze nalezne odpovídající si prvky a~další kroky už je nutné provést
     manuálně.
 
@@ -362,7 +362,7 @@ využívat a~přispívat do něj. V~OpenStreetMap existuje mnoho nástrojů
 pro~editaci prostorových dat a~některé z~nich umožňují i~manuální nebo
 poloautomatické spojování datasetů z~různých zdrojů (\textit{conflation}). 
 Bohužel ani zde však neexistuje žádný komplexnější nástroj jako je výše
-popsaný \textit{JCS}. Navíc většina těchto nástrojů je vytvořena pro~nějaký
+popsaná \zk{JCS}. Navíc většina těchto nástrojů je vytvořena pro~nějaký
 konkrétní účel jako např. pro~spojování silničních sítí v~USA a~ne vždy
 je proto jejich použití zcela obecné. Uživatel si tedy mnohdy musí poradit
 sám a~použít několik různých nástrojů, aby dosáhl požadovaného výsledku.
@@ -371,7 +371,7 @@ se~spojováním map použít.
 
 \subsubsection{JOSM conflation plugin}
 
-\textit{Java OpenStreetMap Editor} (JOSM) je desktopová aplikace umožnující
+\zkratka{JOSM} je desktopová aplikace umožnující
 editaci dat projektu OpenStreetMap. Jedním ze~zásuvných modulů pro~tuto 
 aplikaci je \textit{Conflation}, který umožňuje spojování vektorových dat. 
 Tento nástroj však je stále označen jako experimentální, což znamená, že ne 

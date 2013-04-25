@@ -5,22 +5,23 @@
 %\label{knihovna}
 
 Algoritmy týkající se slučování vektorových map (\textit{conflation}) byly
-implementovány v~externí knihovně \textit{GEOC} bez závislosti na~QGIS API. 
+implementovány v~externí knihovně \zk{GEOC} bez závislosti na~QGIS API. 
 Zásuvný modul \textit{Conflate} umožňuje využití funkcionality knihovny 
 v~Quantum GIS. Díky tomuto oddělení vznikla nezávislá knihovna, kterou bude
 možné případně použít i~v~jiných programech a~projektech.
 
 Tato kapitola popisuje jednotlivé algoritmy a~jejich implementaci v~knihovně
-\textit{GEOC}, zároveň také stručně pojednává o~možnostech  jejich využití.
-Podrobný popis jednotlivých tříd a~jejich metod je podrobněji popsán v~dokumentaci. % viz příloha
+\zk{GEOC}, zároveň také stručně pojednává o~možnostech  jejich využití.
+Podrobný popis jednotlivých tříd a~jejich metod je podrobněji popsán 
+v~dokumentaci. % viz příloha
 
 % úvodní poznámky, proč samost. knihovna (aby se to dalo využít i jinde než v mém pluginu)
 % co popisuje kapitola, vyjmenování algoritmů, jakou funkcionalitu by měla zajišťovat (stručně)
 \section{Reprezentace geometrie}
 \label{reprezentace-geom}
 
-Pro reprezentaci geometrie a~prostorové analýzy \textit{GEOC} využívá
-knihovnu \textit{GEOS}. Geometrie prvků je představována třídou 
+Pro reprezentaci geometrie a~prostorové analýzy \zk{GEOC} využívá
+knihovnu \zk{GEOS}. Geometrie prvků je představována třídou 
 \texttt{geos::geom::Geometry}. Kromě samotné geometrie je v~algoritmech
 často potřeba pracovat se~seznamem bodů jednoho či více prvků. V~těchto
 případech je využita třída \texttt{geos::geom::CoordinateSequence}
@@ -69,27 +70,28 @@ blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je n�
 \subsection{Implementace} % text asi přepsat 
 \label{vs-implementace}
 % popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
-Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční je 
-implementován ve~třídách \texttt{Vertex\-Snapper} 
-a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí aplikaci 
-stačí po~předání vstupních parametrů (k~tomu slouží metody 
+Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční 
+je implementován ve~třídách \texttt{Vertex\-Snapper} 
+a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí 
+aplikaci stačí po~předání vstupních parametrů (k~tomu slouží metody 
 \texttt{setRefGeometry()}, \texttt{setSubGeometry()} 
-a~\texttt{setTolDistance()}) třídě \texttt{Vertex\-Snapper} zavolat funkci 
-\texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových indexů 
-sestavených metodou \texttt{build\-Index()} třídy 
+a~\texttt{setTolDistance()}) třídě \texttt{Vertex\-Snapper} zavolat 
+funkci \texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových 
+indexů sestavených metodou \texttt{build\-Index()} třídy 
 \texttt{Spatial\-Index\-Builder}.
 
-Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices()}. Uvnitř této
-metody se vytvoří instance  třídy \texttt{Vertex\-Geometry\-Editor\-Operation},
-která edituje příslušnou geometrii přichycením blízkých vrcholů v~metodě
-\texttt{edit()}. \texttt{Vertex\-Geometry\-Editor\-Operation} je potomkem třídy 
-\texttt{geos::\-operation::\-Coordinate\-Operation}, která je \textit{inter\-face}
-\footnote{rozhraní třídy, kde jsou deklarovány pouze abstraktní metody bez
-implementace, není možné vytvořit instanci této třídy} třídou pro editaci 
-geometrie.
+Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices()}. 
+Uvnitř této metody se vytvoří instance  třídy 
+\texttt{Vertex\-Geometry\-Editor\-Operation}, která edituje příslušnou 
+geometrii přichycením blízkých vrcholů v~metodě \texttt{edit()}. 
+\texttt{Vertex\-Geometry\-Editor\-Operation} je potomkem třídy 
+\texttt{geos::\-operation::\-Coordinate\-Operation}, která je 
+\textit{inter\-face}\footnote{rozhraní třídy, kde jsou deklarovány 
+pouze abstraktní metody bez implementace, není možné vytvořit 
+instanci této třídy} třídou pro editaci geometrie.
 
-Pro zjištění validity geometrií je volána metoda \texttt{isValid()} třídy
-\texttt{geos::geom::\-Geometry}.
+Pro zjištění validity geometrií je volána metoda \texttt{isValid()} 
+třídy \texttt{geos::geom::\-Geometry}.
 
 Výsledné geometrie lze získat zavoláním metody \texttt{getNewGeometry()},
 která vrací vektor s~interní reprezentací geometrií.
@@ -108,7 +110,7 @@ Dopředu je třeba si uvědomit, že kromě polohy prvků je měněn i~jejich tv
 Využít by tento postup šel i~pro~přichycení dvou sousedních vrstev o~stejné 
 přesnosti, avšak to znamená, že by se změnil pouze tvar krajních prvků 
 (nedošlo by k~posunu celé vrstvy), a~to nemusí být vždy žádoucí. Jako jediný
-z~algoritmů \textit{GEOC} má pak smysl pro~bodové vrstvy.
+z~algoritmů \zkratka{GEOC} má pak smysl pro~bodové vrstvy.
 
 Pro~rozumné výsledky je důležité zvolit vhodnou toleranční vzdálenost. Tato 
 hodnota by měla odpovídat maximální vzdálenosti, o~kterou se vrchol prvku 
@@ -147,7 +149,7 @@ už na~rozhodnutí uživatele.
 
 \textit{Coverage alignment} lze vysvětlit jako \textbf{zarovnání jedné vrstvy 
 k~vrstvě druhé}. Tento způsob je složitější než výše uvedené přichytávání vrcholů.
-V~knihovně \textit{GEOC} je využit opět pro~úpravu jedné vrstvy na~základě vrstvy 
+V~knihovně \zk{GEOC} je využit opět pro~úpravu jedné vrstvy na~základě vrstvy 
 referenční. Do~upravované vrstvy nejsou žádné prvky přidávány ani z~ní vymazávány,
 pouze jde o~jejich modifikaci. Velmi podobný algoritmus se však dá použít 
 i~ke~kombinaci dvou vrstev. % inspirace Saalfeld
@@ -163,15 +165,15 @@ Nejčastější používaný postup při~spojování vektorových map je násled
     odlišná. Existuje mnoho algoritmů řešících tuto problematiku, přičemž 
     postupy se mohou různit podle toho, zda je úkolem vyhledání 
     odpovídajících si bodů, polygonů či linií. Kritéria a~postup použitý 
-    v~knihovně \textit{GEOC} je popsán níže.
+    v~knihovně \zk{GEOC} je popsán níže.
  \item Poté, co se určí odpovídající si prvky, musí se určit totožné vrcholy 
     těchto dvojic prvků. Ty z~vrcholů, které jsou určeny s~dostatečnou 
     přesností (ta může být určena například danou vzdálenostní tolerancí), 
     jsou označeny jako body budoucí triangulační sítě.
- \item Jak už bylo naznačeno, z~nalezených bodů se vytvoří pomocí Delaunayho 
-    triangulace\footnote{Delaunayho triangulace z~množiny bodů v~rovině vytvoří takovou 
-    trojúhelníkovou síť, pro kterou platí, že v~kružnici opsané každému
-    trojúhelníku, neleží žádný jiný bod. DT maximalizuje
+ \item Jak už bylo naznačeno, z~nalezených bodů se vytvoří pomocí 
+    \zkratkatext{DT}\footnote{Delaunayho triangulace z~množiny bodů v~rovině 
+    vytvoří takovou trojúhelníkovou síť, pro kterou platí, že v~kružnici 
+    opsané každému trojúhelníku, neleží žádný jiný bod. \zk{DT} maximalizuje
     minimální úhly trojúhelníků.} trojúhelníková síť. 
     %ML: doplnit poznamku pod carou - kratka charakteristka DT .. doplneno
  \item Následně se provede lokální, nejčastěji afinní transformace v~každém 
@@ -193,8 +195,8 @@ Nejčastější používaný postup při~spojování vektorových map je násled
       \label{fig:ca-princip}
   \end{figure}
 
-V~knihovně \textit{GEOC} je pro nalezení odpovídajících si prvků využito 
-obdobného postupu jako ve~výše zmiňované knihovně \textit{JCS}. Využívá 
+V~knihovně \zk{GEOC} je pro nalezení odpovídajících si prvků využito 
+obdobného postupu jako ve~výše zmiňované knihovně \zk{JCS}. Využívá 
 se vrcholová Hausdorffova vzdálenost, přičemž tato vzdálenost není počítána 
 přímo. Splnění podmínky, že dané prvky nejsou od~sebe dále, než je daná 
 Hausdorffova vzdálenost, se testuje pomocí obalových zón jednotlivých prvků 
@@ -357,7 +359,7 @@ segment mezi předanými blízkými prvky. Pokud k~nějakému úseku linie není
 žádný dostatečně podobný, je zde linie přerušena. Z~původního jednoduchého liniového
 prvku tak může vzniknout multiprvek. Pro vytváření nových geometrií jsou využívány
 metody \texttt{createLineString()} a~\texttt{createMultiLineString()} třídy 
-\texttt{geos::geom::GeometryFactory} knihovny \textit{GEOS}.
+\texttt{geos::geom::GeometryFactory} knihovny \zk{GEOS}.
  
 
 Výpočet kritérií podobnosti segmentů se nachází v~metodě \texttt{similarity()}. 
