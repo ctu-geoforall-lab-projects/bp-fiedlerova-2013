@@ -1,3 +1,21 @@
+/***************************************************************************
+    matchinggeometry.cpp
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "matchinggeometry.h"
 
 namespace geoc {
@@ -13,9 +31,12 @@ MatchingGeometry::MatchingGeometry()
 
 MatchingGeometry::~MatchingGeometry()
 {
-    if(sIndex) delete sIndex;
+    if(sIndex)
+    {
+        delete sIndex;
+    }
 
-} //destructor
+} // destructor
 
 
 void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
@@ -28,7 +49,6 @@ void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 
 void  MatchingGeometry::closeGeometries( const Geometry *geom )
 {
-
     // create spatial index
     sIndex = SpatialIndexBuilder::buildIndex(geometrySet);
 
@@ -46,7 +66,6 @@ void  MatchingGeometry::closeGeometries( const Geometry *geom )
         // get envelope of tested feature
         Geometry *searchGeom = static_cast<Geometry*>( results[j] );
         Envelope subEnv = *( geom->getEnvelopeInternal() );
-        //subEnv.expandBy(tolDistance); // expand envelope with tolerance distance - not necessary in this case
 
         if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
         {
@@ -128,7 +147,7 @@ bool MatchingGeometry::setMatch( GEOCGeom *geom )
             if ( contains( bufferBoundaryA, boundaryB ) && contains( bufferBoundaryB, boundaryA ) )
             {
                 //geom->setChanged(true);
-                geom->setMatchingGeom( closeSet[i] );  // FINDS ONLY FIRST MATCHING GEOMETRIES, WHAT ABOUT ELSE????????????
+                geom->setMatchingGeom( closeSet[i] );
 
                 // for clear memory
                 f.destroyGeometry(bufferA);

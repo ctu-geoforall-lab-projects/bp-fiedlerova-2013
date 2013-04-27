@@ -1,3 +1,21 @@
+/***************************************************************************
+    coveragealignment.h
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef COVERAGEALIGNMENT_H
 #define COVERAGEALIGNMENT_H
 
@@ -25,7 +43,7 @@ using namespace geoc::tin;
 namespace geoc {
 namespace alg {
 
-/** Class for vector conflation of two layers. */
+/** Class for coverage alignment of two vector layers. */
 
 class CoverageAlignment
 {
@@ -56,8 +74,34 @@ public:
       */
     void setTolDistance( double tol ){ tolDistance = tol; }
 
-    /** Set if geometry correction is wanted */
+    /** Set if geometry correction is wanted. */
     void setRepair( bool repair ){ correct = repair; }
+
+    /** Align two layers. */
+    void align();
+
+    /** Get new layer.
+      * @return New layer as TGeomLayer.
+      */
+    TGeomLayer & getNewGeometry() { return newLayer; }
+
+    /** Get list of invalid geometries.
+      */
+    vector<int> getInvalidGeometries() { return invalids; }
+
+
+private:
+
+    TGeomLayer refLayer;
+    TGeomLayer subLayer;
+    TGeomLayer newLayer;
+    CoordinateSequence *matchingPoints;
+    CoordinateSequence *matchingPointsRef;
+    TTin *ttin;
+    vector<int> invalids;
+    double tolDistance;
+    int found;
+    bool correct;
 
     /** Find matching features in ref and sub layer.
       */
@@ -82,9 +126,12 @@ public:
       */
     void addCornerPoints( vector<Coordinate>& vc );
 
-    /** Delete repeated points based on given vector.
+    /** Delete repeated points in given vector and also corresponding points from matching points.
+      * If given vector is vector with points from matchingPoints, deletes repeated points from it
+      * and its equivalents from matchingPointsRef.
+      * @param vc Vector with points from matchingPoints or matchingPointsRef
       */
-    void deleteRepeated( vector<Coordinate> & c);
+    void deleteRepeated( vector<Coordinate> & vc);
 
     /** Create TIN from matching points of subject/new layer
       */
@@ -99,32 +146,6 @@ public:
     /** Transform new geometry.
       */
     void transform();
-
-    /** Align two layers. */
-    void align();
-
-    /** Get new layer.
-      * @return New layer as TGeomLayer.
-      */
-    TGeomLayer & getNewGeometry() { return newLayer; }
-
-    /** Get list of invalid geometries.
-      */
-    vector<int> getInvalidGeometries() { return invalids; }
-
-
-private:
-
-    TGeomLayer refLayer;
-    TGeomLayer subLayer;
-    TGeomLayer newLayer;
-    double tolDistance;
-    CoordinateSequence *matchingPoints;
-    CoordinateSequence *matchingPointsRef;
-    TTin *ttin;
-    vector<int> invalids;
-    int found;
-    bool correct;
 
 };
 

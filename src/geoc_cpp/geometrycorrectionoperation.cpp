@@ -1,3 +1,21 @@
+/***************************************************************************
+    geometrycorrectionoperation.cpp
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "geometrycorrectionoperation.h"
 
 namespace geoc {
@@ -27,7 +45,7 @@ CoordinateSequence* GeometryCorrectionOperation::edit(const CoordinateSequence *
             removeCrosses(coord);
         }
 
-    }
+    } // if
 
     return coord;
 
@@ -42,7 +60,6 @@ void GeometryCorrectionOperation::removeDeadBranch( CoordinateSequence *line )
         // line has a dead branch, if points i and i+2 are equal
         if ( (abs(line->getX(i) - line->getX(i+2)) < 1e-12) && (abs(line->getY(i) - line->getY(i+2)) < 1e-12) )
         {
-            qDebug("dead");
             if ( line->size() > 4 )
             {
                 line->deleteAt(i+1);
@@ -52,8 +69,9 @@ void GeometryCorrectionOperation::removeDeadBranch( CoordinateSequence *line )
             {
                 break;
             }
-        }
-    }// for
+        } // if
+
+    } // for
 
     // dead branch in first point
     if ( (abs(line->getX(1) - line->getX(line->size()-2)) < 1e-12) && (abs(line->getY(1) - line->getY(line->size()-2)) < 1e-12) )

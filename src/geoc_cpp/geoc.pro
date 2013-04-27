@@ -1,8 +1,14 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-02-03T09:54:46
-#
-#-------------------------------------------------
+#############################################################
+#                                                           #
+#           GEOC library - free conflation library          #
+#                                                           #
+#               by Tereza Fiedlerová                        #
+#     -------------------------------------------------     #
+#                                                           #
+#     Project created by QtCreator 2013-02-03T09:54:46      #
+#                                                           #
+#     -------------------------------------------------     #
+#############################################################
 
 DEFINES += GEOCLIBRARY
 
@@ -13,12 +19,12 @@ SOURCES += \
     matchinggeometry.cpp \
     affinetransformation.cpp \
     triangulation.cpp \
-    vertexgeometryoperation.cpp \
-    triangle.cpp \
     coveragealignment.cpp \
     aligngeometryeditoroperation.cpp \
     linematcher.cpp \
-    geometrycorrectionoperation.cpp
+    geometrycorrectionoperation.cpp \
+    spatialindexbuilder.cpp \
+    vertexgeometryeditoroperation.cpp
 
 HEADERS += geoc.h\
     vertexsnapper.h \
@@ -32,7 +38,8 @@ HEADERS += geoc.h\
     sort.h \
     geocgeom.h \
     linematcher.h \
-    geometrycorrectionoperation.h
+    geometrycorrectionoperation.h \
+    spatialindexbuilder.h
 
 
 unix:LIBS += -L/usr/local/lib \

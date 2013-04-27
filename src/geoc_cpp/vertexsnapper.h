@@ -1,3 +1,21 @@
+/***************************************************************************
+    vertexsnapper.h
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef VERTEXSNAPPER_H
 #define VERTEXSNAPPER_H
 
@@ -77,12 +95,6 @@ public:
      */
     void snap();
 
-    /** Snap vertices of given geometry to the close vertices from given coordinate sequence.
-      * @param geom Pointer to the tested geometry.
-      * @param closeCoord Coordinate sequence with close point from the reference layer.
-      */
-    void snapVertices( GEOCGeom * geom, CoordinateSequence * closeCoord );
-
     /** Get list of invalid geometries.
       */
     vector<int> getInvalidGeometries() { return invalids; }
@@ -96,6 +108,12 @@ private:
     SpatialIndex* sIndex;
     vector<int> invalids;
     bool correct;
+
+    /** Snap vertices of given geometry to the close vertices from given coordinate sequence.
+      * @param geom Pointer to the tested geometry.
+      * @param closeCoord Coordinate sequence with close point from the reference layer.
+      */
+    void snapVertices( GEOCGeom * geom, CoordinateSequence * closeCoord );
 
 };
 

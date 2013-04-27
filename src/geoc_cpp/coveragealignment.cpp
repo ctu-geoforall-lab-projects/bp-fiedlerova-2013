@@ -1,18 +1,33 @@
-#include "coveragealignment.h"
+/***************************************************************************
+    coveragealignment.cpp
 
-#include <iostream>
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "coveragealignment.h"
 
 namespace geoc {
 namespace alg {
 
 CoverageAlignment::CoverageAlignment()
 {
-    tolDistance = 0;
     matchingPoints = NULL;
     matchingPointsRef = NULL;
     ttin = NULL;
+    tolDistance = 0;
     found = 0;
-    correct = false;
 
 } // default constructor
 
@@ -21,20 +36,18 @@ CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double t
 {
     refLayer = ref;
     subLayer = sub;
-    tolDistance = tol;
     matchingPoints = NULL;
     matchingPointsRef = NULL;
     ttin = NULL;
+    tolDistance = tol;
     found = 0;
+    correct = false;
 
 } // constructor
 
 
 CoverageAlignment::~CoverageAlignment()
 {
-   //if (matchingPoints) delete matchingPoints;
-   //if (matchingPointsRef) delete matchingPointsRef;
-   //if (ttin) delete ttin;
 
 } // destructor
 
@@ -179,7 +192,6 @@ void CoverageAlignment::addCornerPoints( vector<Coordinate>& vc )
         return;
     }
 
-
     // find max and min coordinates
     double maxX = (*max_element( vc.begin(), vc.end(), SortByX() )).x;
     double maxY = (*max_element( vc.begin(), vc.end(), SortByY() )).y;
@@ -242,9 +254,9 @@ void CoverageAlignment::deleteRepeated( vector<Coordinate> & vc)
 
             it--;
 
-        }
+        } // if
 
-    }
+    } // for
 
 } // void  CoverageAlignment::deleteRepeated( vector<Coordinate> * vc)
 
@@ -292,8 +304,15 @@ void CoverageAlignment::createTIN()
 
     // for clear memory
     gf.destroyGeometry(tin1);
-    if (matchingPoints) delete matchingPoints;
-    if (matchingPointsRef) delete matchingPointsRef;
+    if (matchingPoints)
+    {
+        delete matchingPoints;
+    }
+
+    if (matchingPointsRef)
+    {
+        delete matchingPointsRef;
+    }
 
 } // void CoverageAlignment::createTIN()
 
@@ -322,10 +341,9 @@ void CoverageAlignment::correspondingPoints( const CoordinateSequence * c, Coord
 
 void CoverageAlignment::transform()
 {
-
+    // TIN has no triangles
     if ( ttin->size() == 0 )
     {
-        qDebug("CoverageAlignment::transform: tin has no triangles");
         return;
     }
 
@@ -354,11 +372,11 @@ void CoverageAlignment::transform()
         // check validity
         if( !newLayer[i].getGEOSGeom()->isValid() )
         {
-            qDebug("LineMatcher::match: Geom is not valid.");
             invalids.push_back(newLayer[i].getFeatureId());
         }
 
     }
+
 
 } // void CoverageAlignment::transform()
 
@@ -371,34 +389,32 @@ void CoverageAlignment::align()
     {
         found = 0;
 
-        // find matching points
+        // find matching features
         findMatchingFeatures();
         if (found == 0)
         {
             break;
         }
-        qDebug("CoverageAlignment::align: Matching feature done.");
 
+        // find matching points
         chooseMatchingPoints();
-        qDebug("CoverageAlignment::align: Matching done.");
 
         // create TIN
         createTIN();
-        qDebug("CoverageAlignment::align: TIN done.");
 
         // transform geometry
         transform();
-        qDebug("CoverageAlignment::align: Transform done.");
 
         subLayer = newLayer;
         matchingPoints = NULL;
         matchingPointsRef = NULL;
+        //if (ttin) delete ttin;
+        ttin = NULL;
         invalids.clear();
 
     } while ( found != 0 );
 
 } // void CoverageAlignment::align()
-
 
 
 } // namespace geoc

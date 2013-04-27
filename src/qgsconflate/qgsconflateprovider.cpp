@@ -1,5 +1,22 @@
-// QT includes
-#include <QTranslator>
+/***************************************************************************
+    qgsconflateprovider.cpp
+
+    QgsConflateProvider
+    functionality for plugin Conflate
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 
 // local includes
 #include "qgsconflateprovider.h"
@@ -10,6 +27,9 @@
 #include <qgsvectorlayerfeatureiterator.h>
 #include <qgsproject.h>
 #include <qgsgeometry.h>
+
+// Qt includes
+#include <QTranslator>
 
 
 QgsConflateProvider::QgsConflateProvider()
@@ -249,7 +269,6 @@ void QgsConflateProvider::transferGeometrytoGeos( bool isRefLayer )
         // transfer qgis geometry to geos
         GEOCGeom geos;
         geos.setFeatureId( myFeature.id() );
-        //geos.setGEOSGeom( GEOSGeom_clone(geom->asGeos()) );
         geos.setGEOSGeomFromWKT( (geom->exportToWkt()).toStdString() );
 
         // add geometry to the list of geos geometries
@@ -290,8 +309,6 @@ bool QgsConflateProvider::transferGeometryFromGeos()
         // get new geometry for the feature from geos geometry
         QgsGeometry *geom = NULL;
         int fid = myFeature.id();
-        //GEOSGeometry * newGeom = GEOSGeom_clone( (*it).getGEOSGeom() );
-        //geom->fromGeos( newGeom );
 
         // check if fid are the same for both new and old geometry
         if( fid != (*it).getFeatureId() )
@@ -443,7 +460,7 @@ void QgsConflateProvider::lineMatch()
 
     // get ids of invalid geometries and write them to the protocol
     vector<int> invalids = lm.getInvalidGeometries();
-    writeProtocol(invalids, QTranslator::tr("Line Matcher"));
+    writeProtocol(invalids, QTranslator::tr("Match Lines"));
 
     // transfer geometry back
     if ( mGeosNew.size() > 0 && transferGeometryFromGeos() )

@@ -1,3 +1,21 @@
+/***************************************************************************
+    linematcher.h
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef LINEMATCHER_H
 #define LINEMATCHER_H
 
@@ -48,9 +66,6 @@ public:
       */
     void setMatchTolerance(double tol){ matchTolerance = tol; }
 
-    /** Set if geometry correction is wanted */
-    void setRepair( bool repair ){ correct = repair; }
-
     /** Get new geometry.
       * @return New layer geometry.
       */
@@ -59,6 +74,21 @@ public:
     /** Match line segments.
      */
     void match();
+
+    /** Get list of invalid geometries.
+      */
+    vector<int> getInvalidGeometries() { return invalids; }
+
+private:
+
+    TGeomLayer refGeometry;
+    TGeomLayer subGeometry;
+    TGeomLayer newGeometry;
+    SpatialIndex* sIndex;
+    vector<int> invalids;
+    double tolDistance;
+    double matchTolerance;
+    double diffMax;
 
     /** Find matching segment to each segment of given line.
       * @param line Pointer to the line.
@@ -113,25 +143,9 @@ public:
       */
     bool checkDirection( CoordinateSequence * s1, CoordinateSequence * s2 );
 
-    /** Get list of invalid geometries.
-      */
-    vector<int> getInvalidGeometries() { return invalids; }
-
     /** The longest line in dataset.
       */
     void longestLine();
-
-private:
-
-    TGeomLayer refGeometry;
-    TGeomLayer subGeometry;
-    TGeomLayer newGeometry;
-    SpatialIndex* sIndex;
-    vector<int> invalids;
-    double tolDistance;
-    double matchTolerance;
-    double diffMax;
-    bool correct;
 
 };
 

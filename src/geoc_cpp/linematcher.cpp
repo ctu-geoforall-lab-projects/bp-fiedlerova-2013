@@ -1,3 +1,21 @@
+/***************************************************************************
+    linematcher.cpp
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "linematcher.h"
 
 namespace geoc{
@@ -9,14 +27,16 @@ LineMatcher::LineMatcher()
     tolDistance = 0;
     matchTolerance = 0.7;
     diffMax = 0;
-    correct = false;
 
 } // constructor
 
 
 LineMatcher::~LineMatcher()
 {
-    if (sIndex) delete sIndex;
+    if (sIndex)
+    {
+        delete sIndex;
+    }
 
 } // destructor
 
@@ -66,12 +86,6 @@ void LineMatcher::match()
             GEOCGeom newGeom = subGeometry[i];
             matchLine( &newGeom, closeLines );
             newGeometry[i] = newGeom;
-
-            // repair geometry if wanted
-            if (correct)
-            {
-                GeometryCorrectionOperation::repair(&newGeometry[i]);
-            }
 
             // check validity
             if( !newGeometry[i].getGEOSGeom()->isValid() )
@@ -147,6 +161,7 @@ void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & cl
 CoordinateSequence * LineMatcher::matchSegment( CoordinateSequence* segment, vector<CoordinateSequence *> & closeLines )
 {
     // find closest segment from closeLines
+
     // minimal distance
     double matchCoef = 0;
     size_t indMin = 0;
@@ -260,7 +275,7 @@ double LineMatcher::segmentLength(const CoordinateSequence *seg ) const
 
 double LineMatcher::segmentAngle( const CoordinateSequence *s1, const CoordinateSequence *s2 ) const
 {
-    double PRECISION = 1e-12;
+    const double PRECISION = 1e-12;
 
     double ux = s1->getX(1)-s1->getX(0);
     double uy = s1->getY(1)-s1->getY(0);

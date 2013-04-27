@@ -1,3 +1,21 @@
+/***************************************************************************
+    aligngeometryeditoroperation.h
+
+    GEOC - GEOS Conflation library
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This is free software; you can redistribute it and/or modify it       *
+ *   under the terms of the GNU General Public License as published by     *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef ALIGNGEOMETRYEDITOROPERATION_H
 #define ALIGNGEOMETRYEDITOROPERATION_H
 
@@ -20,7 +38,7 @@ using namespace geoc::idx;
 namespace geoc {
 namespace edit {
 
-/** Class for editing in coverage alignment by affine tr. */
+/** Class for editing in coverage alignment by affine transformation. */
 
 class AlignGeometryEditorOperation: public CoordinateOperation
 {
@@ -41,14 +59,9 @@ public:
       */
     void setTIN( TTin *t );
 
-    /** Find identic points for given point - vertices of triangles
-      */
-    bool findIdPoints( Coordinate *point );
-
     /** Indicates whether geometry is changed.
       */
     bool isChanged() { return changed; }
-
 
     /** Virtual function for editing geometry according to mCoord.
       * @param coordinates Not important.
@@ -63,6 +76,10 @@ private:
     CoordinateSequence *idPoints2;
     SpatialIndex *sIndex;
     bool changed;
+
+    /** Find identic points for given point - vertices of triangles
+      */
+    bool findIdPoints( Coordinate *point );
 
 };
 

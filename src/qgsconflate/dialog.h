@@ -1,5 +1,29 @@
+/***************************************************************************
+    dialog.h
+
+    Dialog
+    dialog for plugin Conflate
+
+    ---------------------
+    begin                : April 2013
+    copyright            : (C) 2013 by Tereza Fiedlerová
+    email                : tfiedlerova dot at gmail dot com
+ ***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef DIALOG_H
 #define DIALOG_H
+
+// Local includes
+#include "ui_dialog.h"
+#include "qgsconflateprovider.h"
+#include "geoc.h"
 
 // Qt includes
 #include <QDialog>
@@ -7,11 +31,6 @@
 
 // QGIS includes
 #include <qgisinterface.h>
-
-// Local includes
-#include "ui_dialog.h"
-#include "qgsconflateprovider.h"
-#include "geoc.h"
 
 
 /** Class which provides GUI for plugin. */
@@ -65,7 +84,7 @@ private slots:
     /** Enable or disable other elements for line match. */
     void on_mrbLineMatch_toggled(bool checked);
 
-    /** Show or hide help */
+    /** Show or hide help. */
     void on_helpButton_clicked();
 
 private:
