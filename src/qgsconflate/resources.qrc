@@ -1,5 +1,8 @@
 <RCC>
-    <qresource prefix="/icon/">
-        <file>icons/mActionConflate.png</file>
+    <qresource prefix="/icon">
+        <file>icons/snap.png</file>
+        <file>icons/match.png</file>
+        <file>icons/align.png</file>
+        <file>icons/mActionConflate.svg</file>
     </qresource>
 </RCC>

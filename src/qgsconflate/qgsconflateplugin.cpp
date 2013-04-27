@@ -40,7 +40,7 @@ QgsConflatePlugin::~QgsConflatePlugin()
 
 void QgsConflatePlugin::initGui()
 {
-   mAction = new QAction( QIcon(":/icon/icons/mActionConflate.png"), tr("&Conflate"), this);
+   mAction = new QAction( QIcon(":/icon/icons/mActionConflate.svg"), tr("&Conflate"), this);
    connect(mAction, SIGNAL(activated()), this, SLOT(showDialog()));
    mIface->addToolBarIcon(mAction); // icon in toolbar "Plugins"
    mIface->addPluginToMenu(tr("&Conflate"), mAction);  // Plugin menu

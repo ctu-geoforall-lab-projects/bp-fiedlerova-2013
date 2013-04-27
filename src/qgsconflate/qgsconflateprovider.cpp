@@ -170,7 +170,6 @@ bool QgsConflateProvider::copyLayer( QString uri )
     {
         // add feature to the list
         features.push_back( myFeature );
-
     }
 
     // add features from list to the layer
@@ -434,7 +433,6 @@ void QgsConflateProvider::lineMatch()
 
     // set tolerance distance and other
     lm.setTolDistance( mTolDistance );
-    lm.setRepair( correct );
     lm.setMatchTolerance( mMatchTol );
 
     // match lines of two layers

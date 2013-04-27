@@ -65,12 +65,15 @@ private slots:
     /** Enable or disable other elements for line match. */
     void on_mrbLineMatch_toggled(bool checked);
 
+    /** Show or hide help */
+    void on_helpButton_clicked();
+
 private:
 
     QgisInterface *mIface;
     QgsConflateProvider* mConflate;
     QString mProtocol;
-
+    bool help;
 
 };
 

@@ -28,6 +28,9 @@ Dialog::Dialog(QWidget *parent, Qt::WFlags fl, QgisInterface * iface) :
     // load layers to combo boxes
     loadLayers();
 
+    this->msaHelp->hide();
+    help = false;
+
 } // constructor
 
 
@@ -107,7 +110,6 @@ bool Dialog::setConflation()
 
     // set values to Conflate provider
     mConflate->setTolDistance( this->mSpinBoxDist->value() );
-    mConflate->setRepair( this->mchbRepair->isChecked() );
     mConflate->setRefVectorLayer( refLayer );
     mConflate->setSubVectorLayer( subLayer );
 
@@ -135,10 +137,12 @@ void Dialog::conflate()
     // do conflation according to selected method
     if ( mrbSnapVertex->isChecked() )
     {
+        mConflate->setRepair( this->mchbRepair->isChecked() );
         mConflate->vertexSnap();
     }
     else if ( mrbCovAlign->isChecked() )
     {
+        mConflate->setRepair( this->mchbRepair->isChecked() );
         mConflate->align();
     }
     else if ( mrbLineMatch->isChecked() )
@@ -258,6 +262,24 @@ void Dialog::on_mrbLineMatch_toggled(bool checked)
 {
     this->mLabelMatch->setEnabled(checked);
     this->mSpinBoxMatch->setEnabled(checked);
+    this->mchbRepair->setEnabled(!checked);
 
 } // void Dialog::on_mrbLineMatch_toggled(bool checked)
 
+
+void Dialog::on_helpButton_clicked()
+{
+    if (!help)
+    {
+        this->msaHelp->show();
+        this->helpButton->setText("Hide help <<");
+        help = true;
+    }
+    else
+    {
+        this->msaHelp->hide();
+        this->helpButton->setText("Show help >>");
+        help = false;
+    }
+
+} // void Dialog::on_helpButton_clicked()
