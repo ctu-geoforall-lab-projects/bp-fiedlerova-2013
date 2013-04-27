@@ -45,10 +45,6 @@ public:
       */
     Triangle(): triangle(NULL), correspondingT(NULL), triangleGeom(NULL){}
 
-    /** Destructor
-      */
-    ~Triangle();
-
     /** Set triangle
       */
     void setTriangle( CoordinateSequence *t ){ triangle = t; }
