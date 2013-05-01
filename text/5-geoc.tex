@@ -1,22 +1,18 @@
 \chapter{Knihovna GEOC}
 \label{5-geoc}
 
-%\section{Tvorba knihovny GEOC} % mám to nechat zakomentované?
-%\label{knihovna}
-
 Algoritmy týkající se slučování vektorových map (\textit{conflation}) byly
 implementovány v~externí knihovně \zk{GEOC} bez závislosti na~QGIS API. 
-Zásuvný modul \textit{Conflate} umožňuje využití funkcionality knihovny 
-v~Quantum GIS. Díky tomuto oddělení vznikla nezávislá knihovna, kterou bude
-možné případně použít i~v~jiných programech a~projektech.
+Zásuvný modul \textit{Conflate} zprostředkovává funkcionalitu knihovny 
+v~prostředí Quantum GIS. Díky tomuto oddělení vznikla nezávislá knihovna, 
+kterou bude možné případně použít i~v~jiných programech a~projektech.
 
 Tato kapitola popisuje jednotlivé algoritmy a~jejich implementaci v~knihovně
 \zk{GEOC}, zároveň také stručně pojednává o~možnostech  jejich využití.
-Podrobný popis jednotlivých tříd a~jejich metod je podrobněji popsán 
-v~dokumentaci. % viz příloha
+Podrobný popis jednotlivých tříd a~jejich metod lze najít
+v~dokumentaci na~přiloženém CD~(\ref{priloha-obsahCD}). 
 
-% úvodní poznámky, proč samost. knihovna (aby se to dalo využít i jinde než v mém pluginu)
-% co popisuje kapitola, vyjmenování algoritmů, jakou funkcionalitu by měla zajišťovat (stručně)
+
 \section{Reprezentace geometrie}
 \label{reprezentace-geom}
 
@@ -34,42 +30,43 @@ a~\texttt{geos::geom::Coordinate}, která pak reprezentuje samostatný bod.
 Při zpracování vrstev z~více zdrojů někdy stačí pouze upřesnit polohu či tvar 
 prvků z~cílové vrstvy tak, aby se přiblížil prvkům z~vrstvy referenční. 
 \mbox{Není-li} podrobnost obou datasetů příliš rozdílná, lze využít jednoduchého 
-postupu \textbf{přichycení blízkých vrcholů}. % inspirace JCS
+postupu \textbf{přichycení blízkých vrcholů}. Tento algoritmus byl inspirován
+stejnojmenným zásuvným mo\-dulem knihovny \zk{JCS} (viz kap. \ref{jcs-plugin}).
+
 
 \subsection{Popis algoritmu}
 \label{vs-algoritmus}
 
 Nejjednodušším způsobem kombinace dvou vektorových vrstev je pouhé přichycení 
-blízkých vrcholů cílové vrstvy k~vrstvě referenční. Obecný postup je následující:
+blízkých vrcholů cílové vrstvy k~vrstvě referenční. Algoritmus lze obecně 
+popsat následujícími několika body.
 
 \begin{enumerate}
  \item Na~počátku je třeba určit vzdálenostní toleranci, tedy maximální 
     vzdálenost mezi~dvěma body, kdy ještě bude provedeno jejich přichycení.
- \item Ke~každému prvku ze~zpracovávané vrstvy nalezneme nejbližší prvky 
+ \item Ke~každému prvku ze~zpracovávané vrstvy se najdou nejbližší prvky 
     z~vrstvy referenční. To jsou prvky, jejichž nejkratší vzdálenost 
     od~zpracovávaného prvku není větší	než vzdálenostní tolerance.
- \item Pro~každý bod ze~zpracovávaného prvku vypočteme vzdálenosti ke~všem
-    bodům z~blízkých referenčních prvků.
+ \item Pro~každý bod ze~zpracovávaného prvku jsou vypočteny vzdálenosti 
+    ke~všem bodům z~blízkých referenčních prvků.
  \item Pokud nejmenší z~těchto délek je menší než vzdálenostní tolerance, 
-    pak posuneme zpracovávaný bod do~odpovídajícího referenčního bodu s~touto
-    nejmenší vzdáleností.
- \item Takto projdeme postupně všechny vrcholy všech prvků cílové vrstvy 
-    a~snažíme se k~nim nalézt blízké body z~prvků vrstvy referenční. 
+    pak je zpracovávaný bod posunut do~odpovídajícího referenčního bodu 
+    s~touto nejmenší vzdáleností.
+ \item Takto se prochází postupně všechny vrcholy všech prvků cílové vrstvy 
+    a~vyhledávají se k~nim blízké body z~prvků vrstvy referenční. 
 \end{enumerate}
 
-% obrázek ilustrujici postup zpracovani
 \label{vspic}
   \begin{figure}[h!]
     \centering
-      %\includegraphics[width=300pt]{./pictures/vs-princip.pdf}
       \input{./pictures/vs-princip.pdf_tex}
       \caption{Postup přichycení vrcholů}
       \label{fig:vs-princip}
   \end{figure}
 
-\subsection{Implementace} % text asi přepsat 
+
+\subsection{Implementace}
 \label{vs-implementace}
-% popis mé implementace algoritmu + zmínit třídy a funkce s odkazy na literaturu
 Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční 
 je implementován ve~třídách \texttt{Vertex\-Snapper} 
 a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí 
@@ -77,7 +74,7 @@ aplikaci stačí po~předání vstupních parametrů (k~tomu slouží metody
 \texttt{setRefGeometry()}, \texttt{setSubGeometry()} 
 a~\texttt{setTolDistance()}) třídě \texttt{Vertex\-Snapper} zavolat 
 funkci \texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových 
-indexů sestavených metodou \texttt{build\-Index()} třídy 
+indexů sesta\-vených metodou \texttt{build\-Index()} třídy 
 \texttt{Spatial\-Index\-Builder}.
 
 Výsledky vyhledávání poté předá funkci \texttt{snap\-Vertices()}. 
@@ -104,7 +101,7 @@ Přichycení bodů jedné vrstvy k~vrstvě druhé má své výhody i~nevýhody, 
 je před volbou tohoto způsobu zpracování třeba zvážit. Použití této metody 
 je vhodné v~takových případech, kdy máme k~dispozici dvě vrstvy o~rozdílné 
 přesnosti (tento rozdíl však nesmí být příliš veliký) a~prvky vzájemně se 
-překrývající. Cílem je upřesnit polohu a~tvar prvků z~méně přesného datasetu. 
+překrývající. Cílem je upřesnit polohu a~tvar prvků jednoho datasetu. 
 Dopředu je třeba si uvědomit, že kromě polohy prvků je měněn i~jejich tvar.
 
 Využít by tento postup šel i~pro~přichycení dvou sousedních vrstev o~stejné 
@@ -121,43 +118,27 @@ bodů k~jednomu bodu z~referenční vrstvy. Zda je toto přípustné či nikoli 
 už na~rozhodnutí uživatele.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  PRESUNUTO DO PROBLEMU
-% \label{vsinvalid}
-%   \begin{figure}[hbt]
-%     \centering
-%       \includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
-%       \caption{Vznik nevalidní geometrie při přichycení vrcholů}
-%       \label{fig:vs-nevalidni}
-%   \end{figure} 
-% 
-% V~některých případech může dojít ke~vzniku nevalidních geometrií, to je takových,
-% jejichž segmenty se vzájemně protínají apod. To se nejčastěji stává u~protáhlých 
-% úzkých prvků a~jiných speciálních tvarů. Příkladem může být situace uvedená 
-% na~obrázku \ref{fig:vs-nevalidni}, kde růžový polygon je prvkem přichycen 
-% k~referenční fialové vrstvě, ale z~důvodu nedostatečné hustoty vrcholů a~nevhodného
-% tvaru vzniká nežádoucí křížení. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%Někdy může být tento postup výhodný i~v~případě, kdy chceme odstranit drobné mezery či 
-%překryty v~rámci jedné vrstvy. Poté stačí nastavit danou vrstvu jako referenční i~jako
-%cílovou.  -- teď to ale nejde, protože se z mezer stanou překryty apod. (vrstva se v 
-%průběhu nemění), ale šlo by to asi dodělat. 
-
-
 \section{Coverage Alignment} 
 \label{coverage alignment}
 
 \textit{Coverage alignment} lze vysvětlit jako \textbf{zarovnání jedné vrstvy 
 k~vrstvě druhé}. Tento způsob je složitější než výše uvedené přichytávání vrcholů.
 V~knihovně \zk{GEOC} je využit opět pro~úpravu jedné vrstvy na~základě vrstvy 
-referenční. Do~upravované vrstvy nejsou žádné prvky přidávány ani z~ní vymazávány,
-pouze jde o~jejich modifikaci. Velmi podobný algoritmus se však dá použít 
-i~ke~kombinaci dvou vrstev. % inspirace Saalfeld
+referenční. Do~upravované vrstvy nejsou žádné prvky přidávány ani z~ní mazány,
+jde pouze o~jejich modifikaci. Velmi podobný algoritmus se dá použít 
+i~ke~kombinaci dvou vrstev.
 
 \subsection{Popis algoritmu}
 \label{ca-algoritmus}
 
 Nejčastější používaný postup při~spojování vektorových map je následující.
+
+  \begin{figure}[H]
+    \centering
+      \input{./pictures/ca-princip.pdf_tex}
+      \caption{Postup zarovnání vrstev}
+      \label{fig:ca-princip}
+  \end{figure}
 
 \begin{enumerate}
  \item Nejprve je třeba nalézt odpovídající si prvky v~obou překrývajících se 
@@ -166,7 +147,7 @@ Nejčastější používaný postup při~spojování vektorových map je násled
     postupy se mohou různit podle toho, zda je úkolem vyhledání 
     odpovídajících si bodů, polygonů či linií. Kritéria a~postup použitý 
     v~knihovně \zk{GEOC} je popsán níže.
- \item Poté, co se určí odpovídající si prvky, musí se určit totožné vrcholy 
+ \item Poté, co se určí odpovídající si prvky, musí se nalézt totožné vrcholy 
     těchto dvojic prvků. Ty z~vrcholů, které jsou určeny s~dostatečnou 
     přesností (ta může být určena například danou vzdálenostní tolerancí), 
     jsou označeny jako body budoucí triangulační sítě.
@@ -175,25 +156,13 @@ Nejčastější používaný postup při~spojování vektorových map je násled
     vytvoří takovou trojúhelníkovou síť, pro kterou platí, že v~kružnici 
     opsané každému trojúhelníku, neleží žádný jiný bod. \zk{DT} maximalizuje
     minimální úhly trojúhelníků.} trojúhelníková síť. 
-    %ML: doplnit poznamku pod carou - kratka charakteristka DT .. doplneno
  \item Následně se provede lokální, nejčastěji afinní transformace v~každém 
     trojúhelníku sítě. Tak se přetransformují body cílové vrstvy do~systému 
     vrstvy referenční.
- \item Celý postup je možné iterativně opakovat, dokud nedosáhneme 
+ \item Celý postup je možné iterativně opakovat, dokud není dosaženo 
     požadovaného výsledku (ten může být dán např. podmínkou minimálního 
-    množství nalezených odpovídajících si vrcholů či prvků).
+    množství nově nale\-zených odpovídajících si vrcholů či prvků).
 \end{enumerate}
-
-% obrázek ilustrujici postup zpracovani, vč. tinu apod.
-\label{capic}
-  \begin{figure}[H]
-    \centering
-      \def\svgwidth{400pt}
-      \input{./pictures/ca-princip.pdf_tex}
-      %\includegraphics[width=350pt]{./pictures/ca-princip.pdf}
-      \caption{Postup zarovnání vrstev}
-      \label{fig:ca-princip}
-  \end{figure}
 
 V~knihovně \zk{GEOC} je pro nalezení odpovídajících si prvků využito 
 obdobného postupu jako ve~výše zmiňované knihovně \zk{JCS}. Využívá 
@@ -203,47 +172,39 @@ Hausdorffova vzdálenost, se testuje pomocí obalových zón jednotlivých prvk�
 následujícím způsobem.
 
 \begin{enumerate}
- \item Máme dva prvky A a~B ze~dvou různých překrývajících se vrstev.
+ \item Mějme dva prvky A a~B ze~dvou různých překrývajících se vrstev.
  \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní 
     tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, 
-    že si prvky odpovídají a~pokračuje se dalším krokem. Situace je naznačena
+    že si prvky odpovídají, a~pokračuje se dalším krokem. Situace je naznačena
     na~obrázku \ref{fig:buffer}. V~opačném případě si prvky neodpovídají.
-
-\label{bfpic}
-  \begin{figure}[H]
-    \centering
-      \small
-      \def\svgwidth{400pt}
-      \input{./pictures/buffer-test.pdf_tex}
-      %\includegraphics[width=300pt]{./pictures/buffer-test.pdf}
-      \caption{Porovnání prvků na základě jejich obalových zón}
-      \label{fig:buffer}
-
-  \end{figure}
  \item Dále se testuje, zda hranice prvku B leží v~obalové zóně hranice prvku
     A a~naopak (viz obrázek \ref{fig:buffer-boundary}). Je-li splněna i~tato 
     podmínka, pak jsou prvky označeny za~odpovídající si.
+\end{enumerate}
 
-\label{bf2pic}
-  \begin{figure}[H]
+  \begin{figure}[ht]
+    \centering
+      \small
+      \def\svgwidth{390pt}
+      \input{./pictures/buffer-test.pdf_tex}
+      \caption{Porovnání prvků na základě jejich obalových zón}
+      \label{fig:buffer}
+  \end{figure}
+
+  \begin{figure}[ht]
     \centering
       \small
       \def\svgwidth{400pt}
       \input{./pictures/buffer-boundary.pdf_tex}
-      %\includegraphics[width=300pt]{./pictures/buffer-boundary.pdf}
       \caption{Porovnání prvků na základě obalových zón jejich hranic}
       \label{fig:buffer-boundary}
   \end{figure}
-
-\end{enumerate}
-
-%% ML: doplnit ilustraci .. obrázek obal. zón
 
 \subsection{Implementace}
 \label{ca-implementace}
 Algoritmus je opět implementován pod jedinou metodou \texttt{align()} 
 třídy \texttt{Coverage\-Alignment}, kterou je možné zavolat po~nastavení
-základních parametrů. Ta postupně volá metody provádějící jednotlivé
+základních parametrů. Ta po\-stupně volá metody provádějící jednotlivé
 kroky algoritmu.
 
 Nejdříve je třeba nalézt odpovídající si prvky. K~tomu slouží třída 
@@ -255,7 +216,7 @@ obalových zón jsou prováděny za~pomoci prostorových funkcí
 \texttt{buffer()}, která vytvoří obalovou zónu, \texttt{getBoundary()},
 která vrací hranici geometrie, a~konečně \texttt{contains()}, která
 testuje, zda jedna geometrie obsahuje druhou. Všechny jsou přitom
-metodami \texttt{geos::geom::Geometry}.
+metodami třídy \texttt{geos::geom::Geometry}.
 
 Určení blízkých bodů je pak provedeno prostřednictvím metody 
 \texttt{choose\-Matching\-Points()}, která dále využívá
@@ -284,8 +245,6 @@ pouze přichytávány blízké vrcholy, ale jsou upravovány téměř všechny v
 To zajišťuje reálnější výsledky i~v situacích, kdy hustota vrcholů v~obou 
 datasetech je velmi rozdílná.
 
-% poznámka o výhodách a nevýhodách využití u liniových a polygon. datech
-
 
 \section{LineMatcher}
 \label{line matcher}
@@ -301,7 +260,7 @@ segmenty.
 \subsection{Popis algoritmu}
 \label{lm-algoritmus}
 
-Jak je uvedeno výše, tento algoritmus pracuje pouze se~segmenty jednotlivých
+Jak je uvedeno výše, tento algoritmus pracuje pouze s~úseky jednotlivých
 linií, a~to z~toho důvodu, že jedna dlouhá linie, může být v~jiném datasetu
 rozdělena na~několik menších například přerušením na~křižovatkách. Pro každou
 linii jednoho datasetu je pak provedeno následující. 
@@ -310,29 +269,27 @@ linii jednoho datasetu je pak provedeno následující.
  \item Ke~každému segmentu linie jsou nalezeny blízké linie z~druhého datasetu.
        Stejně jako u~předchozích, i~zde je blízkost definována zvolenou toleranční
        vzdáleností.
- \item Testovaný segment je dále porovnáván s~každým segmentem z~těchto blízkých
+ \item Testovaný segment je dále porovnáván s~každým úsekem z~těchto blízkých
        linií na~základě kritérií \ref{crit} uvedených níže.
  \item Pokud je splněna předem zvolená hodnota podobnosti segmentů pro všechna 
-       kritéria $s_1,s_2,s_3$ je jako výsledná podobnost určena hodnota $s$.
- \item Z~opovídajících segmentů je nalezen takový, jehož podobnost s~testovaným
-       je největší.
+       kritéria $S_1,S_2,S_3$, je výsledná podobnost určena hodnotou $S$.
+ \item Z~odpovídajících segmentů je nalezen takový, jehož podobnost s~testovaným
+       je největší (hodnota $S$ je co nejblíže jedné).
  \item Výsledný segment je průměrem ze~dvou nejlépe si odpovídajících segmentů.
 \end{enumerate}
 
 \subsubsection*{Kritéria pro určení odpovídajících si liniových segmentů}
-První dvě kritéria dle [odkaz na literaturu] nejlépe určují podobnost dvou % odkaz na lit. arcgis report
+První dvě kritéria (viz \cite{moosavi}) nejlépe určují podobnost dvou 
 linií. Třetí kritérium bylo přidáno pro praktické použití tak, aby se neurčovaly
-pouze podobné prvky, ale i~prvky blízké. %Ve~výsledku mu pak byla přiřazena největší 
-% váha, jelikož při této úloze je blízkost segmentů důležitá.
-Jednotlivá kritéria určující podobnost mohou nabývat hodnot od~$0$ do~$1$,
-kde $1$ znamená naprostou shodu.
+pouze podobné prvky, ale i~prvky blízké. Jednotlivá kritéria určující podobnost 
+mohou nabývat hodnot od~$0$ do~$1$, kde $1$ znamená naprostou shodu.
 
 \begin{equation}
  \begin{aligned}
- s_1 = \frac{ \Delta l_{max} - \Delta l }{ \Delta l_{max} - \Delta l_{min}},\ 
- s_2 &= \frac{ \alpha_{max} - \alpha }{ \alpha_{max} - \alpha_{min}},\ 
- s_3 = \frac{ d_{max} - d }{ d_{max} - d_{min}}\\
- s &= \frac{s_1+s_2+s_3}{3}
+ S_1 = \frac{ \Delta l_{max} - \Delta l }{ \Delta l_{max} - \Delta l_{min}},\ 
+ S_2 &= \frac{ \alpha_{max} - \alpha }{ \alpha_{max} - \alpha_{min}},\ 
+ S_3 = \frac{ d_{max} - d }{ d_{max} - d_{min}}\\
+ S &= \frac{S_1+S_2+S_3}{3}
  \label{crit}
  \end{aligned}
 \end{equation}
@@ -354,7 +311,7 @@ Veškeré funkce pro tento algoritmus jsou obsaženy ve~třídě \texttt{Line\-M
 
 Funkce \texttt{match()} hledá postupně ke~každé linii blízké linie z~druhého datasetu.
 Následně předá výsledky tohoto hledání metodě \texttt{match\-Line()}, která ke~každému
-segmentu linie, nalezne prostřednictvím metody \texttt{matching\-Segment()} odpovídající
+úseku linie, nalezne prostřednictvím metody \texttt{matching\-Segment()} odpovídající
 segment mezi předanými blízkými prvky. Pokud k~nějakému úseku linie není určen
 žádný dostatečně podobný, je zde linie přerušena. Z~původního jednoduchého liniového
 prvku tak může vzniknout multiprvek. Pro vytváření nových geometrií jsou využívány
@@ -367,14 +324,16 @@ Výpočet kritérií podobnosti segmentů se nachází v~metodě \texttt{similar
 \subsection{Využití}
 \label{lm-vyuziti}
 
-\texttt{LineMatcher} lze využít pro spojování liniových vrstev. Map různých cest, 
-silnic, tras atd. existuje velké množství i~díky rozvoji technologií \zk{GNSS}. 
-Právě k~jejich slučování slouží \texttt{LineMatcher}. Hodí se i~pro vyhledání 
-společných prvků obsažených ve~dvou datasetech. Příkladem aplikace takové je 
-určení cyklotras vedoucích po~silnici z~vrstvy silnic a~cyklotras.  % trasy z GPS je třeba upravit -> menší hustota bodů apod.
+\textit{Line Matcher} lze využít pro spojování liniových vrstev. Map různých cest, 
+silnic, tras atd. existuje velké množství i~díky rozvoji technologií 
+\zk{GNSS}\footnote{Data tras z~\zk{GNSS} je nutné před použitím upravit, nejlépe 
+zjednodušením linií, aby délka úseků přibližně odpovídala druhé vrstvě.}. Právě
+k~jejich slučování slouží \textit{Line Matcher}. Hodí se i~pro vyhledání 
+společných prvků obsažených ve~dvou datasetech. Příkladem takové aplikace je 
+určení cyklotras vedoucích po~silnici z~vrstvy silnic a~cyklotras.
 
 Vzhledem k~požadavku co nejobecnějšího využití je výsledkem tohoto algoritmu
 průměr z~odpovídajících si prvků.  Někdy by však bylo vhodnější nechat prvkům
-původní polohu, pouze vymazat ty nepasující. Naopak může být požadavkem také
+původní polohu, pouze vymazat ty nepasující. Jindy může být požadavkem také
 ponechání i neodpovídajících si prvků apod. Různýmí drobnými modifikacemi
 by se tedy dalo dosáhnout lepšího využití pro nějaký konkrétní případ.

@@ -1,7 +1,7 @@
 \chapter{Další vývoj}
-\label{9-vyvoj}
+\label{8-vyvoj}
 
-V~rámci dalšího vývoje zásuvného modulu i~knihovny \textit{GEOC}
+V~rámci dalšího vývoje zásuvného modulu i~knihovny \zk{GEOC}
 by bylo vhodné vylepšit některé algoritmy a~také funkcionalitu.
 Některé možné úpravy algoritmů jsou už zmíněny v~části 
 \ref{7-problemy}, proto je zde již neopakuji. 
@@ -9,8 +9,15 @@ Samozřejmě vždy lze optimalizovat kód a~zvýšit efektivitu aplikace,
 tato kapitola však obsahuje spíše konkrétní návrhy, co by se dalo 
 do~programu doplnit, aby měl širší uplatnění.
 
+Nejbližším krokem by mělo být vytvoření \textit{Makefile}\footnote{
+Soubor určující postup nástroje \textit{make} při překladu zdrojových
+souborů do~binárních souborů}. a~konfiguračního souboru, který by 
+uživatelům umožnil snadné zprovoznění knihovny a~zásuvného modulu.
 
-\section{VertexSnapper}
+\section{Knihovna GEOC}
+\label{geoc-vyvoj}
+
+\subsubsection{Vertex Snapper}
 \label{vs-vyvoj}
 
 Jelikož se jedná o~nejjednodušší algoritmus pro spojování vektorových map,
@@ -56,7 +63,7 @@ použít i~pro zpracování pomocí \texttt{Coverage\-Alignment}.
 % vylepšení algoritmu pro nalezení odpovídajících si bodů pro vrcholy tinu tak, aby měl
 % správný tvar a velikost
 
-\section{Zpracování po~dlaždicích}
+\subsubsection{Zpracování po~dlaždicích}
 \label{dlazdice-vyvoj}
 
  % zpracování po dlaždicích
@@ -72,7 +79,7 @@ na~nepravidelné Voronoi polygony, které jsou duální k~trojúhelníkům
 Bez tohoto postupu je využití programu omezeno pouze na~menší data.
 
 
-\section{Další algoritmy}
+\subsubsection{Další algoritmy}
 \label{dalsi-vyvoj}
 
 Zatím jsou v~knihovně \zk{GEOC} implementovány pouze některé

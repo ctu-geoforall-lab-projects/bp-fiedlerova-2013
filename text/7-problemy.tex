@@ -18,7 +18,7 @@ na~\textit{mailing-list} vývojářů \textit{GEOSu} a~odpovědí bylo uvedení
 již zmíněných pro a~proti. Problém jsem následně prodiskutovala s~vedoucím 
 práce, který mi doporučil toto řešení.} bylo proto v~knihovně \zk{GEOC} 
 přistoupeno k~využití C++~API i~s~rizikem, že bude při~každé změně nutné 
-vše překompilovat. %% ML: odkaz pod carou - odkaz na diskuzi ML  
+vše překompilovat. 
 
 S~tím souvisí i~další problém převodu geometrie. Jelikož v~programu \zk{QGIS} 
 je používáno právě C~API, nelze \zk{GEOS} geometrii jednoduše převést na~typ 
@@ -26,7 +26,6 @@ je používáno právě C~API, nelze \zk{GEOS} geometrii jednoduše převést na
 typy přes \zk{WKT}. Nevýhoda tohoto postupu je však zpomalení běhu programu 
 obzvláště u~rozsáhlejších datasetů. Toto by mělo být v~budoucnu vyřešeno 
 vytvořením vlastního C~API.
-%% ML toto budu vyreseno C API knihovny GEOC...
 
 
 \section{Rychlost zpracování}
@@ -92,6 +91,8 @@ výsledků testování.
 
 \begin{table}[H]
  \centering
+  \caption[Výsledky testování]{Výsledky testování - zrychlení algoritmů 
+	  při použití prostorových indexů}
 \begin{tabular}{|c|cc|cc|}
 \hline
   & \multicolumn{2}{|c}{VertexSnapper} & \multicolumn{2}{|c|}{CoverageAlignment} \\
@@ -104,15 +105,15 @@ výsledků testování.
  10.5 $\rightarrow$ 0.7 s& 10.5 $\rightarrow$ 4.2 s\\
 \hline
 \end{tabular}
-  \caption[Výsledky testování]{Výsledky testování - zrychlení algoritmů 
-	  při použití prostorových indexů}
   \label{tab:vysledky}
 \end{table}
 
 
 Z~dat uvedených v~tabulce \ref{tab:vysledky} je patrné, že doplnění 
-prostorových indexů oba algoritmy výrazně urychlilo. Míra zrychlení 
-samozřejmě závisí na~vstupních datech.
+prostorových indexů oba algoritmy výrazně urychlilo (řádově více než 
+desetkrát). Pro podrobnější rozbor a~určení míry zrychlení by 
+samozřejmě nutné provést mnohem rozsáhlejší testování. Zde bylo účelem 
+pouze ukázat, že prostorové indexy algoritmy opravdu zrychlily.
 
 U~algoritmu \texttt{Coverage\-Alignment} je navíc patrné,
 že při použití prostorových indexů závisí rychlost nejen
@@ -122,9 +123,6 @@ vzdálenosti. % To je dáno tím, ...
 
 \section{VertexSnapper}
 \label{problemy-vs}
-% problemy pri implementaci vertexsnapperu
-% měly by se nějakým způsobem řešit překrývající se prvky?
-% doplnit obrázky s ukázkami
 
 \subsubsection{Nevalidní geometrie}
 Vzhledem k~principu tohoto algoritmu mohou při jeho použití vznikat nevalidní 
@@ -139,7 +137,6 @@ křížení.
   \begin{figure}[hbt]
     \centering
       \input{./pictures/vs-invalid.pdf_tex}
-      %\includegraphics[width=350pt]{./pictures/vs-invalid.pdf}
       \caption{Vznik nevalidní geometrie při přichycení vrcholů}
       \label{fig:vs-nevalidni}
   \end{figure} 

@@ -351,6 +351,7 @@ void CoverageAlignment::transform()
     AlignGeometryEditorOperation myOp;
     myOp.setTIN( ttin );
 
+    invalids.clear();
     size_t nSize = newLayer.size();
     for ( size_t i = 0; i < nSize; i++ )
     {
@@ -410,7 +411,6 @@ void CoverageAlignment::align()
         matchingPointsRef = NULL;
         //if (ttin) delete ttin;
         ttin = NULL;
-        invalids.clear();
 
     } while ( found != 0 );
 

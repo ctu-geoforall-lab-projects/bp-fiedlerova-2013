@@ -8,28 +8,32 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \documentclass[%
-  12pt,         % Velikost základního písma je 12 bodů
-  a4paper,      % Formát papíru je A4
-  twoside,      % Oboustranný tisk
-  pdftex        % překlad bude proveden programem 'pdftex' do PDF
-]{report}       % Dokument třídy 'zpráva'
+  12pt,         			% Velikost základního písma je 12 bodů
+  a4paper,      			% Formát papíru je A4
+  twoside,       			% Oboustranný tisk
+  pdftex				% překlad bude proveden programem 'pdftex' do PDF
+]{report}       			% Dokument třídy 'zpráva'
 %
 
-\usepackage[czech, english]{babel} % použití češtiny, angličtiny
+\usepackage[czech, english]{babel}	% použití češtiny, angličtiny
+\usepackage[utf8]{inputenc}		% Kódování zdrojových souborů je UTF8
 
-\usepackage[utf8]	% Kódování zdrojových souborů je UTF8
-	{inputenc}      % Balíček pro nastavení kódování zdrojových souborů
+\usepackage{natbib}
 
+\usepackage{caption}
+\usepackage{subcaption}
 %% Správné nastavení mezer před sekcemi
 %\usepackage[setspace]
 %\onehalfspacing
 \usepackage[compact]{titlesec}
-\titleformat{\subsubsection}{\normalfont\bfseries}{\thesection}{1em}{}
-\titlespacing*{\subsubsection}{0em}{1em}{0.5em}
+%\titleformat{\subsubsection}{\normalfont\bfseries}{\thesection}{1em}{}
+%\titlespacing*{\subsubsection}{0em}{1em}{0.5em}
 
 %\raggedbottom % nehlídá stejnou velikost stránek -> neroztahuje mezery mezi obrázky apod. X dává pozn. pod čarou nahoru
 
 \usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
+\usepackage{color}% pro svg obrázky
+\usepackage{transparent}
 
 \usepackage{wrapfig}        % pro obtékání textu kolem obrázků a tabulek 
 
@@ -42,10 +46,6 @@
 
 \usepackage{amsmath} % pro aligned
 \addtolength{\jot}{1em} % 
-
-\usepackage{graphicx}  % pro svg obrázky
-\usepackage{color}
-\usepackage{transparent}
 
 \usepackage[
     nohyperlinks    % Nebudou tvořeny hypertextové odkazy do seznamu zkratek
@@ -122,12 +122,31 @@
 \misto{Praha}
 
 %% Abstrakt
-\abstrakt	{Abstrakt v~češtině}%
-			{Abstract in English}
+\abstrakt 
+{Tato bakalářská práce se zabývá problémem slučování vektorových dat
+ z~různých zdrojů. Cílem práce je vytvoření zásuvného modulu pro
+ Quantum GIS. Tento modul umožní uživateli jednoduše kombinovat
+ pomocí zvolené metody dvě různé vektorové vrstvy načtené v~prostředí 
+ programu. Výsledkem je nová vrstva ve~formátu \textit{shapefile}.
+ Modul využívá algoritmy pro spojení datasetů z~externí knihovny, 
+ jejíž návrh a~vytvoření je také náplní této práce. Text práce kromě 
+ popisu tvorby modulu a~knihovny obsahuje i~přehled existujících 
+ nástrojů v~této oblasti.}%
+{This bachelor thesis deals with the~problem of vector to vector 
+ conflation. The~aim is to create Quantum GIS plugin. This plugin allows
+ user to simply combine two different vector layers, which are loaded 
+ in program, by selected method. The~result is a~new layer in
+ \textit{shapefile} format. Plugin uses the~conflation algorithms from 
+ external library. Design and creation of the library is also 
+ the~objective of this thesis. The~text includes the~list of existing 
+ tools in this field, beside the~description of plugin and library.
+ }
 
 %% Klíčová slova
-\klicovaslova	{Klíčová slova v~češtině}%
-				{Keywords in English}
+\klicovaslova
+{GIS, Quantum GIS, zásuvný modul, C++ knihovna, slučování vektorových map}%
+{GIS, Quantum GIS, plugin, C++ library, vector conflation}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -140,6 +159,11 @@
 
 %%% Začátek dokumentu
 \begin{document}
+
+%\title{Tvorba QGIS zásuvného modulu pro slučování vektorových map}
+%\author{Tereza Fiedlerová}
+%\date{\today}
+
 \catcode`\-=12  % pro vypnuti aktivniho znaku '-' pouzivaneho napr. v \cline 
 
 % aktivace záhlaví
@@ -201,9 +225,8 @@
 \include{5-geoc}
 \include{6-plugin}
 \include{7-problemy}
-%\include{8-testovani}
-\include{9-vyvoj}
-\include{10-zaver}
+\include{8-vyvoj}
+\include{9-zaver}
 
 % Vysázení seznamu zkratek
 \include{zkratky}
