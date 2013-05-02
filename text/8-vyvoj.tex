@@ -9,74 +9,31 @@ Samozřejmě vždy lze optimalizovat kód a~zvýšit efektivitu aplikace,
 tato kapitola však obsahuje spíše konkrétní návrhy, co by se dalo 
 do~programu doplnit, aby měl širší uplatnění.
 
-Nejbližším krokem by mělo být vytvoření \textit{Makefile}\footnote{
-Soubor určující postup nástroje \textit{make} při překladu zdrojových
-souborů do~binárních souborů}. a~konfiguračního souboru, který by 
+Nejbližším krokem by mělo být vytvoření \textit{Makefile}\footnote{Soubor 
+určující postup nástroje \textit{make} při překladu zdrojových
+souborů do~binárních souborů.}. a~konfiguračního souboru, který by 
 uživatelům umožnil snadné zprovoznění knihovny a~zásuvného modulu.
 
 \section{Knihovna GEOC}
 \label{geoc-vyvoj}
 
-\subsubsection{Vertex Snapper}
-\label{vs-vyvoj}
-
-Jelikož se jedná o~nejjednodušší algoritmus pro spojování vektorových map,
-nemusí být výsledek funkce \texttt{Vertex\-Snapper} vždy zcela podle
-představ uživatele. Pro~širší využitelnost by bylo dobré usnadnit
-uživateli editaci nevalidních prvků vzniklých zpracováním, především
-takových, kdy se celý prvek přichytil do jednoho bodu. Po~proběhnutí
-zarovnání vrstev by se jednoduše objevila nabídka, kde by uživatel mohl
-zvolit jednu z~těchto možností (popř. i~nějakých dalších). 
-
-% FORMÁTOVÁNÍ !!!!!!!!
-\begin{itemize}
-% \itemsep5pt  \parskip0pt \parsep0pt % to by tu vůbec nemělo být
- \item export nevalidních či bodových prvků do nové vrstvy 
- \item smazání všech nyní bodových prvků
- \item zrušení provedeného přichycení u~nevalidních prvků
-\end{itemize}
-
-K~lepším výsledkům by zajisté vedlo i~doporučení toleranční vzdálenosti,
-jelikož právě její volba může vést k~nereálným výsledkům. Uživatel by
-tak nemusel metodou \uv{pokus-omyl} zjišťovat, jak tento parametr 
-nastavit, pouze by ho mohl upravit dle svých představ. Jak už bylo
-několikrát řečeno, vyhovujícím návrhem by byl průměr z~několika
-nejkratších segmentů prvků dané vrstvy. Tato funkce by se navíc dala
-použít i~pro zpracování pomocí \texttt{Coverage\-Alignment}.
-
-
-%\section{MatchingGeometry}
-%\label{mg-vyvoj}
-
-% různá kritéria pro polygony, linie, body
-
-
-%section{CoverageAlignment}
-%label{ca-vyvoj}
-
-% přidání bodů do geometrií, pokud je mezi prvkem ref. a sub. vrstvy příliš velký rozdíl
-
-
-% modifikace algoritmu tak, aby bylo možné spojit i vrstvy o stejné přesnosti - průměr prvků
-
-
-% vylepšení algoritmu pro nalezení odpovídajících si bodů pro vrcholy tinu tak, aby měl
-% správný tvar a velikost
-
 \subsubsection{Zpracování po~dlaždicích}
 \label{dlazdice-vyvoj}
 
- % zpracování po dlaždicích
 Větší efektivita při zpracování rozsáhlých dat je v~\zk{GIS} 
 aplikacích zajištěna většinou jejich zpracováním po~částech. Je možné
 si data rozdělit na~pravidelné dlaždice a~každou tuto část upravovat
-samostatně. Ještě vhodnější způsob u~této aplikace je %(dle Freitas, Alfonso)
-rozdělení dat pomocí shlukových algoritmů a~následné rozdělení
-na~jednotlivá pole Voronoi teselací\footnote{rozdělení roviny 
+samostatně. Ještě vhodnější způsob u~této aplikace je dle \cite{freitas}
+rozčlenění dat pomocí shlukových algoritmů a~následné rozdělení
+na~jednotlivá pole Voronoi teselací\footnote{Rozdělení roviny 
 na~nepravidelné Voronoi polygony, které jsou duální k~trojúhelníkům
-\zk{DT}}.
+\zk{DT}.}.
 
-Bez tohoto postupu je využití programu omezeno pouze na~menší data.
+Bez tohoto postupu je využití programu omezeno pouze na~menší objem
+dat. Uživatel by si sice mohl data na~části rozdělit sám a~zpracovávat
+je postupně, to je však nepohodlné a~časově náročné, nehledě na~to,
+že by musel následně řešit problém úpravy prvků na~styku jednotlivých 
+částí.
 
 
 \subsubsection{Další algoritmy}
@@ -86,7 +43,6 @@ Zatím jsou v~knihovně \zk{GEOC} implementovány pouze některé
 základní algoritmy pro slučování map. V~rámci dalšího vývoje by
 bylo možné postupně doplňovat další pro její širší využití.
 
-% zahrnutí atributů
 V~současné době je v~oblasti slučování vektorových map 
 (\textit{conflation}) snaha o~hledání společných elementů 
 dvou datasetů nejen na~základě geometrie, ale i~s~přihlédnutím
@@ -94,9 +50,12 @@ k~atributům prvků. Zakomponování tohoto přístupu do~algoritmu
 pro určení odpovídajících si prvků je proto logicky vhodným 
 dalším krokem jeho vývoje.
 
-% úprava topologie před samotným spojením
 
-\section{Zásuvný modul \textit{Conflate}}
+\section{Zásuvný modul Conflate}
+\label{plugin-vyvoj}
+
+\subsubsection{Protokol a~výsledek zpracování}
+\label{protokol-vyvoj}
 
 U~zásuvného modulu by bylo vhodné usnadnit uživateli vyhledání
 a~opravu výsledných nevalidních geometrií. Nyní si musí sám
@@ -106,3 +65,13 @@ a~označen příslušný prvek.
 
 Co se týče protokolu, lze ještě doplnit možnost jeho uložení
 do~textového souboru.
+
+\subsubsection{Volba toleranční vzdálenosti}
+\label{tolerance-vyvoj}
+
+K~lepšímu a~pohodlnějšímu spojení map by zajisté vedlo doporučení 
+toleranční vzdálenosti, jelikož právě její volba může vést k~nereálným 
+výsledkům. Nezkušený uživatel by tak nemusel metodou \uv{pokus-omyl} 
+zjišťovat, jak tento parametr na\-stavit, pouze by ho mohl upravit dle svých 
+představ. Jak už bylo několikrát řečeno, vyhovujícím návrhem by byl průměr 
+z~několika nejkratších segmentů prvků dané vrstvy.

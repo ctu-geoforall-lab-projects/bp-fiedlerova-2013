@@ -1,6 +1,6 @@
 %% Creator: Inkscape inkscape 0.48.3.1, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'protokol.pdf' (pdf, eps, ps)
+%% Accompanies image file 'tin-invalid.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{427.78481445bp}%
+    \setlength{\unitlength}{429.75449219bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,13 +48,12 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.13326766)%
-    \put(0,0){\includegraphics[width=\unitlength]{protokol.pdf}}%
-    \put(0.03752909,0.07771871){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflatePlugin}}}%
-    \put(0.45295257,0.07656385){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Dialog}}}%
-    \put(0.7340145,0.07971295){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflateProvider}}}%
-    \put(0.05554316,0.00937606){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{zásuvný modul}}}%
-    \put(0.39868684,0.00843154){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{grafické rozhraní}}}%
-    \put(0.77306855,0.01263758){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{funkcionalita}}}%
+  \begin{picture}(1,0.32652906)%
+    \put(0,0){\includegraphics[width=\unitlength]{./pictures/tin-invalid.pdf}}%
+    \put(0.00169428,0.29684436){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{neplatný trojúhelník}}}%
+    \put(0.71971214,0.11335088){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\small původní triangulace
+}}}%
+    \put(0.72370124,0.06415338){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\small trojúhelníky sestavené  }}}%
+    \put(0.72998486,0.04254922){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\small z odpovídajících si bodů}}}%
   \end{picture}%
 \endgroup%

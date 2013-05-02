@@ -2,22 +2,25 @@
 \label{9-zaver}
 
 Cílem této bakalářské práce bylo nastudování algoritmů pro
-slučování vektorových map (\textit{vector-to-vector conflation}
+slučování vektorových map (\textit{vector to vector conflation})
 a~následné vytvoření zásuvného modulu pro \zkratkatext{QGIS}, 
-který pomocí těchto algoritmů umožní zpracování dat. Spojováním
-vektorových map se myslí vytvoření nové mapy na~základě
-dat ze~dvou různých zdrojů. Samotné algoritmy týkající se
-slučování datasetů jsou implementovány v~externí C++ knihovně
-\zkratka{GEOC} využívající knihovnu \zk{GEOS}. Kromě tohoto 
-je výstupem práce i~přehled některých existujících nástrojů 
-zabývajících se slučováním map. 
+který pomocí těchto algoritmů umožní zpracování dat. Kromě 
+toho je výstupem práce i~přehled některých existujících 
+nástrojů zabývajících se slučováním map.
 
-Algoritmy pro spojování map jsou v~knihovně nezávislé 
-na~\zk{QGIS} \zk{API} tak, aby bylo možné knihovnu \zk{GEOC}
-případně později využít i~jinými programy. K~problému slučování
-vektorových map existuje mnoho přístupů. Aplikace všech by
-však byla příliš náročná, proto byl zvolen pouze přístup 
-zabývající se pouze geometrickými vlastnostmi dat.
+Výsledný zásuvný modul \textbf{Conflate} z~daných vstupních 
+vrstev na~základě para\-metrů zvolených uživatelem vytvoří novou 
+vrstvu, která je kombinací původních. Samotné algoritmy týkající 
+se slučování datasetů jsou implementovány v~externí C++ knihovně
+\zkratka{GEOC} využívající knihovnu \zk{GEOS}. 
+
+Knihovna \zk{GEOC} je navržena nezávisle na~\zk{QGIS} \zk{API} tak, 
+aby ji bylo možné případně později využít i~jinými programy. Zatím
+obsahuje tři základní algoritmy pro sloučení vektorových dat. 
+K~problému sjednocení vektorových map existuje mnoho přístupů. 
+Aplikace všech by však byla příliš náročná, proto byl zvolen jediný 
+přístup zabývající se pouze geometrickými vlastnostmi dat.
+
 
 Jelikož se jedná o~poměrně novou oblast v~\zk{GIS}, bylo
 obtížné najít literaturu, která by popisovala nějaké obecné 
@@ -26,9 +29,7 @@ spojováním map pro nějaký specifický případ. Na druhou stranu
 jsem se však dověděla mnoho nového o~pro mě donedávna neznámém
 tématu.
 
-Výsledkem této práce je C++ knihovna \zk{GEOC}, která 
-implementuje tři různé algoritmy pro slučování vektorových map 
-na~základě jejich geometrických vlastností, a zásuvný modul 
-\textit{Conflate} využívající tuto knihovnu. Přestože knihovnu
-i~zásuvný modul je možné ještě v~různých směrech vylepšit,
-lze říci, že stanovené cíle práce byly splněny.
+Přestože knihovnu i~zásuvný modul je možné ještě v~různých směrech 
+vylepšit, lze říci, že stanovené cíle práce byly splněny. Nejbližším
+krokem by nyní mělo být uvedení projektu do~takového stavu, aby 
+mohl být poskytnut uživatelům programu \zkratkatext{QGIS}.
