@@ -45,6 +45,11 @@ void LineMatcher::match()
 {
     newGeometry = subGeometry;
 
+    if ((refGeometry.size() == 0) || (subGeometry.size() == 0) )
+    {
+        return;
+    }
+
     // build spatial index
     sIndex = SpatialIndexBuilder::buildIndex(&refGeometry);
 
@@ -90,7 +95,6 @@ void LineMatcher::match()
             // check validity
             if( !newGeometry[i].getGEOSGeom()->isValid() )
             {
-                qDebug("LineMatcher::match: Geom is not valid.");
                 invalids.push_back(newGeometry[i].getFeatureId());
             }
 
@@ -336,7 +340,6 @@ double LineMatcher::similarity( const CoordinateSequence * c1, const CoordinateS
     // max and min differences and deviations in dataset - set from data, not like this
     double devMax = M_PI/2;
     double devMin = 0;
-    //double diffMax = max( length1, length2 );//+tolDistance;
     double diffMin = 0;
     double distMax = tolDistance;
     double distMin = 0;

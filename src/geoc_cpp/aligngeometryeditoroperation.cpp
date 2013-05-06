@@ -27,7 +27,7 @@ AlignGeometryEditorOperation::~AlignGeometryEditorOperation()
     {
         delete sIndex;
     }
-}
+} // constructor
 
 
 void AlignGeometryEditorOperation::setTIN(TTin *t)
@@ -35,7 +35,7 @@ void AlignGeometryEditorOperation::setTIN(TTin *t)
     ttin = t;
     sIndex = SpatialIndexBuilder::buildIndex(ttin);
 
-}
+} // void AlignGeometryEditorOperation::setTIN(TTin *t)
 
 CoordinateSequence* AlignGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *g )
 {

@@ -31,6 +31,9 @@
      </property>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QGridLayout" name="gridLayout">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QFrame" name="frameSettings">
          <property name="sizePolicy">

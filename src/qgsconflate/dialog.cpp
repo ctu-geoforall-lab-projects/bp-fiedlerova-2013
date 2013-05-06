@@ -135,7 +135,7 @@ bool Dialog::setConflation()
     if ( !mConflate->checkLayersType() )
     {
         QMessageBox::warning( 0, tr("Warnig"), tr("Geometry type warning. (Layers must "
-                             "have the same geometry type. Line is needed for Match Lines."),
+                             "have the same geometry type. Line is needed for Match Lines.)"),
                               QMessageBox::Ok);
         return false;
     }

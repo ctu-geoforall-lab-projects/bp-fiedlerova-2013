@@ -9,13 +9,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="40.369473"
+   width="40.440693"
    height="35.890388"
    id="svg2"
    inkscape:label="Pozadí"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="mActionConflate.png">
+   sodipodi:docname="mActionConflate.svg">
   <defs
      id="defs3201">
     <marker
@@ -41,8 +41,8 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
-     inkscape:cx="-22.846337"
-     inkscape:cy="0.092588858"
+     inkscape:cx="-22.775113"
+     inkscape:cy="0.092590372"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -72,7 +72,7 @@
      inkscape:label="Vrstva 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-417.16357,-460.35684)">
+     transform="translate(-417.09235,-460.35684)">
     <path
        style="fill:#81f169;fill-opacity:1;stroke:#000000;stroke-width:0.40000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 425.44582,480.14758 8.93023,15.79965 21.75313,-0.22899 -12.59392,-16.02862 z"
@@ -95,7 +95,7 @@
        inkscape:connector-curvature="0" />
     <path
        sodipodi:type="star"
-       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.23780203000000011;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.23780203;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        id="path4301"
        sodipodi:sides="3"
        sodipodi:cx="-0.53571427"
@@ -108,7 +108,7 @@
        inkscape:rounded="0"
        inkscape:randomized="0"
        d="m -0.71428578,31.247531 -2.41775332,-4.496967 -2.4177534,-4.496967 5.10336383,0.154648 5.10336417,0.154647 -2.6856106,4.342319 z"
-       transform="matrix(0.7200726,0,0,0.80145346,422.0386,468.88235)"
+       transform="matrix(0.7200726,0,0,0.80145346,422.0386,467.27521)"
        inkscape:transform-center-x="-0.064291201"
        inkscape:transform-center-y="1.1187366" />
   </g>

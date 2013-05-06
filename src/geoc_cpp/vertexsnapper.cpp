@@ -46,6 +46,11 @@ void VertexSnapper::snap()
 
     newGeometry = subGeometry;
 
+    if ((refGeometry.size() == 0) || (subGeometry.size() == 0) )
+    {
+        return;
+    }
+
     // build spatial index
     sIndex = SpatialIndexBuilder::buildIndex(&refGeometry);
 

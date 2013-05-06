@@ -48,7 +48,6 @@ CoverageAlignment::CoverageAlignment( TGeomLayer &ref, TGeomLayer &sub, double t
 
 CoverageAlignment::~CoverageAlignment()
 {
-
 } // destructor
 
 
@@ -264,6 +263,11 @@ void CoverageAlignment::deleteRepeated( vector<Coordinate> & vc)
 void CoverageAlignment::createTIN()
 {
 
+    if( (matchingPoints->size() < 3) || matchingPoints->size() != matchingPointsRef->size())
+    {
+        return;
+    }
+
     ttin = new TTin();
 
     GeometryFactory gf;
@@ -342,7 +346,7 @@ void CoverageAlignment::correspondingPoints( const CoordinateSequence * c, Coord
 void CoverageAlignment::transform()
 {
     // TIN has no triangles
-    if ( ttin->size() == 0 )
+    if ( !ttin || ttin->size() == 0 )
     {
         return;
     }
@@ -384,8 +388,15 @@ void CoverageAlignment::transform()
 
 void CoverageAlignment::align()
 {
+    if ((refLayer.size() == 0) || (subLayer.size() == 0) )
+    {
+        newLayer = subLayer;
+        return;
+    }
 
-    // repeat until no new matches are found
+    // repeat until no new matches are found or number of iteration is 10
+    unsigned short it = 0;
+
     do
     {
         found = 0;
@@ -411,8 +422,9 @@ void CoverageAlignment::align()
         matchingPointsRef = NULL;
         //if (ttin) delete ttin;
         ttin = NULL;
+        it++;
 
-    } while ( found != 0 );
+    } while ( (found != 0) && (it < 10) );
 
 } // void CoverageAlignment::align()
 
