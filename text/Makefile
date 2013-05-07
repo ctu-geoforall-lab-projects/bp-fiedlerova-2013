@@ -6,7 +6,7 @@ all:
 
 clean:
 	rm -f *~ *.aux *.log *.out *.bbl *.blg *.loa *.lof \
-	*.toc
+	*.toc *.lot
 
 distclean:
 	make clean
