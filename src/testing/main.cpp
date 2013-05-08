@@ -1,14 +1,12 @@
 #include <cstdlib>
 #include <iostream>
+#include <ctime>
 
 #include <QString>
 
-#include <qgsapplication.h>
 #include <qgsmaplayer.h>
 #include <qgsvectorlayer.h>
 #include <qgsproviderregistry.h>
-
-#include <geos_c.h>
 
 #include "qgsconflateprovider.h"
 
@@ -44,7 +42,7 @@ void notice(const char *fmt, ...) {
 
 int main(int argc, const char **argv)
 {
-    initGEOS(notice, log_and_exit);
+    //initGEOS(notice, log_and_exit);
 
     QString input_ref, input_sub, output;
 
@@ -57,7 +55,7 @@ int main(int argc, const char **argv)
     if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
         return EXIT_FAILURE;
 
-    QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/"); // some memory error here
+    QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/");
 
     cProvider = new QgsConflateProvider();
 
@@ -71,19 +69,29 @@ int main(int argc, const char **argv)
     if (!subLayer)
         exit(EXIT_FAILURE);
     
+
+    clock_t start = clock(); // start of measuring time
+
     cProvider->setRefVectorLayer(refLayer);
     cProvider->setSubVectorLayer(subLayer);
-    cProvider->setTolDistance(0.01);
+    cProvider->setTolDistance(100);
+    cProvider->setMatchCriterium(0.7);
+    cProvider->setRepair(false);
 
     // create output layer
     cProvider->copyLayer(output + ".shp");
 
     // do something ...
-    cProvider->vertexSnap();
-    
-    finishGEOS();
+    //cProvider->vertexSnap();
+    cProvider->align();
+    //cProvider->lineMatch();
+    clock_t end = clock();    // end of measuring time
 
-    delete cProvider;
+    std::cout<< "time: "<< ((double)(end - start)/CLOCKS_PER_SEC) << std::endl;
+
+    newLayer = cProvider->getNewVectorLayer();
+    
+    //finishGEOS();
 
     exit(EXIT_SUCCESS);
 }
