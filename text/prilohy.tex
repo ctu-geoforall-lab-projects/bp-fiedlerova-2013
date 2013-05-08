@@ -4,6 +4,14 @@
 \chapter[Porovnání rychlosti algoritmů]{Porovnání rychlosti algoritmů po~použití prostorových indexů}
 \label{priloha-testovani}
 
+Knihovnu \zk{GEOC} lze pro účely testování přeložit s~definováním makra 
+\texttt{WITHOUT\_SPIDX}. Tím lze získat verzi knihovny bez prostorových indexů
+(platí pro algoritmy \textit{Vertex Snapper} a~\textit{Coverage Alignment}).
+Bez nastavení této možnosti knihovna automaticky prostorové indexy používá. 
+Pro testování byla vytvořena aplikace \textbf{geoc\_testing}, která byla 
+volána pomocí jednoduchého skriptu pro \textit{bash} (aplikaci, skript,
+ i~data lze nalézt na~CD). 
+
 Porovnání bylo provedeno měřením času výpočtu pro daný algoritmus
 pro~různá vstupní data a~dvě různě zvolené toleranční vzdálenosti.
 Pro každou konfiguraci (algoritmus, vstupní data, toleranční vzdálenost)
@@ -12,7 +20,6 @@ prostorových indexů. Cílem bylo určení změny rychlosti algoritmů po~zaved
 prostorových indexů. Testování bylo provedeno na~přenosném počítači 
 s~parametry uvedenými v~tabulce \ref{tab:parametry}. 
 
-\vspace{10pt}
 \begin{table}[H]
  \centering
   \caption{Parametry počítače využitého pro testování}
@@ -30,12 +37,10 @@ s~parametry uvedenými v~tabulce \ref{tab:parametry}.
   \label{tab:parametry}
 \end{table}
 
-\vspace{10pt}
 V~tabulkách \ref{tab:vs-bez} - \ref{tab:ca-s} jsou uvedeny časy zpracování pro 
 danou upravovanou a~re\-ferenční vrstvu (tabulka \ref{tab:vstup}) a~zvolenou 
 toleranční vzdálenost. Časy jsou uváděny v~sekundách. 
 
-\vspace{10pt}
 \begin{table}[H]
  \centering
   \caption{Vstupní vrstvy}
@@ -44,14 +49,14 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
  typ dat & referenční vrstva & upravovaná vrstva \\
 \hline
 \hline
- polygony & vyber\_obce & vyber\_CR \\
- linie & zel1 & zel2 \\
+ polygony & obce\_ref & obce\_sub \\
+ linie & zel\_ref & zel\_sub \\
  \hline
 \end{tabular}
   \label{tab:vstup}
 \end{table}
 
-\begin{table}
+\begin{table}[H]
  \centering
   \small
    \caption{\texttt{Vertex\-Snapper} -
@@ -82,7 +87,7 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
    \label{tab:vs-bez}
 \end{table}
  
-\begin{table}
+\begin{table}[H]
  \centering
   \small
    \caption{\texttt{Vertex\-Snapper} -
@@ -113,11 +118,11 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
    \label{tab:vs-s}
 \end{table}
  
-\begin{table}
+\begin{table}[H]
  \centering
   \small
    \caption{\texttt{Coverage\-Alignment} - 
-	    čas zpracování bez prostorovýczh indexů}
+	    čas zpracování bez prostorových indexů}
   \begin{tabular}{|c|c|c|c|c|}
    \hline
       & \multicolumn{2}{c|}{polygony} & 
@@ -126,25 +131,25 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
     id  &  ~~100 m~ & ~1 000 m & ~1 000 m & 10 000 m\\
    \hline
    \hline
- 1  & 38.75 & 37.68 & 10.02 & 11.45 \\ 
- 2  & 38.55 & 37.93 & 10.36 & 8.99  \\
- 3  & 38.51 & 37.44 & 10.24 & 10.06 \\
- 4  & 41.60 & 36.95 & 11.22 & 10.41 \\
- 5  & 34.02 & 41.81 & 10.04 & 11.22 \\
- 6  & 40.31 & 38.55 & 10.44 & 10.02 \\
- 7  & 38.77 & 41.39 & 11.21 & 9.88 \\
- 8  & 38.54 & 36.79 & 10.09 & 11.30 \\
- 9  & 37.69 & 39.69 & 9.67  & 11.32 \\
- 10 & 36.72 & 41.60 & 11.67 & 10.29 \\
+1	&	38.75	&	37.68	&	10.02	&	18.85	\\
+2	&	38.55	&	37.93	&	10.36	&	20.94	\\
+3	&	38.51	&	37.44	&	10.24	&	18.77	\\
+4	&	41.6	&	36.95	&	11.22	&	18.74	\\
+5	&	34.02	&	41.81	&	10.04	&	18.83	\\
+6	&	40.31	&	38.55	&	10.44	&	18.73	\\
+7	&	38.77	&	41.39	&	11.21	&	20.91	\\
+8	&	38.54	&	36.79	&	10.09	&	18.98	\\
+9	&	37.69	&	39.69	&	9.67	&	18.81	\\
+10	&	36.72	&	41.6	&	11.67	&	20.87	\\
    \hline
    \hline
-   průměr & 38.35 & 38.98 & 10.51 & 10.49 \\
+   průměr & 38.35 & 38.98 & 10.51 & 19.44 \\
    \hline
   \end{tabular}
    \label{tab:ca-bez}
 \end{table}
  
-\begin{table}
+\begin{table}[H]
  \centering
   \small
    \caption{\texttt{Coverage\-Alignment} - 
@@ -157,19 +162,19 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
     id  &  ~~100 m~ & ~1 000 m & ~1 000 m & 10 000 m\\
    \hline
    \hline
- 1  & 1.05 & 1.82 &  0.73 & 3.99 \\
- 2  & 1.13 & 1.78 &  0.69 & 3.98 \\
- 3  & 1.14 & 1.66 &  0.68 & 4.01 \\
- 4  & 1.04 & 1.65 &  0.77 & 4.37 \\
- 5  & 1.04 & 1.79 &  0.78 & 4.39 \\
- 6  & 1.03 & 1.79 &  0.70 & 3.96 \\
- 7  & 1.06 & 1.87 &  0.69 & 3.99 \\
- 8  & 1.12 & 1.84 &  0.77 & 3.99 \\
- 9  & 1.02 & 1.80 &  0.68 & 4.39 \\
- 10 & 1.14 & 1.76 &  0.70 & 4.38 \\
+1	&	1.05	&	1.82	&	1.35	&	6.99	\\
+2	&	1.13	&	1.78	&	1.35	&	6.98	\\
+3	&	1.14	&	1.66	&	1.20	&	7.72	\\
+4	&	1.04	&	1.65	&	1.36	&	7.83	\\
+5	&	1.04	&	1.79	&	1.24	&	7.04	\\
+6	&	1.03	&	1.79	&	1.21	&	7.77	\\
+7	&	1.06	&	1.87	&	1.32	&	7.73	\\
+8	&	1.12	&	1.84	&	1.21	&	6.98	\\
+9	&	1.02	&	1.8	&	1.22	&	7.75	\\
+10	&	1.14	&	1.76	&	1.33	&	7.75	\\
    \hline
    \hline
-   průměr & 1.08 & 1.78 & 0.72 & 4.15 \\
+   průměr & 1.08 & 1.78 & 1.28 & 7.45 \\
    \hline
   \end{tabular}
    \label{tab:ca-s}
@@ -517,17 +522,25 @@ editačních nástrojů QGISu.
   \put( 16,  90){\line(1, 0){10} { libgeoc.so}}
   \put(150,  90){ geoc (knihovna)}
   \put(  1,  80){\line(0, 1){50}}
-  \put(  1,  80){\line(1, 0){10} {\textbf{ text}}}
+  \put(  1,  80){\line(1, 0){10} {\textbf{ test}}}
   \put( 16,  70){\line(0, 1){8}}
-  \put( 16,  70){\line(1, 0){10} {\textbf{ latex}}}
-  \put(150,  70){ zdrojové soubory textu této práce}
+  \put( 16,  70){\line(1, 0){10} {\textbf{ src}}}
+  \put(150,  70){ zdrojové soubory testovací aplikace}
   \put( 16,  60){\line(0, 1){10}}
-  \put( 16,  60){\line(1, 0){10} { tereza-fiedlerova-bp-2013.xls}}
-  \put(150,  60){ anotace práce}
-  \put( 16,  50){\line(0, 1){10}}
-  \put( 16,  50){\line(1, 0){10} { tereza-fiedlerova-bp-2013.pdf}}
-  \put(150,  50){ tento text}
-  \put( 16,  40){\line(0, 1){10}}
-  \put( 16,  40){\line(1, 0){10} { zadani-oficialni.jpeg}}
-  \put(150,  40){ naskenované oficiální zadání práce}
+  \put( 16,  60){\line(1, 0){10} { \textbf{ data}}}
+  \put(150,  60){ testovací data}
+  \put(  1,  50){\line(0, 1){50}}
+  \put(  1,  50){\line(1, 0){10} {\textbf{ text}}}
+  \put( 16,  40){\line(0, 1){8}}
+  \put( 16,  40){\line(1, 0){10} {\textbf{ latex}}}
+  \put(150,  40){ zdrojové soubory textu této práce}
+  \put( 16,  30){\line(0, 1){10}}
+  \put( 16,  30){\line(1, 0){10} { tereza-fiedlerova-bp-2013.xls}}
+  \put(150,  30){ anotace práce}
+  \put( 16,  20){\line(0, 1){10}}
+  \put( 16,  20){\line(1, 0){10} { tereza-fiedlerova-bp-2013.pdf}}
+  \put(150,  20){ tento text}
+  \put( 16,  10){\line(0, 1){10}}
+  \put( 16,  10){\line(1, 0){10} { zadani-oficialni.jpeg}}
+  \put(150,  10){ naskenované oficiální zadání práce}
 \end{picture}

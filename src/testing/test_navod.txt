@@ -1,0 +1,36 @@
+---------------------------------------------
+Návod na testování pomocí skriptu testing.sh
+---------------------------------------------
+
+Skript je nutné volat s~těmito argumenty - referenční vrstva, u\-pravovaná vrstva, výsledná vrstva, metoda (1 pro Vertex Snapper, 2 pro Coverage Alignment, 3 pro Line Matcher), toleranční vzdálenost, počet pokusů, soubor, kam se mají uložit výsledné časy. 
+
+Pomocí těchto příkazů a~kompilováním knihovny s~a~bez prostorových indexů lze provést veškeré testování, jehož výsledky jsou uvedeny v příloze F k bakalářské práci. 
+
+
+----------------------------------------------------
+Zkompilování knihovny GEOC bez prostorových indexů:
+----------------------------------------------------
+/usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++ DEFINES+=WITHOUT_SPIDX -o Makefile geoc.pro
+
+make
+
+--------------------------------------------------
+Zkompilování knihovny GEOC s prostorovými indexy:
+--------------------------------------------------
+/usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++ -o Makefile geoc.pro
+
+make
+
+-------------------------------------------------------------
+Příkazy pro testování (nutné provést pro obě verze knihovny)
+-------------------------------------------------------------
+./testing.sh ./sample_data/zel_ref.shp ./sample_data/zel_sub.shp out 1 100 10 vs_100_linie.txt
+./testing.sh ./sample_data/zel_ref.shp ./sample_data/zel_sub.shp out 1 10000 10 vs_10000_linie.txt
+./testing.sh ./sample_data/obce_ref.shp ./sample_data/obce_sub.shp out 1 100 10 vs_100_polygon.txt
+./testing.sh ./sample_data/obce_ref.shp ./sample_data/obce_sub.shp out 1 10000 10 vs_10000_polygon.txt
+./testing.sh ./sample_data/zel_ref.shp ./sample_data/zel_sub.shp out 2 1000 10 ca_1000_linie.txt
+./testing.sh ./sample_data/zel_ref.shp ./sample_data/zel_sub.shp out 2 10000 10 ca_10000_linie.txt
+./testing.sh ./sample_data/obce_ref.shp ./sample_data/obce_sub.shp out 2 100 10 ca_100_polygon.txt
+./testing.sh ./sample_data/obce_ref.shp ./sample_data/obce_sub.shp out 2 10000 10 ca_10000_polygon.txt
+
+

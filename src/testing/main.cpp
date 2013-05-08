@@ -42,7 +42,7 @@ void notice(const char *fmt, ...) {
 
 int main(int argc, const char **argv)
 {
-    //initGEOS(notice, log_and_exit);
+    //initGEOS(notice, log_and_exit); -> only with C api
 
     QString input_ref, input_sub, output;
     short method;
@@ -51,9 +51,9 @@ int main(int argc, const char **argv)
     QgsVectorLayer *refLayer;
     QgsVectorLayer *subLayer;
     QgsVectorLayer *newLayer;
-    
+
     QgsConflateProvider *cProvider;
-    
+
     if (0 != parse_opt(argc, argv, input_ref, input_sub, output, method, tolerance))
         return EXIT_FAILURE;
 
@@ -65,12 +65,12 @@ int main(int argc, const char **argv)
     refLayer = open_layer(input_ref, "input_ref");
     if (!refLayer)
         exit(EXIT_FAILURE);
-    
+
     // load second input layer
     subLayer = open_layer(input_sub, "input_sub");
     if (!subLayer)
         exit(EXIT_FAILURE);
-    
+
 
     clock_t start = clock(); // start of measuring time
 
@@ -101,8 +101,8 @@ int main(int argc, const char **argv)
 
     clock_t end = clock();    // end of measuring time
 
-    std::cout<< "time: "<< ((double)(end - start)/CLOCKS_PER_SEC) << std::endl;
-    
+    std::cout<< ((double)(end - start)/CLOCKS_PER_SEC) << std::endl;
+
     //finishGEOS();
 
     exit(EXIT_SUCCESS);
@@ -120,19 +120,19 @@ int parse_opt(int argc, const char **argv, QString &input_ref, QString &input_su
     output    = argv[3];
     method    = QString(argv[4]).toShort();
     tolerance = QString(argv[5]).toDouble();
-    
+
     return 0;
 }
 
 QgsVectorLayer *open_layer(QString uri, QString basename)
 {
     QgsVectorLayer *pLayer;
-    
+
     pLayer = new QgsVectorLayer(uri, basename, "ogr");
     if (!pLayer || !pLayer->isValid()) {
         cerr << "Unable to open " << uri.toStdString() << endl;
         return NULL;
     }
-    
+
     return pLayer;
 }

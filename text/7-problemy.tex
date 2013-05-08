@@ -75,9 +75,9 @@ porovnáváním pouze blízkých prvků, přesto je takových prvků ještě mno
 \subsection{Porovnání rychlosti s a bez použití prostorových indexů}
 \label{problemy-test}
 Porovnání vlivu prostorových indexů na~rychlost zpracování bylo provedeno 
-nad dvojicí polygonových vrstev \texttt{vyber\_CR} a~\texttt{vyber\_obce}, 
+nad dvojicí polygonových vrstev \texttt{obce\_ref} a~\texttt{obce\_sub}, 
 které obsahují polygony obcí části ČR, a~nad dvojicí li\-niových vrstev 
-\texttt{zel1} a~\texttt{zel2} obsahující výběr železnic ve~Středočeském 
+\texttt{zel\_ref} a~\texttt{zel\_sub} obsahující výběr železnic ve~Středočeském 
 kraji. Použity byly pouze tyto výběry, nikoliv data z~celé České republiky,
 jelikož na~tak velkých datasetech zpracování bez prostorových indexů může 
 trvat poměrně dlouho.
@@ -85,7 +85,7 @@ trvat poměrně dlouho.
 Testovány byly vždy uvedené dvojice datasetů pro různé toleranční vzdálenosti,
 a~to při zpracování algoritmy \texttt{Vertex\-Snapper} a~\texttt{Coverage\-Alignment}
 s~použitím prostorových indexů a~bez jejich použití. Kompletní výsledky testování 
-jsou uvedeny v~tabulkách v~příloze \ref{priloha-testovani}. Zde uvádím jen přehled 
+jsou uvedeny v~tabulkách v~příloze \ref{priloha-testovani}. Zde je uveden jen přehled 
 výsledků testování.
 
 \begin{table}[H]
@@ -99,9 +99,9 @@ výsledků testování.
 \hline
 \hline
  polygonová data & 20.9 $\rightarrow$ 0.8 s& 22.6 $\rightarrow$ 0.7 s& 
- 4.7 $\rightarrow$ 0.5 s& 4.9 $\rightarrow$ 0.5 s\\
+  4.7 $\rightarrow$ 0.5 s& 4.9 $\rightarrow$ 0.5 s\\
  liniová data & 38.4 $\rightarrow$ 1.1 s& 39.0 $\rightarrow$ 1.8 s& 
- 10.5 $\rightarrow$ 0.7 s& 10.5 $\rightarrow$ 4.2 s\\
+  10.5 $\rightarrow$ 1.3 s& 19.4 $\rightarrow$ 7.5 s\\
 \hline
 \end{tabular}
   \label{tab:vysledky}
@@ -114,10 +114,10 @@ desetkrát). Pro podrobnější rozbor a~určení míry zrychlení by
 samozřejmě bylo nutné provést mnohem rozsáhlejší tes\-tování. Zde bylo 
 účelem pouze ukázat, že prostorové indexy algoritmy opravdu zrychlily.
 
-U~algoritmu \texttt{Coverage\-Alignment} je navíc patrné,
-že při použití prostorových indexů závisí rychlost nejen
-na~vstupních datech, ale také na~nastavení toleranční 
-vzdálenosti.
+Pro účely testování byla vytvořena jednoduchá konzolová aplikace, která je
+spo\-lečně s~testovanými daty také obsahem přiloženého CD (viz 
+příloha~\ref{priloha-obsahCD}). Příklad použití této aplikace pro testování je
+pak popsán v~příloze~\ref{priloha-testovani}.
 
 \section{Vertex Snapper}
 \label{problemy-vs}
