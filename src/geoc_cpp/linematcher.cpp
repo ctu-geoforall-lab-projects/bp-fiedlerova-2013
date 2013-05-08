@@ -153,19 +153,16 @@ void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & cl
             lastId = i+1;
 
             delete match;
-            delete result;
         }
 
         delete segment;
     }
 
     // add also last part of line
-    LineString *ls = gf->createLineString( newLine );
-    vc.push_back( ls );
+    vc.push_back( gf->createLineString( newLine ));
 
     // create new line from matched segments
-    MultiLineString *mls = gf->createMultiLineString( vc );
-    gline->setGEOSGeom( mls );
+    gline->setGEOSGeom( gf->createMultiLineString( vc ) );
     gline->setChanged( true );
 
     delete line;

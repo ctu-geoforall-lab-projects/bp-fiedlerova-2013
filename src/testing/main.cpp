@@ -15,7 +15,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-static int parse_opt(int, const char **, QString &, QString &, QString &);
+static int parse_opt(int, const char **, QString &, QString &, QString &, short &, double &);
 static QgsVectorLayer *open_layer(QString, QString);
 
 void log_and_exit(const char *fmt, ...) {
@@ -45,6 +45,8 @@ int main(int argc, const char **argv)
     //initGEOS(notice, log_and_exit);
 
     QString input_ref, input_sub, output;
+    short method;
+    double tolerance;
 
     QgsVectorLayer *refLayer;
     QgsVectorLayer *subLayer;
@@ -52,7 +54,7 @@ int main(int argc, const char **argv)
     
     QgsConflateProvider *cProvider;
     
-    if (0 != parse_opt(argc, argv, input_ref, input_sub, output))
+    if (0 != parse_opt(argc, argv, input_ref, input_sub, output, method, tolerance))
         return EXIT_FAILURE;
 
     QgsProviderRegistry::instance("/opt/Quantum-GIS/build/output/lib/qgis/plugins/");
@@ -74,7 +76,7 @@ int main(int argc, const char **argv)
 
     cProvider->setRefVectorLayer(refLayer);
     cProvider->setSubVectorLayer(subLayer);
-    cProvider->setTolDistance(100);
+    cProvider->setTolDistance(tolerance);
     cProvider->setMatchCriterium(0.7);
     cProvider->setRepair(false);
 
@@ -82,30 +84,42 @@ int main(int argc, const char **argv)
     cProvider->copyLayer(output + ".shp");
 
     // do something ...
-    //cProvider->vertexSnap();
-    cProvider->align();
-    //cProvider->lineMatch();
+    if(method == 1)
+    {
+       cProvider->vertexSnap();
+    }
+    else if(method == 2)
+    {
+        cProvider->align();
+    }
+    else if(method == 3)
+    {
+        cProvider->lineMatch();
+    }
+
+    newLayer = cProvider->getNewVectorLayer();
+
     clock_t end = clock();    // end of measuring time
 
     std::cout<< "time: "<< ((double)(end - start)/CLOCKS_PER_SEC) << std::endl;
-
-    newLayer = cProvider->getNewVectorLayer();
     
     //finishGEOS();
 
     exit(EXIT_SUCCESS);
 }
 
-int parse_opt(int argc, const char **argv, QString &input_ref, QString &input_sub, QString &output)
+int parse_opt(int argc, const char **argv, QString &input_ref, QString &input_sub, QString &output, short &method, double &tolerance)
 {
-    if (argc != 4) {
-        cerr << "Usage: input_ref input_sub output" << endl;
+    if (argc != 6) {
+        cerr << "Usage: input_ref input_sub output method tolerance" << endl;
         return -1;
     }
 
     input_ref = argv[1];
     input_sub = argv[2];
     output    = argv[3];
+    method    = QString(argv[4]).toShort();
+    tolerance = QString(argv[5]).toDouble();
     
     return 0;
 }
