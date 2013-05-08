@@ -64,7 +64,6 @@ void  MatchingGeometry::closeGeometries( const Geometry *geom )
     // get close geometries
     for ( size_t j = 0; j < rSize; j++ )
     {
-        qDebug("closeGeometries: get close geometries - for");
         // get envelope of tested feature
         Geometry *searchGeom = static_cast<Geometry*>( results[j] );
         Envelope subEnv = *( geom->getEnvelopeInternal() );

@@ -77,7 +77,9 @@ void VertexSnapper::snap()
             if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
             {
                 // add coordinates from close features
-                closeCoord->add( searchGeom->getCoordinates(), true, true );
+                CoordinateSequence *cs = searchGeom->getCoordinates();
+                closeCoord->add( cs, true, true );
+                delete cs;
             }
         }
 

@@ -56,6 +56,8 @@ void LineMatcher::match()
     // set diffMax
     longestLine();
 
+    CoordinateSequence *cs = NULL;
+
     for ( size_t i = 0; i < subGeometry.size(); i++ )
     {
         // find close features from the reference layer
@@ -78,9 +80,10 @@ void LineMatcher::match()
             if ( subEnv.intersects( searchGeom->getEnvelopeInternal() ) )
             {
                 // add coordinates from close features
-                CoordinateSequence *cs = geos::geom::CoordinateSequence::removeRepeatedPoints(
-                                         searchGeom->getCoordinates() );
+                const CoordinateSequence *c = searchGeom->getCoordinates();
+                cs = geos::geom::CoordinateSequence::removeRepeatedPoints( c );
                 closeLines.push_back( cs );
+                delete c;
             }
 
         }
@@ -102,18 +105,22 @@ void LineMatcher::match()
 
     } // for
 
+    delete cs;
+
 } // void LineMatcher::match()
 
 
 void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & closeLines )
 {
 
-    const CoordinateSequence * line = geos::geom::CoordinateSequence::removeRepeatedPoints(
-                                      gline->getGEOSGeom()->getCoordinates() );
+    const CoordinateSequence *cs = gline->getGEOSGeom()->getCoordinates();
+    const CoordinateSequence * line = geos::geom::CoordinateSequence::removeRepeatedPoints(cs);
     const GeometryFactory *gf = gline->getGEOSGeom()->getFactory();
     CoordinateSequence * newLine = new CoordinateArraySequence();
     vector<Geometry *> vc;
     size_t lastId = 0;
+
+    delete cs;
 
     // for each segment
     for (size_t i = 0; i < line->size()-1; i++ )
@@ -145,18 +152,23 @@ void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & cl
 
             lastId = i+1;
 
+            delete match;
+            delete result;
         }
 
         delete segment;
     }
 
     // add also last part of line
-    vc.push_back( gf->createLineString(newLine) );
+    LineString *ls = gf->createLineString( newLine );
+    vc.push_back( ls );
 
     // create new line from matched segments
-    gline->setGEOSGeom( gf->createMultiLineString( vc ) );
+    MultiLineString *mls = gf->createMultiLineString( vc );
+    gline->setGEOSGeom( mls );
     gline->setChanged( true );
 
+    delete line;
     delete newLine;
 
 } // void LineMatcher::matchLine( GEOCGeom * line, vector<CoordinateSequence *> & closeLines )
@@ -396,6 +408,8 @@ void LineMatcher::longestLine()
                 diffMax = dl;
             }
         }
+
+        delete cs;
     }
 
 } // double LineMatcher::longestLine()

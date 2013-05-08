@@ -101,7 +101,9 @@ void CoverageAlignment::chooseMatchingPoints()
 
             findClosestPoints( g1, g2 );
 
-            mfPoints->add( g1->getCoordinates(), false, true );
+            CoordinateSequence *cs = g1->getCoordinates();
+            mfPoints->add( cs, false, true );
+            delete cs;
 
         }
     }
@@ -381,7 +383,6 @@ void CoverageAlignment::transform()
         }
 
     }
-
 
 } // void CoverageAlignment::transform()
 

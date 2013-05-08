@@ -45,7 +45,7 @@ SpatialIndex * SpatialIndexBuilder::buildIndex( TGeomLayer * layer)
 } // SpatialIndex * SpatialIndexBuilder::buildIndex( TGeomLayer * layer)
 
 
-SpatialIndex *SpatialIndexBuilder::buildIndex( TTin *t )
+SpatialIndex *SpatialIndexBuilder::buildIndex( TTin * t )
 {
     // create new index
     SpatialIndex *sIndex = new STRtree();
@@ -63,7 +63,7 @@ SpatialIndex *SpatialIndexBuilder::buildIndex( TTin *t )
 
     return sIndex;
 
-} // SpatialIndex *SpatialIndexBuilder::buildIndex( TTin *t )
+} // SpatialIndex *SpatialIndexBuilder::buildIndex( TTin * t )
 
 } // namespace geoc
 } // namespace idx

@@ -40,7 +40,6 @@ CoordinateSequence* GeometryCorrectionOperation::edit(const CoordinateSequence *
         {
             // remove dead branches
             removeDeadBranch(coord);
-
             // repair crossing
             removeCrosses(coord);
         }
