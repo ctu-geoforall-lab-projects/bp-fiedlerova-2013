@@ -10,7 +10,7 @@ kterou bude možné případně použít i~v~jiných programech a~projektech.
 Tato kapitola popisuje jednotlivé algoritmy a~jejich implementaci v~knihovně
 \zk{GEOC}, zároveň také stručně pojednává o~možnostech  jejich využití.
 Podrobný popis jednotlivých tříd a~jejich metod lze najít
-v~dokumentaci na~přiloženém CD~(\ref{priloha-obsahCD}). 
+v~dokumentaci na~přiloženém CD~(viz příloha~\ref{priloha-obsahCD}). 
 
 
 \section{Reprezentace geometrie}
@@ -31,7 +31,7 @@ Při zpracování vrstev z~více zdrojů někdy stačí pouze upřesnit polohu �
 prvků z~cílové vrstvy tak, aby se přiblížil prvkům z~vrstvy referenční. 
 \mbox{Není-li} podrobnost obou datasetů příliš rozdílná, lze využít jednoduchého 
 postupu \textbf{přichycení blízkých vrcholů}. Tento algoritmus byl inspirován
-stejnojmenným zásuvným mo\-dulem knihovny \zk{JCS} (viz kap. \ref{jcs-plugin}).
+stejnojmenným zásuvným mo\-dulem knihovny \zk{JCS} (viz kapitola~\ref{jcs-plugin}).
 
 
 \subsection{Popis algoritmu}
@@ -56,8 +56,7 @@ popsat následujícími několika body.
     a~vyhledávají se k~nim blízké body z~prvků vrstvy referenční. 
 \end{enumerate}
 
-\label{vspic}
-  \begin{figure}[h!]
+  \begin{figure}[H]
     \centering
       \input{./pictures/vs-princip.pdf_tex}
       \caption{Postup přichycení vrcholů}
@@ -69,9 +68,11 @@ popsat následujícími několika body.
 \label{vs-implementace}
 Algoritmus pro~přichycení vrcholů upravované vrstvy k~referenční 
 je implementován ve~třídách \texttt{Vertex\-Snapper} 
-a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Při~použití v~externí 
-aplikaci stačí po~předání vstupních parametrů (k~tomu slouží metody 
-\texttt{setRefGeometry()}, \texttt{setSubGeometry()} 
+a~\texttt{Vertex\-Geometry\-Editor\-Operation}. Lepší představu 
+o~jednotlivých třídách lze získat z~\zk{UML} diagramu  tříd
+v~příloze~\ref{priloha-uml}. Při~po\-užití v~externí aplikaci 
+stačí po~pře\-dání nezbytných vstupních parametrů (k~tomu 
+slouží metody \texttt{setRefGeometry()}, \texttt{setSubGeometry()} 
 a~\texttt{setTolDistance()}) třídě \texttt{Vertex\-Snapper} zavolat 
 funkci \texttt{snap()}. Ta vyhledá blízké prvky s~využitím prostorových 
 indexů sesta\-vených metodou \texttt{build\-Index()} třídy 
@@ -92,6 +93,7 @@ třídy \texttt{geos::geom::\-Geometry}.
 
 Výsledné geometrie lze získat zavoláním metody \texttt{getNewGeometry()},
 která vrací vektor s~interní reprezentací geometrií.
+
 
 
 \subsection{Využití}
@@ -176,9 +178,9 @@ následujícím způsobem.
  \item Pokud prvek B leží v~obalové zóně prvku A o~velikosti vzdálenostní 
     tolerance a~A leží v~obalové zóně prvku B o~stejné velikosti, je možné, 
     že si prvky odpovídají, a~pokračuje se dalším krokem. Situace je naznačena
-    na~obrázku \ref{fig:buffer}. V~opačném případě si prvky neodpovídají.
+    na~obrázku~\ref{fig:buffer}. V~opačném případě si prvky neodpovídají.
  \item Dále se testuje, zda hranice prvku B leží v~obalové zóně hranice prvku
-    A a~naopak (viz obrázek \ref{fig:buffer-boundary}). Je-li splněna i~tato 
+    A a~naopak (viz obrázek~\ref{fig:buffer-boundary}). Je-li splněna i~tato 
     podmínka, pak jsou prvky označeny za~odpovídající si.
 \end{enumerate}
 
@@ -209,8 +211,8 @@ kroky algoritmu.
 
 Nejdříve je třeba nalézt odpovídající si prvky. K~tomu slouží třída 
 \texttt{Matching\-Geometry}, která k~dané geometrii najde odpovídající
-(\texttt{set\-Match()}). Obdobně jako u~\texttt{Vertex\-Snapper} je i~zde 
-při hledání blízkých prvků využíváno prostorových indexů, které jsou 
+(metoda \texttt{set\-Match()}). Obdobně jako u~\texttt{Vertex\-Snapper} je i~zde 
+při hledání blízkých prvků využíváno prostoro\-vých indexů, které jsou 
 vytvořeny metodou \texttt{SpatialndexBuilder::build\-Index()}. Testy
 obalových zón jsou prováděny za~pomoci prostorových funkcí 
 \texttt{buffer()}, která vytvoří obalovou zónu, \texttt{getBoundary()},
@@ -218,7 +220,7 @@ která vrací hranici geometrie, a~konečně \texttt{contains()}, která
 testuje, zda jedna geometrie obsahuje druhou. Všechny jsou přitom
 metodami třídy \texttt{geos::geom::Geometry}.
 
-Určení blízkých bodů je pak provedeno prostřednictvím metody 
+Určení blízkých bodů je provedeno prostřednictvím metody 
 \texttt{choose\-Matching\-Points()}, která dále využívá
 \texttt{find\-Closest\-Points()} a~\texttt{clean\-Matching\-Points()} 
 třídy \texttt{Coverage\-Alignment}.
@@ -235,13 +237,16 @@ která transformuje prvky na~základě předané geometrie a~triangulační
 sítě. Ta je volána prostřednictvím třídy pro editaci 
 \texttt{Align\-Geo\-metry\-Edi\-tor\-Ope\-ra\-tion}.
 
+Propojení jednotlivých tříd a~nejdůležitější metody zobrazuje \zk{UML}
+diagram tříd  pro tento algoritmus v~příloze~\ref{priloha-uml}.
+
 
 \subsection{Využití}
 \label{ca-vyuziti}
 
 Na~rozdíl od~předchozího algoritmu je tento trochu šířeji využitelný. Je opět 
 vhodný pro~zpřesnění vrstvy dle vrstvy referenční, avšak tentokrát nejsou 
-pouze přichytávány blízké vrcholy, ale jsou upravovány téměř všechny vrcholy. 
+pouze přichytá\-vány blízké vrcholy, ale jsou upravovány téměř všechny vrcholy. 
 To zajišťuje reálnější výsledky i~v situacích, kdy hustota vrcholů v~obou 
 datasetech je velmi rozdílná.
 
@@ -307,7 +312,8 @@ vzdálenosti krajních bodů dvojice segmentů z~obou datasetů.
 \subsection{Implementace}
 \label{lm-implementace}
 
-Veškeré funkce pro tento algoritmus jsou obsaženy ve~třídě \texttt{Line\-Matcher}.
+Veškeré funkce pro tento algoritmus jsou obsaženy ve~třídě \texttt{Line\-Matcher}
+(blíže viz příloha~\ref{priloha-uml}, obrázek~\ref{fig:uml-lm}).
 
 Funkce \texttt{match()} hledá postupně ke~každé linii blízké linie z~druhého datasetu.
 Následně předá výsledky tohoto hledání metodě \texttt{match\-Line()}, která ke~každému
@@ -318,7 +324,6 @@ prvku tak může vzniknout multiprvek. Pro vytváření nových geometrií jsou 
 metody \texttt{createLineString()} a~\texttt{createMultiLineString()} třídy 
 \texttt{geos::geom::GeometryFactory} knihovny \zk{GEOS}.
  
-
 Výpočet kritérií podobnosti segmentů se nachází v~metodě \texttt{similarity()}. 
 
 \subsection{Využití}

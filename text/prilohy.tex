@@ -181,26 +181,26 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
 %%                 PŘÍLOHA - UML DIAGRAMY TŘÍD                                   %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{UML diagramy tříd}
-\label{priloha-diagramy}
+\label{priloha-uml}
 
 Následující UML diagramy zobrazují třídy spojené s~jednotlivými 
 algoritmy a~jejich nejdůležitější atributy a~metody.
 
-  \begin{figure}[hbt]
+  \begin{figure}[ht]
     \centering
       \includegraphics[width=420pt]{./pictures/uml-vs.pdf}
       \caption{UML diagram tříd pro VertexSnapper}
       \label{fig:uml-vs}
   \end{figure}
 
-  \begin{figure}[hbt]
+  \begin{figure}[t]
     \centering
       \includegraphics[width=420pt]{./pictures/uml-ca.pdf}
       \caption{UML diagram tříd pro CoverageAlignment}
       \label{fig:uml-ca}
   \end{figure}
 
-  \begin{figure}[hbt]
+  \begin{figure}[t]
     \centering
       \includegraphics[width=420pt]{./pictures/uml-lm.pdf}
       \caption{UML diagram tříd pro LineMatcher}
@@ -216,9 +216,8 @@ algoritmy a~jejich nejdůležitější atributy a~metody.
 Tato příručka je psána pro použití modulu \textbf{Conflate} v~Quantum GIS 1.9.0 , 
 v~jiných verzích se může způsob načtení modulu, popř. i~jiné činnosti mírně lišit.
 
-\section{Instalace}
-\label{prirucka-instalace}
-Instalace ... %Je potřeba knihovna \textit{GEOC} ..
+% \section{Instalace}
+% \label{prirucka-instalace}
 
 \section{Načtení zásuvného modulu}
 \label{prirucka-nacteni}
@@ -323,7 +322,7 @@ za~chybné.
 \subsection{Výstupní vrstva}
 
 Před spuštěním zpracování lze ještě nastavit název a~cestu, kam se má uložit
-výsledný soubor. Upravená vrstva se vždy uloží jako nová vrstva ve~formátu 
+vý\-sledný soubor. Upravená vrstva se vždy uloží jako nová vrstva ve~formátu 
 \textit{shapefile}. Do~pole \textit{Output shapefile} lze zadat \textbf{cestu 
 k~výstupnímu souboru}, popřípadě ji vybrat pomocí tlačítka \textit{Browse} 
 (\textit{Procházet}) vpravo. 
@@ -448,7 +447,8 @@ editačních nástrojů QGISu.
     \centering
       \includegraphics[width=400pt]{./pictures/test-ca4.png}
       \caption[CoverageAlignment- porovnání]{CoverageAlignment 
-	- porovnání zarovnání s~toleranční vzdáleností 500 a~1000 m}
+	- porovnání zarovnání s~toleranční vzdáleností 500~m~(zelená)
+	a~1000 m (modrá)}
       \label{fig:ca4}
   \end{figure}
 
@@ -481,3 +481,53 @@ editačních nástrojů QGISu.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Obsah CD}
 \label{priloha-obsahCD}
+
+\setlength{\unitlength}{.5mm}
+\begin{picture}(250, 210)
+  \put(  0, 197){\textbf{.}}
+  \put(  1, 190){\line(0, 1){5}}
+  \put(  1, 190){\line(1, 0){10} {\textbf{ plugin}}}
+  \put( 16, 180){\line(0, 1){8}}
+  \put( 16, 180){\line(1, 0){10} {\textbf{ lib}}}
+  \put(150, 180){ potřebné knihovny}
+  \put( 16, 170){\line(0, 1){10}}
+  \put( 16, 170){\line(1, 0){10} {\textbf{ license}}}
+  \put(150, 170){ adresář s~licencí GNU GPL}
+  \put( 16, 160){\line(0, 1){10}}
+  \put( 16, 160){\line(1, 0){10} {\textbf{ src}}}
+  \put(150, 160){ zdrojové soubory programu}
+  \put( 16, 150){\line(0, 1){10}}
+  \put( 16, 150){\line(1, 0){10} {\textbf{ doc}}}
+  \put(150, 150){ Doxygen dokumentace}
+  \put( 16, 140){\line(0, 1){10}}
+  \put( 16, 140){\line(1, 0){10} { libqgsconflate.so}}
+  \put(150, 140){ plugin (knihovna)}
+  \put(  1, 130){\line(0, 1){60}}
+  \put(  1, 130){\line(1, 0){10} {\textbf{ GEOC}}}
+  \put( 16, 120){\line(0, 1){8}}
+  \put( 16, 120){\line(1, 0){10} {\textbf{ lib}}}
+  \put(150, 120){ potřebné knihovny}
+  \put( 16, 110){\line(0, 1){10}}
+  \put( 16, 110){\line(1, 0){10} {\textbf{ src}}}
+  \put(150, 110){ zdrojové kódy knihovny}
+  \put( 16, 100){\line(0, 1){10}}
+  \put( 16, 100){\line(1, 0){10} {\textbf{ doc}}}
+  \put(150, 100){ Doxygen dokumentace}
+  \put( 16,  90){\line(0, 1){10}}
+  \put( 16,  90){\line(1, 0){10} { libgeoc.so}}
+  \put(150,  90){ geoc (knihovna)}
+  \put(  1,  80){\line(0, 1){50}}
+  \put(  1,  80){\line(1, 0){10} {\textbf{ text}}}
+  \put( 16,  70){\line(0, 1){8}}
+  \put( 16,  70){\line(1, 0){10} {\textbf{ latex}}}
+  \put(150,  70){ zdrojové soubory textu této práce}
+  \put( 16,  60){\line(0, 1){10}}
+  \put( 16,  60){\line(1, 0){10} { tereza-fiedlerova-bp-2013.xls}}
+  \put(150,  60){ anotace práce}
+  \put( 16,  50){\line(0, 1){10}}
+  \put( 16,  50){\line(1, 0){10} { tereza-fiedlerova-bp-2013.pdf}}
+  \put(150,  50){ tento text}
+  \put( 16,  40){\line(0, 1){10}}
+  \put( 16,  40){\line(1, 0){10} { zadani-oficialni.jpeg}}
+  \put(150,  40){ naskenované oficiální zadání práce}
+\end{picture}

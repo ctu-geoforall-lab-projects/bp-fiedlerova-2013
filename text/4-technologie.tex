@@ -6,10 +6,17 @@ při tvorbě zásuvného modulu a~externí knihovny využity. Uvedeny jsou pouze
 základní informace o~jednotlivých projektech, více podrobností lze
 nalézt na~uvedených oficiálních internetových stránkách projektů.
 
-%%% ML: pridat logo projektu QGIS a QT?
 
 \section{Quantum GIS}
 \label{qgis}
+
+  \begin{figure}[H]
+    \centering
+      \includegraphics[width=120pt]{./pictures/qgis.png}
+      \caption[QGIS logo]{QGIS logo 
+      (zdroj: \url{http://www.qgis.org/wiki/File:QGis_Logo.png})}
+      \label{fig:qgis}
+  \end{figure}
 
 \zkratka{QGIS} je \textit{open source} multiplatformní geografický 
 informační ná\-stroj, který patří mezi~oficiální projekty \zk{OSGeo}.
@@ -37,8 +44,7 @@ stal plnohodnotným geografickým informačním systémem.
 knihovny \zkratkatext{JTS} (viz kap. \ref{jts}) do~jazyka C++. Záměrem 
 projektu je poskytovat kompletní funkcionalitu \zk{JTS} pro~C++. Knihovna 
 byla původně vyvíjena firmou Refractions Research of Victoria, Canada. Nyní 
-je projektem \zkratka{OSGeo}\footnote{\url{http://www.osgeo.org/}}  a~je 
-dostupná pod licencí \zkratka{LGPL}.
+je projektem \zkratka{OSGeo} a~je dostupná pod licencí \zkratka{LGPL}.
 
 Knihovna \zk{GEOS} implementuje třídy pro reprezentaci geometrických
 objektů (bod, linie, polygon, vícenásobný bod, geometrická kolekce
@@ -53,39 +59,34 @@ geometrie geografických objektů apod.} formáty. Stejně jako knihovna
 \zk{JTS} se řídí specifikací \textit{Simple Features} pro \zk{SQL}.
 Obsahuje C~i~C++ API.
 
-% (\texttt{Point, LineString, Polygon, MultiPoint, MultiLineString,
-% MultiPolygon} a \texttt{GeometryCollection})
-
-% \texttt{Intersects, Touches, Disjoint, Crosses, Within, Contains,
-% Overlaps, Equals, Covers}
-% \texttt{Union, Distance,
-% Intersection, Symmetric Difference, Convex Hull, Envelope, Buffer, 
-% Simplify, Polygon Assembly, Valid, Area, Length}
-
-
 \section{Qt projekt}
 \label{qt}
 
-Qt\footnote{\url{http://qt.digia.com/}} je multiplatformní knihovna pro 
-vývoj aplikací včetně grafického uživatelského rozhraní určená především 
-pro vývojáře pracující v~jazyce C++, existuje však i~pro některé další 
-jazyky.
+  \begin{figure}[hbt]
+    \centering
+      \includegraphics[width=100pt]{./pictures/qt.png}
+      \caption[Qt logo]{Qt logo 
+	(zdroj: \url{http://qt.digia.com/About-us/Logos-for-Download/})}
+      \label{fig:qt}
+  \end{figure}
 
-Projekt Qt byl vyvinut v~roce 1999 norskou společností Trolltech, v~roce 
-2008 ho tato firma prodala firmě Nokia, až nakonec v~roce 2012 skončil 
-v~rukou společnosti Digia. Přes všechny tyto změny však zůstal jedním 
-z~oblíbených nástrojů pro vytváření desktopových a~mobilních aplikací 
-s~grafickým rozhraním. \textit{Qt} je licencován pod \textit{open source} 
-licencemi \zk{LGPL} verze 2.1, \zk{GPL} verze 3.0, ale existuje i~komerční 
-licence pro~vývoj proprietárních 
-projektů\footnote{\url{http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html}}.
+Qt je multiplatformní knihovna pro vývoj aplikací včetně grafického 
+uživatelského rozhraní určená především pro vývojáře pracující 
+v~jazyce C++, existuje však i~pro některé další jazyky.
+
+Projekt Qt\footnote{\url{http://qt.digia.com/}} byl vyvinut v~roce 1999 
+norskou společností Trolltech, v~roce 2008 ho tato firma prodala firmě 
+Nokia, až nakonec v~roce 2012 skončil v~rukou společnosti Digia. 
+Přes všechny tyto změny však zůstal jedním z~oblíbených nástrojů pro 
+vytváření desktopových a~mobilních aplikací s~grafickým rozhraním. 
+\textit{Qt} je licencován pod \textit{open source} licencemi \zk{LGPL} 
+verze 2.1, \zk{GPL} verze 3.0, ale existuje i~komerční licence pro~vývoj
+ proprietárních projektů.
 
 V~rámci projektu nevznikla pouze knihovna, ale i~řada nástrojů usnadňujících
 vývoj aplikací. Jedním z nich je i~program \textbf{Qt Creator}. Jedná se 
 o~vývojové prostředí~(\zk{IDE}) obsahující mimo jiné i~nástroj pro návrh 
 grafického rozhraní\linebreak[10] (\textit{\zk{UI}~designer}) a~nástroje pro 
-\textit{debugging}\footnote{Testování, ladění počítačového programu.}.
+\textit{debugging} (testování, ladění počítačového programu).
 Tento nástroj byl použit pro tvorbu zásuv\-ného modulu i~knihovny, jež jsou
 výsledkem této práce.
-
-%%% ML: prilis mnoho poznamek pod carou

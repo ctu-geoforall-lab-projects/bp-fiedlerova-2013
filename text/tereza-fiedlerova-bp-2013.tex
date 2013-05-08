@@ -22,62 +22,53 @@
 
 \usepackage{caption}
 \usepackage{subcaption}
-%% Správné nastavení mezer před sekcemi
-%\usepackage[setspace]
-%\onehalfspacing
-\usepackage[compact]{titlesec}
-%\titleformat{\subsubsection}{\normalfont\bfseries}{\thesection}{1em}{}
-%\titlespacing*{\subsubsection}{0em}{1em}{0.5em}
+\captionsetup{font=small}
 
-%\raggedbottom % nehlídá stejnou velikost stránek -> neroztahuje mezery mezi obrázky apod. X dává pozn. pod čarou nahoru
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatletter
 
-\usepackage[dvips]{graphicx}    % Balíček 'graphicx' pro vkládání obrázků
-\usepackage{color}% pro svg obrázky
+\usepackage[dvips]{graphicx}   
+\usepackage{color}
 \usepackage{transparent}
+\usepackage{wrapfig}
+\usepackage{float} 
 
-\usepackage{wrapfig}        % pro obtékání textu kolem obrázků a tabulek 
-
-\usepackage{cmap}           % pro správné mapování znaků v pdf na Unicode
-\usepackage[T1]{fontenc}    % totéž  
-
-\usepackage{float} % pro umístění obrázků apod.
+\usepackage{cmap}           
+\usepackage[T1]{fontenc}    
 
 \usepackage{textcomp}
-
-\usepackage{amsmath} % pro aligned
+\usepackage[compact]{titlesec}
+\usepackage{amsmath}
 \addtolength{\jot}{1em} % 
 
 \usepackage[
-    nohyperlinks    % Nebudou tvořeny hypertextové odkazy do seznamu zkratek
-]{acronym}          % pro sazby zkratek a symbolů
-                    % Nutné pro použití prostředí 'seznamzkratek'
-                    % při volbě 'cvutstyle' balíčku 'thesiscvut'
+    nohyperlinks    
+]{acronym}
 
 \usepackage[
-    unicode,                % záložky a informace budou v kódování unicode
-    breaklinks=true,        % hypertextové odkazy mohou obsahovat zalomení řádku
-    hypertexnames=false,    % názvy hypertextových odkazů nezávisle na názvech TeXu
+    unicode,                
+    breaklinks=true,        
+    hypertexnames=false,
     colorlinks=true,        % kolem odkazů nebude rámeček, odkazy budou barvou:
     citecolor=black,
     filecolor=black,
     linkcolor=black,
     urlcolor=black
-]{hyperref}         % pro sazbu hypertextových odkazů
-                    % Nutné pro použití příkazu 'nastavenipdf'
-                    % při volbě 'cvutstyle' balíčku 'thesiscvut'
+]{hyperref}         
 
-\usepackage{url}        %zalamovani radku v internetovem odkazu
+\usepackage{url}
 
-\usepackage{fancyhdr}   %zahlavi, zapati
+\usepackage{fancyhdr}
 
-\usepackage[%
-  cvutstyle,          % Úvodní listy budou podle zvyklostí na ČVUT
-  bachelor            % sazba bakalářské práce
-]{thesiscvut}       % Balíček pro sazbu studentských prací
+\usepackage[
+  cvutstyle,          
+  bachelor           
+]{thesiscvut}
 
-\usepackage{enumitem} % pro nastavení číslování
-%\setlist{noitemsep} % bez mezer mezi položkami
-\setlist{\itemsep=0.2em,\topsep=0.5em,\parsep=0em, \parskip=0em} % nastaveni mezer mezi položkami a před seznamem -- NEFUNGUJE!!
+\usepackage{enumitem} 
+%\setlist{\itemsep=0.2em,\topsep=0.5em,\parsep=0em, \parskip=0em} % nastaveni mezer mezi položkami a před seznamem
 \setlist{leftmargin=*} % bez odsazení
 
 
@@ -88,7 +79,7 @@
     \webtrue
 \fi 
 
-\renewcommand{\figurename}{Obrázek} % Pro český popis obrázku
+\renewcommand{\figurename}{Obrázek}
 \def\figurename{Obrázek}
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
@@ -152,17 +143,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Nastavení polí ve Vlastnostech dokumentu PDF
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Při vloženém balíčku 'hyperref' 
-%% lze použít příkaz '\nastavenipdf'
 \nastavenipdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Začátek dokumentu
 \begin{document}
-
-%\title{Tvorba QGIS zásuvného modulu pro slučování vektorových map}
-%\author{Tereza Fiedlerová}
-%\date{\today}
 
 \catcode`\-=12  % pro vypnuti aktivniho znaku '-' pouzivaneho napr. v \cline 
 
@@ -205,7 +190,9 @@
 	\vspace{1em}
 		%\noindent
 	\par\hspace{2ex}
-	{Chtěla bych poděkovat vedoucímu ............... práce za připomínky a pomoc při zpracování této práce. Dále bych chtěla poděkovat \dots}
+	{Chtěla bych poděkovat vedoucímu mé bakalářské práce, Ing. Martinu Landovi, 
+	za připomínky a pomoc při zpracování této práce. Dále bych chtěla poděkovat
+	své rodině a~svému příteli za projevenou podporu a~trpělivost.}
 }
 
 % Vysázení obsahu

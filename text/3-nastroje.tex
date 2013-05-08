@@ -69,6 +69,14 @@ najednou pro více vybraných prvků.
 
 \subsubsection{Integrate}
 
+  \begin{figure}[H]
+    \centering
+      \includegraphics[width=250pt]{./pictures/integrate.png}
+      \caption[Integrate - princip]{Integrate - princip 
+	  (zdroj: \url{http://resources.arcgis.com/en/help/main/10.1/index.html\#//00170000002s000000})}
+      \label{fig:integrate}
+  \end{figure}
+
 Nástroj \textit{Integrate} umožňuje sladění dvou datasetů. Na~vstupu vyžaduje 
 dvě či více vrstev, které chceme zarovnat, a~dále maximální vzdálenost, při~které
 lze považovat prvky za~odpovídající si. U~každého datasetu navíc lze zadat 
@@ -134,7 +142,7 @@ nebo poloautomatické sloučení vektorových datasetů, případně jejich atri
 Ovšem většinou je cesta k~dosažení cíle pomocí těchto nástrojů poměrně složitá 
 a~ne vždy jsou výsledky takové, jak bychom si představovali. Asi jediným 
 ucelenějším nástrojem je knihovna \zkratka{JCS} implementovaná jako kolekce 
-zásuvných modulů v~programu OpenJUMP\footnote{\url{http://www.openjump.org/}}.
+zásuvných modulů v~programu OpenJUMP.
 
 
 \subsection{JCS - Java Conflation Suite}
@@ -167,12 +175,11 @@ obsahující algoritmy pro kontrolu a~slučo\-vání prostorových dat
 implementovány v~podobě kolekce zásuvných modulů - \textit{QA, Conflate, 
 RoadMatcher}.
 
-\label{jcspic}
   \begin{figure}[H]
     \centering
-      \includegraphics[width=300pt]{./pictures/JCS_Architecture.png}
-      \caption{Architektura JCS 
-	  (\url{http://www.vividsolutions.com/JCS/images/)}}
+      \includegraphics[width=280pt]{./pictures/JCS_Architecture.png}
+      \caption[Architektura JCS]{Architektura JCS 
+	  (zdroj: \url{http://www.vividsolutions.com/JCS/images/})}
       \label{fig:architektura}
   \end{figure}
 
@@ -204,7 +211,7 @@ oblasti atd.
 Projekt \zk{JCS} neumožňuje změnu souřadnicového systému. Proto se
 automaticky přepokládá, že vrstvy vstupující do~zpracování mají stejný
 prostorový referenční systém. Souřadnice bodů výstupních vrstev mají vždy
-desetinnou přesnost.  %% JE TO SPRÁVNĚ ??
+desetinnou přesnost.
 
 Při většině výpočtů v~zásuvných modulech \zk{JCS} je využívána tzv. 
 Hausdorffova metrika. Na~rozdíl od~euklidovské metriky totiž nezkoumá jen
@@ -236,8 +243,6 @@ nepočítá se přitom přímo tato vzdálenost. Rozhodující je, jestliže oba
 zóna o~velikosti vzdálenostní tolerance prvního prvku obsahuje prvek druhý 
 a~naopak. Tato podmínka je ekvivalentní k~podmínce, že Hausdorffova vzdálenost
 musí být menší nebo rovna toleranci. 
-
-%% ML: doplnit ilustraci? .. stejná jako u popisu meho algoritmu CoverageAlignment
 
 Pro~odstraňování překrytů či mezer neexistuje exaktní algoritmus,
 ale jsou vy\-užívány různé heuristiky poskytující dobré topologické výsledky.
@@ -387,7 +392,6 @@ Tento nástroj však je stále označen jako experimentální, což znamená, ž
 vždy funguje zcela správně. Nástroj umožňuje zarovnat prvky jedné vrstvy tak,
 aby souhlasily s~prvky druhé vrstvy, která je označena za~referenční. 
 
-\label{josmpic}
   \begin{figure}[hbt]
     \centering
       \includegraphics[width=280pt]{./pictures/josm.png}
@@ -432,10 +436,9 @@ spojení map, poskytuje nástroje pro následnou kontrolu kvali\-ty výsledné m
 Je navržen tak, aby bylo snadné implementovat nové techniky a~algoritmy v~této 
 oblasti.  
 
-% \label{mbppic}
-%   \begin{figure}[hbt]
-%     \centering
-%       \includegraphics[width=280pt]{./pictures/MBPconflate.png}
-%       \caption{MBPConflate (\todo{zdroj})}
-%       \label{fig:mbp}
-%   \end{figure}
+   \begin{figure}[hbt]
+     \centering
+       \includegraphics[width=280pt]{./pictures/MBPconflate.png}
+       \caption[MBPConflate]{MBPConflate (zdroj: \cite{mbp})}
+       \label{fig:mbp}
+   \end{figure}

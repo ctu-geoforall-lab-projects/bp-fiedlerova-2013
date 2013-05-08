@@ -1,15 +1,11 @@
 \chapter{Úvod}
 \label{1-uvod}
 
-%%% ML : budouci cas -> pritomny ?
-%%% Napr. Poslední dvě kapitoly budou věnovány ->
-%%%       Poslední dvě kapitoly jsou věnovány
-
 Spojování geografických dat z~různých zdrojů je jedním z~aktuálních
 problémů v~oblasti geografických informačních systémů (\zk{GIS}). 
 S~rostoucí dostupností di\-gitálních dat začala vzrůstat i~potřeba 
 tato data kombinovat a~porovnávat. Na~internetu je volně k~dispozici 
-spousta různých prostorových datasetů. Jejich přes\-nost, úplnost, 
+spousta různých prostorových dat. Jejich přes\-nost, úplnost, 
 atributy a~další vlastnosti jsou však velmi odlišné. Některé jsou 
 geo\-metricky přesné, ale neobsahují potřebné atributy nebo některé 
 žádoucí detaily. Méně přesné mapy s~potřebnými informacemi lze upravit 
@@ -24,7 +20,7 @@ dvou map o~stejné přesnosti, detekce změn a jiné. Záměrem je vždy
 vytvoření nové mapy, z~níž lze vyčíst informace, které by nebylo možné
 získat pouze z~jednoho vstupního zdroje.
 
-Vzhledem k~velkému množství datasetů a~jejich rozsahu je automatizace
+Vzhledem k~velkému množství datových sad a~jejich rozsahu je automatizace
 výše uvedených úloh logickým a~nevyhnutelným krokem. Ne vždy je však
 automatické zpracování zárukou úspěchu. Každý algoritmus má své limity
 a~nikdy nelze identifi\-kovat sto procent odpovídajících si prvků. To může
@@ -32,22 +28,22 @@ být ještě sníženo nejednoznač\-ností a~kvalitou vstupních dat. Proto je
 stále třeba dodatečná ruční úprava a~kontrola dat. Ta je však oproti 
 úspoře času díky automatickému zpracování často za\-ne\-dbatelná.
 
-Výstupem práce má být zásuvný modul pro program QGIS, který umožní spojení vektorových 
+Výstupem práce je zásuvný modul, který umožňuje spojení vektorových 
 map. Hlavním cílem je však vyhledání způsobů řešení tohoto problému 
-a~implementace některých z~nich. Předpokládá se, že vznikne knihovna 
+a~implementace některých z~nich. V~rámci práce vzniká také knihovna 
 s~algoritmy pro sjednocení vektorových dat, kterou bude možné dále 
-rozšiřovat a~doplňovat další funkcionalitu. Zásuvný modul bude využívat 
+rozšiřovat a~doplňovat další funkcionalitu. Zásuvný modul využívá 
 tuto knihovnu a~s~jejím rozšiřováním bude možné i~sem přidávat další 
 funkce.   
 
-V~následující kapitole bude podrobněji popsána problematika slučování 
-nejen vektorových map (\textit{conflation}). V~kapitole~\ref{3-nastroje} 
-pak budou představeny některé existující nástroje v~této oblasti. 
+V~následující kapitole je podrobněji popsána problematika slučování 
+nejen vektorových map (\textit{conflation}). V~části~\ref{3-nastroje} 
+pak jsou představeny některé existující nástroje v~této oblasti. 
 Po~krátkém výčtu použitých technologií (kapitola~\ref{4-technologie})
-se bude práce zabývat samotnou tvorbou knihovny a~zásuvného modulu. 
-Kapitola~\ref{5-geoc} bude popisovat jednotlivé algoritmy nově vznikající
-knihovny a~jejich implementaci. Následovat bude popis zásuvného modulu 
+už se práce zabývá samotnou tvorbou knihovny a~zásuvného modulu. 
+Kapitola~\ref{5-geoc} popisuje jednotlivé algoritmy nově vznikající
+knihovny a~jejich implementaci. Následuje popis zásuvného modulu 
 a~jeho funkcionality včetně ukázek jeho použití (oddíl~\ref{6-plugin}). 
-Poslední dvě kapitoly budou věnovány řešení problémů a~nápady na~další 
+Poslední dvě kapitoly jsou věnovány řešení problémů a~nápady na~další 
 vývoj a~vylepšení vzniklé aplikace.  
 

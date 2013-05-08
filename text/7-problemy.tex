@@ -5,10 +5,10 @@
 \label{problemy-geos}
 Jako poměrně zásadní problém se ukázalo použití knihovny \zk{GEOS}. 
 Přestože tato knihovna je napsána v~jazyce C++, obsahuje 
-\textit{wrapper}\footnote{Třída, program, knihovna apod., který slouží 
-ke~zprostředkování přístupu k~nějakému dalšímu programu. Jedná se pouze 
+\textit{wrapper} (třída, program, knihovna apod., který slouží 
+ke~zprostředkování přístupu k~nějakému dalšímu programu, jedná se pouze 
 o~nové rozhraní k~existujícímu programu, které má umožnit kompatibilitu
-s~externím programem apod.} v~podobě C~API. Hlavním důvodem toho je 
+s~externím programem apod.) v~podobě C~API. Hlavním důvodem toho je 
 zajištění vyšší stability. Při~použití C~API totiž není nutné vlastní 
 aplikaci, která ho používá, při~každé změně v~knihovně \zk{GEOS} překompilovat. 
 Proto většina programů využívajících \zk{GEOS} a~mezi nimi i~Quantum 
@@ -53,7 +53,7 @@ u~nichž to má smysl, tedy takové, jejichž minimální ohraničující obdél
 
 Použití prostorových indexů rychlost zpracování sice značně zvýšilo (podrobněji 
 v~kapitole~\ref{problemy-test}), ale stále trvá zpracování velmi obsáhlých dat 
-obzvláště u~algoritmu \linebreak[5] \texttt{Coverage\-Alignment} poměrně 
+obzvláště u~algo\-ritmu \texttt{Coverage\-Alignment} poměrně 
 dlouhou dobu. Zvýšení rychlosti by bylo možné dosáhnout použitím prostorových 
 indexů nejen při vyhledávání blízkých prvků, ale i~při následném hledání 
 blízkých bodů. V~těchto případech nebyly prostorové indexy využity z~toho 
