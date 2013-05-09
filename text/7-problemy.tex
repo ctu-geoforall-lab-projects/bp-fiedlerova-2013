@@ -45,11 +45,11 @@ operací a~čas zpracování pak výrazně roste. Tento problém byl částečn�
 aplikací prostorových indexů\footnote{Prostorové indexy jsou využívány pro 
 optimalizaci prostorových dotazů v~prostorových databázích.}. Konkrétně byla 
 využita třída \texttt{geos::index::strtree::STRtree} knihovny \zk{GEOS} .
-Tato třída implementuje metodu indexování dat založenou na~\textit{R-Tree}
-\footnote{Česky R-strom, prostorová stromová datová struktura využívající 
-minimální ohraničující obdélníky.}. Díky tomu se porovnávají pouze dvojice prvků, 
-u~nichž to má smysl, tedy takové, jejichž minimální ohraničující obdélníky 
-(v~některých algoritmech rozšířené o~toleranční vzdálenost) se protínají. 
+Tato třída implementuje metodu indexování dat založenou 
+na~\textit{R-Tree}\footnote{Česky R-strom, prostorová stromová datová struktura 
+využívající minimální ohraničující obdélníky.}. Díky tomu se porovnávají pouze 
+dvojice prvků, u~nichž to má smysl, tedy takové, jejichž minimální ohraničující 
+obdélníky (v~některých algoritmech rozšířené o~toleranční vzdálenost) se protínají. 
 
 Použití prostorových indexů rychlost zpracování sice značně zvýšilo (podrobněji 
 v~kapitole~\ref{problemy-test}), ale stále trvá zpracování velmi obsáhlých dat 
@@ -239,7 +239,7 @@ V~případě nevhodné konfigurace odpovídajících si trojúhelníků může v
 lokální transformace dojít ke~vzniku nevalidních geometrií. To je způsobeno
 faktem, že odpovídající trojúhelníky jsou sestrojovány z~odpovídajících si bodů,
 nikoli triangulací (tím by totiž mohly vzniknout trojúhelníky jiného tvaru). 
-Tudíž druhá trojúhelníková síť nemusí být platná. Nejsnazší řešení je vyřadit
+Tudíž druhá troj\-úhelníková síť nemusí být platná. Nejsnazší řešení je vyřadit
 takové body z~množiny vrcholů TIN a~vypočítat triangulaci znovu. 
 
 Tento problém úzce souvisí s~volbou toleranční vzdálenosti. Při dodržení pravidla

@@ -113,8 +113,8 @@ je umožnit snadnou údržbu dat v~rozsáhlých geografických databázích, kde
 data získávána z~různých zdrojů. Nástroj porovnává dva datasety obsahující 
 rozdílné reprezentace stejné skutečnosti. Nejdříve automaticky vytvoří 
 \textit{conflation links} indikující způsob spojení vrstev, které lze ještě
-ručně editovat. Následně umožní geometrie i~atributy těchto dvou reprezentací
-sjednotit. GeoMedia Fusion slouží k~úpravě bodových, liniových i~plošných dat
+ručně editovat. Následně geometrie i~atributy těchto dvou reprezentací
+sjednotí. GeoMedia Fusion slouží k~úpravě bodových, liniových i~plošných dat
 včetně jejich atributů. 
 
 
@@ -157,10 +157,9 @@ liniové datasety. Co se týče bodových vrstev, je její funkcionalita poměrn
 Knihovna \zk{JCS} je závislá na~knihovně 
 \zkratka{JTS}\footnote{\url{http://www.vividsolutions.com/jts/}}, která poskytuje 
 základní geometrické funkce pro práci s~prostorovými daty. Obě knihovny jsou navrženy 
-v~souladu s~\zk{OGC} specifikací 
-\textit{Simple Features}\footnote{\url{http://www.opengeospatial.org/standards/sfs}}, 
-která popisuje způsob uložení geografických digitálních dat, prostorové vztahy 
-a~funkce. \zk{JCS} vznikla v~rámci projektu JUMP Unified Mapping Platform. Je 
+v~souladu s~\zk{OGC} specifikací \textit{Simple Features} pro SQL,
+která popisuje způsob uložení geografických digitálních dat, pro\-storové vztahy 
+a~funkce. Knihovna \zk{JCS} vznikla v~rámci projektu JUMP Unified Mapping Platform. Je 
 poskytována pod~licencí 
 \zkratka{LGPL}\footnote{\url{http://www.gnu.org/licenses/lgpl.html}}.
 
@@ -222,7 +221,7 @@ Na~výpočet je Hausdorffova vzdálenost poměrně složitá. Proto se v~algorit
 použitých v~\zk{JCS} používá spíše vrcholová Hausdorffova vzdálenost 
 (\textit{Vertex Hausdorff Distance}), která není vztažena ke~geometrickému 
 prvku, ale pouze k~jeho vrcholům. Tato varianta Hausdorffovy vzdálenosti 
-ve~většině případů vrací stejně dobré výsledky. 
+ve~většině případů vrací stejně dobré výsledky.
 
 Postup spojování vektorových datasetů pomocí knihovny \zk{JCS} je založen
 na~na\-le\-zení geometrických rozdílů mezi oběma mapami a~následném odstranění 
@@ -231,7 +230,7 @@ těchto rozdílů.
 K~detekci geometrických odlišností je použit algoritmus pro prostorové rozdíly.
 Tento algoritmus funguje tak, že postupně porovnává geometrické prvky z~obou 
 datasetů, případně pouze jejich jednotlivé části, a~pokud se tyto prvky shodují,
-označí je jako odpovídající si. Výsledkem jsou pak ty prvky z~obou datasetů, 
+ozna\-čí je jako odpovídající si. Výsledkem jsou pak ty prvky z~obou datasetů, 
 ke~kterým nebyly nalezeny žádné odpovídající prvky. Nalezení odpovídajících si
 prvků probíhá následovně. Pokud je požadována přesná shoda, provede se 
 testování, zda jsou prvky stejného geometrického typu a~zda se rovná jejich 
@@ -255,7 +254,7 @@ s~tímto nástrojem řešit.
     a~odstraňování topologických chyb - mezer a~překrytů v~rámci jedné
     vektorové mapy tvořené polygony či multipolygony. Detekce nežádoucích
     mezer mezi polygony je založena na~rozpoznání blízkých liniových segmentů,
-    kde blízkost je určena zvolenou vzdálenostní tolerancí. 
+    kde blízkost je určena zvolenou vzdálenostní to\-le\-rancí. 
 
  \item Další často řešenou úlohou je \textit{Boundary Alignment}, což by
     bylo možné přeložit do češtiny jako \uv{zarovnání či navázání hranic}. 
@@ -265,7 +264,7 @@ s~tímto nástrojem řešit.
     Při této úloze je nutné zvolit přesnější referenční vrstvu, jejíž 
     geometrické vlastnosti se nezmění.
 
- \item U \textit{Coverage Alignment} máme na~vstupu dvě vektorové
+ \item U \textit{Coverage Alignment} jsou na~vstupu dvě vektorové
     mapy zobrazující to samé území nebo alespoň jeho část. Tyto mapy se 
     tedy výrazně překrývají. Úkolem je upravit méně přesnou vrstvu tak,
     aby odpovídala vrstvě referenční, popřípadě její části, pokud se vrstvy
@@ -273,9 +272,9 @@ s~tímto nástrojem řešit.
     vrstvy do~blízkých vrcholů vrstvy referenční.
 
  \item Poměrně specifickou, ale velmi častou úlohou je \textit{Road Network 
-    Matching} neboli \uv{spojování silničních sítí}. Na~vstupu máme dvě 
-    vektorové mapy té samé silniční sítě. Při~této úloze hledáme podobnost
-    mezi liniovými prvky obou datasetů, které označíme za~odpovídající si.
+    Matching} neboli \uv{spojování silničních sítí}. Na~vstupu jsou dvě 
+    vektorové mapy té samé silniční sítě. Při~této úloze se hledá podobnost
+    mezi liniovými prvky obou datasetů, které jsou označeny za~odpovídající si.
     Poté je vytvořena nová vrstva silniční sítě, která obsahuje odpovídající
     si prvky, přičemž při~mírných odlišnostech použije liniové prvky z~přesnější
     mapy. \zk{JCS} bohužel zatím neumožňuje automatické provedení této
@@ -303,8 +302,8 @@ pouze k~identifikaci geometrických rozdílů.
     ale je mezi nimi mezera či překryt. 
  \item \textit{Find Overlaps} - najde překrývající se prvky ze~dvou datasetů.
  \item \textit{Find Coverage Gaps} - umožňuje nalézt mezery mezi polygony
-    jednoho datasetu, které jsou užší než zadaná vzdálenostní tolerance
-    a~zároveň je mezi hranami polygonů, které tvoří tuto mezeru, úhel menší
+    jednoho datasetu, které jsou užší než zadaná vzdálenostní tolerance.
+    Zároveň musí být mezi hranami polygonů, které tvoří tuto mezeru, úhel menší
     než daná úhlová tolerance.
  \item \textit{Find Coverage Overlaps} - najde všechny překryty mezi polygony
     v~rámci jednoho datasetu, respektive všechny překrývající se polygony.
@@ -322,7 +321,7 @@ pouze k~identifikaci geometrických rozdílů.
 \end{itemize}
 
 Další zásuvné moduly zařazené do~skupiny s~názvem \textit{Conflate} slouží
-k~samotnému spojování vektorových map a~navázání dvou sousedních map.
+k~samo\-tnému spojování vektorových map a~navázání dvou sousedních map.
 
 \begin{itemize}
  \item \textit{Vertex Snapper} - identifikuje a~napojí k~sobě blízké uzlové
@@ -335,13 +334,13 @@ k~samotnému spojování vektorových map a~navázání dvou sousedních map.
     si body, ale s~celými geometriemi.
  \item \textit{PolygonToolboxMatcherPlugin} - tento nástroj slouží k~identifikaci
     podobných polygonů ve~dvou různých datasetech, přičemž umožňuje různá 
-    nastavení tak, aby bylo možné najít opravdu jen odpovídající si polygony
+    nastavení tak, aby bylo možné najít opravdu jen odpovídající si polygony,
     popřípadě více polygonů odpovídajících jednomu či naopak. 
  \item \textit{AlignmentToolboxPlugin} - slouží k~zarovnání dvou vrstev k~sobě.
     Bohužel zatím není plně funkční.
 \end{itemize}
 
-Skupina označena jako \textit{Clean} obsahuje funkce k~k~opravě nepřesností
+Skupina označena jako \textit{Clean} obsahuje funkce k~opravě nepřesností
 nalezených pomocí funkcí skupiny \textit{QA} v~rámci jednoho datasetu.
 
 \begin{itemize}
@@ -361,8 +360,8 @@ spojováním vektorových map silniční sítě.
 
 \begin{itemize}
  \item \textit{RoadMatcherToolboxPlugin} - umožňuje vytvořit vrstvu s~rozdíly
-    mezi silnicemi ze~dvou vrstev a~na~základě těchto rozdílů a~identifikovaných
-    společných prvků jednu z~těchto vrstev navázat na~druhou referenční tak, 
+    mezi silnicemi ze~dvou vrstev. Na~základě těchto rozdílů a~identifikovaných
+    společných prvků jednu z~těchto vrstev naváže na~druhou referenční tak, 
     aby si odpovídaly.
 \end{itemize}
 
@@ -377,7 +376,7 @@ pro editaci prostorových dat a~některé z~nich umožňují i~manuální nebo
 poloautomatické spojování datasetů z~různých zdrojů (\textit{conflation}). 
 Bohužel ani zde však neexistuje žádný komplexnější nástroj jako je výše
 popsaná \zk{JCS}. Navíc většina těchto nástrojů je vytvořena pro nějaký
-konkrétní účel jako např. pro spojování silničních sítí v~USA a~ne vždy
+konkrétní účel (např. pro spojování silničních sítí v~USA) a~ne vždy
 je proto jejich použití zcela obecné. Uživatel si tedy mnohdy musí poradit
 sám a~použít několik různých nástrojů, aby dosáhl požadovaného výsledku.
 Dále uvádím nástroje, které lze pro některé činnosti související 
@@ -401,8 +400,8 @@ aby souhlasily s~prvky druhé vrstvy, která je označena za~referenční.
 
 V~prvním kroku je určena referenční a~upravovaná vrstva. Poté je třeba v~obou
 těchto vrstvách označit prvky, které by si měly odpovídat. V~dalším kroku se 
-provede automatická identifikace dvojic vybraných prvků z~obou datasetů 
-a~nakonec se vykoná samotný proces zarovnání prvků (\textit{conflate}), kdy 
+provede automatická identifikace dvojic vybraných prvků z~obou datasetů. 
+Nakonec se vykoná samotný proces zarovnání prvků (\textit{conflate}), kdy 
 jsou prvky upravované vrstvy změněny tak, aby odpovídaly prvkům vrtsvy 
 referenční. Jedná se o~proces poloautomatický, jelikož nejdříve je třeba
 ručně identifikovat odpovídající si prvky a~teprve na~základě tohoto kroku je 
@@ -416,9 +415,9 @@ Project\footnote{Projekt pod záštitou britského ministerstva dopravy,
 který si klade za~cíl umožnit dostupnost informací o~síti cyklostezek
 ve~Velké Británii prostřednictvím OpenStreetMap.}. 
 V~případě tohoto nástroje se jedná především o~proces přenosu atributů. 
-Pokud máme v~mapě dva odpovídající si prvky, pomocí tohoto nástroje je 
-můžeme označit za~odpovídající a~jednoduše sloučit jejich atributy. Nutno 
-však podotknout, že výběr odpovídajících si prvků musíme provést vždy ručně. 
+Pokud se v~mapě nachází dva odpovídající si prvky, pomocí tohoto nástroje je 
+lze označit za~odpovídající a~jednoduše sloučit jejich atributy. Nutno 
+však podotknout, že výběr odpovídajících si prvků se musí provést vždy ručně. 
 
 
 \subsection{Univerzitní projekty}
@@ -434,7 +433,8 @@ V~rámci tohoto projektu vznikl \textit{MBPConflate} software, který má přisp
 k~výzkumu v~oblasti slučování geo\-grafických dat. Program umožňuje automatické 
 spojení map, poskytuje nástroje pro následnou kontrolu kvali\-ty výsledné mapy. 
 Je navržen tak, aby bylo snadné implementovat nové techniky a~algoritmy v~této 
-oblasti. Bohužel se mi k~tomuto nástroji nepodařilo najít iformace o~licenci. 
+oblasti. Bohužel k~tomuto nástroji nejsou k~dispozici dostatečné informace týkající
+se licence a~dostupnosti. 
 
    \begin{figure}[hbt]
      \centering

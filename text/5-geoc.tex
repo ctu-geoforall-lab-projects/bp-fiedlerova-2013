@@ -3,7 +3,7 @@
 
 Algoritmy týkající se slučování vektorových map (\textit{conflation}) byly
 implementovány v~externí knihovně \zk{GEOC} bez závislosti na~QGIS API. 
-Zásuvný modul \textit{Conflate} zprostředkovává funkcionalitu knihovny 
+Zásuvný modul \textbf{Conflate} zprostředkovává funkcionalitu knihovny 
 v~prostředí Quantum GIS. Díky tomuto oddělení vznikla nezávislá knihovna, 
 kterou bude možné případně použít i~v~jiných programech a~projektech.
 
@@ -101,7 +101,7 @@ která vrací vektor s~interní reprezentací geometrií.
 
 Přichycení bodů jedné vrstvy k~vrstvě druhé má své výhody i~nevýhody, které 
 je před volbou tohoto způsobu zpracování třeba zvážit. Použití této metody 
-je vhodné v~takových případech, kdy máme k~dispozici dvě vrstvy o~rozdílné 
+je vhodné v~takových případech, kdy jsou k~dispozici dvě vrstvy o~rozdílné 
 přesnosti (tento rozdíl však nesmí být příliš veliký) a~prvky vzájemně se 
 překrývající. Cílem je upřesnit polohu a~tvar prvků jednoho datasetu. 
 Dopředu je třeba si uvědomit, že kromě polohy prvků je měněn i~jejich tvar.
@@ -116,7 +116,7 @@ hodnota by měla odpovídat maximální vzdálenosti, o~kterou se vrchol prvku
 může posunout. Při~volbě příliš krátké vzdálenosti se výsledná vrstva nemusí 
 vůbec odlišovat od té vstupní. Naopak \mbox{je-li} zvolená vzdálenost delší 
 než nejkratší úsek geometrie (linie, polygonu), může dojít k~přichycení dvou 
-bodů k~jednomu bodu z~referenční vrstvy. Zda je toto přípustné či nikoli je 
+bodů k~jednomu bodu z~referenční vrstvy. Zda je toto přípustné či nikoli, je 
 už na~rozhodnutí uživatele.
 
 

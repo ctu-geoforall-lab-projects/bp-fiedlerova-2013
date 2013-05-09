@@ -23,6 +23,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup{font=small}
+\usepackage{enumitem} 
+\setlist{leftmargin=*} % bez odsazení
 
 \makeatletter
 \setlength{\@fptop}{0pt}
@@ -41,7 +43,7 @@
 \usepackage{textcomp}
 \usepackage[compact]{titlesec}
 \usepackage{amsmath}
-\addtolength{\jot}{1em} % 
+\addtolength{\jot}{1em} 
 
 \usepackage[
     nohyperlinks    
@@ -51,7 +53,7 @@
     unicode,                
     breaklinks=true,        
     hypertexnames=false,
-    colorlinks=true,        % kolem odkazů nebude rámeček, odkazy budou barvou:
+    colorlinks=true, % true for print version
     citecolor=black,
     filecolor=black,
     linkcolor=black,
@@ -59,17 +61,12 @@
 ]{hyperref}         
 
 \usepackage{url}
-
 \usepackage{fancyhdr}
 
 \usepackage[
   cvutstyle,          
   bachelor           
 ]{thesiscvut}
-
-\usepackage{enumitem} 
-%\setlist{\itemsep=0.2em,\topsep=0.5em,\parsep=0em, \parskip=0em} % nastaveni mezer mezi položkami a před seznamem
-\setlist{leftmargin=*} % bez odsazení
 
 
 \newif\ifweb
@@ -81,8 +78,6 @@
 
 \renewcommand{\figurename}{Obrázek}
 \def\figurename{Obrázek}
-
-\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Definice informací o dokumentu  %%%%%%%%%%%%%%%%%%%%%
@@ -162,7 +157,7 @@
 	\ #1}}{}}
 
 % Vysázení přebalu práce
-\vytvorobalku
+%\vytvorobalku
 
 % Vysázení titulní stránky práce
 \vytvortitulku
@@ -191,8 +186,8 @@
 		%\noindent
 	\par\hspace{2ex}
 	{Chtěla bych poděkovat vedoucímu mé bakalářské práce, Ing. Martinu Landovi, 
-	za připomínky a pomoc při zpracování této práce. Dále bych chtěla poděkovat
-	své rodině a~svému příteli za projevenou podporu a~trpělivost.}
+	za odborné rady a~pomoc při zpracování této práce. Dále bych chtěla 
+	poděkovat své rodině a~svému příteli za projevenou podporu a~trpělivost.}
 }
 
 % Vysázení obsahu
@@ -231,7 +226,7 @@
 % Vysázení seznamu příloh
 \seznampriloh
 
-% Vložení souboru 'text/prilohy' s přílohami
+% Vložení souboru s přílohami
 \include{prilohy}
 
 % Konec dokumentu

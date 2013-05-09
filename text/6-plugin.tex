@@ -91,9 +91,9 @@ lze nalézt v~anglické dokumentaci k~zásuvnému modulu (příloha~\ref{priloha
  \item Dalším krokem je výběr vrstev a~nastavení možností uživatelem.
  \item Po~spuštění zpracování se nejdříve zkopíruje upravovaná vrstva 
 	(\textit{Subject layer}) do~nové vektorové vrstvy pomocí funkce 
-	\texttt{copyLayer()}. Formát nové vrstvy je vždy \textit{shapefile}
-	\footnote{ESRI Shapefile je datový formát pro ukládání vektorových 
-	  prostorových dat  vyvinutý firmou Esri. Jedná se o~jeden 
+	\texttt{copyLayer()}. Formát nové vrstvy je vždy 
+	\textit{shapefile}\footnote{ESRI Shapefile je datový formát pro ukládání 
+	vektorových prostorových dat  vyvinutý firmou Esri. Jedná se o~jeden 
 	  z~nejrozšířenějších formátů dat pro geografické informační systémy,
 	  přípona souborů v tomto formátu je \textit{.shp}.}.
 	Tato vrstva je vytvořena v~aktuální složce a~její název, pokud není
@@ -115,7 +115,7 @@ lze nalézt v~anglické dokumentaci k~zásuvnému modulu (příloha~\ref{priloha
 	\texttt{Vertex\-Snapper} a~metoda \texttt{snap()}, při volbě zarovnání 
 	vrstev \textit{Coverage Alignment} třída \texttt{Cove\-rage\-Align\-ment} 
 	a~metoda \texttt{align()}, poslední možností je \textit{Match Lines}, která
-	využívá třídu \texttt{Line\-Matcher}, a~její metoda \texttt{match()}. 
+	využívá třídu \texttt{Line\-Matcher} a~její metodu \texttt{match()}. 
 	Výsledek je uložen do~nového vektoru.
  \item Na závěr je upravena geometrie nové vrstvy (kopie upravované vrstvy) dle
 	vý\-sledků úprav provedených algoritmy knihovny \zk{GEOC}.

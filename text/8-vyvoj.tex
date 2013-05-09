@@ -22,7 +22,8 @@ s~využitím standardních nástrojů.
 \label{dlazdice-vyvoj}
 
 Větší efektivita při zpracování rozsáhlých dat je v~\zk{GIS} 
-aplikacích zajištěna většinou jejich zpracováním po~částech. Je možné
+aplikacích zajištěna většinou jejich zpracováním po~částech 
+a~paralelizací algoritmu (části se zpracovávají souběžně). Je možné
 si data rozdělit na~pravidelné dlaždice a~každou tuto část upravovat
 samostatně. Ještě vhodnější způsob u~této aplikace je dle \cite{freitas}
 rozčlenění dat pomocí shlukových algoritmů a~následné rozdělení
@@ -46,7 +47,7 @@ bylo možné postupně doplňovat další pro její širší využití.
 
 V~současné době je v~oblasti slučování vektorových map 
 (\textit{conflation}) snaha o~hledání společných elementů 
-dvou datasetů nejen na~základě geometrie, ale i~s~přihlédnutím
+dvou datasetů nejen na~základě geometrie, ale i~s~při\-hlédnutím
 k~atributům prvků. Zakomponování tohoto přístupu do~algoritmu 
 pro určení odpovídajících si prvků je proto logicky vhodným 
 dalším krokem jeho vývoje.
