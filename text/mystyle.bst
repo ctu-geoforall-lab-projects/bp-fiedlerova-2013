@@ -1,49 +1,8 @@
 %% $Id$
-%% File: `csplainnat.bst' for use with natbib package
-%% This is a modification of `plainnat.bst' for Czech references style 
-%% (According to "CSN ISO 690: Bibliograficke citace. Obsah, forma a struktura").
-%% Some modifications are commented, look for the keyword 'CHANGE'
-%% For more detailed info use svn repository svn://kraken.pedf.cuni.cz/csplainnat/
+%% File: `mypstyle.bst' for use with natbib package
+%% This is a modification of `csplainnat.bst' 
 %%
-%% Original plainnat.bst by Patrick W Daly
-%% Modifications by David Mudr{\'{a}}k mudrd8mz@uxit.pedf.cuni.cz
-%% 
-%% MAJOR MODIFICATIONS
-%% * Added "@ONLINE" item type with added "cited" field.
-%%
-%% This program can be redistributed and/or modified under the terms
-%% of the LaTeX Project Public License Distributed from CTAN
-%% archives in directory macros/latex/base/lppl.txt; either
-%% version 1 of the License, or any later version.
-%%
- % BibTeX `plainnat' family
- %   version 0.99b for BibTeX versions 0.99a or later,
- %   for LaTeX versions 2.09 and 2e.
- %
- % For use with the `natbib.sty' package; emulates the corresponding
- %   member of the `plain' family, but with author-year citations.
- %
- % With version 6.0 of `natbib.sty', it may also be used for numerical
- %   citations, while retaining the commands \citeauthor, \citefullauthor,
- %   and \citeyear to print the corresponding information.
- %
- % For version 7.0 of `natbib.sty', the KEY field replaces missing
- %   authors/editors, and the date is left blank in \bibitem.
- %
- % Includes field EID for the sequence/citation number of electronic journals
- %  which is used instead of page numbers.
- %
- % Includes fields ISBN and ISSN.
- %
- % Includes field URL for Internet addresses.
- %
- % Includes field DOI for Digital Object Idenfifiers.
- %
- % Works best with the url.sty package of Donald Arseneau.
- %
- % Works with identical authors and year are further sorted by
- %   citation key, to preserve any natural sequence.
- %
+
 ENTRY
   { address
     author
@@ -279,13 +238,6 @@ FUNCTION {format.key}
   if$
 }
 
-FUNCTION {format.medium}
-{ medium empty$
-    { "" }
-    { "[" medium * "]" *}
-  if$
-}
-
 FUNCTION {format.authors}
 { author empty$
     { "" }
@@ -322,7 +274,7 @@ FUNCTION {format.issn}
 FUNCTION {format.url}
 { url empty$
     { "" }
-    { new.block "Dostupn{\'{e}} z: \url{" url * "}" * }
+    { new.block "Do\-stup\-n{\'{e}} z: \url{" url * "}" * }
   if$
 }
 
@@ -571,7 +523,7 @@ FUNCTION {format.eid}
 }
 
 FUNCTION {format.vol.num.pages}
-{ ", roč.~" * volume * field.or.null
+{ volume  field.or.null
   number empty$
     'skip$
     { ", č.~" number * *
@@ -679,7 +631,7 @@ FUNCTION {format.article.crossref}
     }
     { "In " key * }
   if$
-  " \citep{" * crossref * "}" *
+  " \cite{" * crossref * "}" *
 }
 
 FUNCTION {format.book.crossref}
@@ -708,7 +660,7 @@ FUNCTION {format.book.crossref}
     }
     'skip$
   if$
-  ", \citet{" * crossref * "}" *
+  ", \cite{" * crossref * "}" *
 }
 
 FUNCTION {format.incoll.inproc.crossref}
@@ -729,7 +681,7 @@ FUNCTION {format.incoll.inproc.crossref}
     }
     { "In " }
   if$
-  " \citet{" * crossref * "}" *
+  " \cite{" * crossref * "}" *
 }
 
 FUNCTION {article}
@@ -742,7 +694,10 @@ FUNCTION {article}
   crossref missing$
     { journal emphasize "journal" output.check
       new.block
-      format.medium output
+      medium missing$
+      'skip$
+        { "[" medium * "]" * output }
+      if$
       new.sentence
       format.date "year" output.check
       eid empty$
@@ -757,7 +712,10 @@ FUNCTION {article}
       if$
     }
   if$
-  format.cited output
+  cited missing$
+    'skip$
+    { "[cit.~" cited * "]" * output }
+  if$
   format.issn output
   format.doi output
   format.url output
@@ -813,7 +771,7 @@ FUNCTION {book}
       format.bvolume output
       format.number.series output
       new.sentence
-      address "~: " * publisher *   % CHANGE mudrd8mz 2005-10-12 
+      address ": " * publisher *   % CHANGE mudrd8mz 2005-10-12 
       "publisher" output.check      
     }
     { new.block
@@ -946,23 +904,28 @@ FUNCTION {inproceedings}
   new.block
   crossref missing$
     { format.in.ed.booktitle "booktitle" output.check
-      format.medium output
+      medium missing$
+      'skip$
+        { "[" medium * "]" * output }
+      if$
       new.block
-      format.bvolume output
-      format.number.series output
-      format.pages output
       address empty$
         { organization publisher new.sentence.checkb
           organization output
           publisher output
           format.date "year" output.check
         }
-        { address "~: " * publisher *   % CHANGE mudrd8mz 2005-10-12 
+        { address " : " * publisher *   % CHANGE mudrd8mz 2005-10-12 
+          "publisher" output.check
           format.date "year" output.check
           new.sentence
-          organization output
+          organization output         
         }
       if$
+      new.block
+      format.bvolume output
+      format.number.series output
+      format.pages output
     }
     { format.incoll.inproc.crossref output.nonnull
       format.pages output
