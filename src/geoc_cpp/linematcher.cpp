@@ -40,6 +40,65 @@ LineMatcher::~LineMatcher()
 
 } // destructor
 
+#ifdef WITHOUT_SPIDX
+
+void LineMatcher::match()
+{
+    newGeometry = subGeometry;
+
+    if ((refGeometry.size() == 0) || (subGeometry.size() == 0) )
+    {
+        return;
+    }
+
+    // set diffMax
+    longestLine();
+
+    CoordinateSequence *cs = NULL;
+
+    for ( size_t i = 0; i < subGeometry.size(); i++ )
+    {
+        // find close features from the reference layer
+        vector<CoordinateSequence*> closeLines;
+
+        // get close coordinates
+        for ( size_t j = 0; j < refGeometry.size(); j++ )
+        {
+
+            // close features
+            if ( subGeometry[i].getGEOSGeom()->distance( refGeometry[j].getGEOSGeom() ) < tolDistance )
+            {
+                // add coordinates from close features
+                const CoordinateSequence *c = refGeometry[j].getGEOSGeom()->getCoordinates();
+                cs = geos::geom::CoordinateSequence::removeRepeatedPoints( c );
+                closeLines.push_back( cs );
+                delete c;
+            }
+
+        }
+
+        // process line if there are close lines
+        if ( closeLines.size() > 0 )
+        {
+            GEOCGeom newGeom = subGeometry[i];
+            matchLine( &newGeom, closeLines );
+            newGeometry[i] = newGeom;
+
+            // check validity
+            if( !newGeometry[i].getGEOSGeom()->isValid() )
+            {
+                invalids.push_back(newGeometry[i].getFeatureId());
+            }
+
+        } // if
+
+    } // for
+
+    delete cs;
+
+} // void LineMatcher::match()
+
+#else
 
 void LineMatcher::match()
 {
@@ -108,6 +167,8 @@ void LineMatcher::match()
     delete cs;
 
 } // void LineMatcher::match()
+
+#endif
 
 
 void LineMatcher::matchLine( GEOCGeom * gline, vector<CoordinateSequence *> & closeLines )

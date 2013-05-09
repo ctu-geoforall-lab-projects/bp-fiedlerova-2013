@@ -46,6 +46,27 @@ void MatchingGeometry::setGeometrySet( TGeomLayer * geomSet)
 
 } // void MatchingGeometry::setGeometrySet( TGeomLayer geometrySet, bool isFirst )
 
+#ifdef WITHOUT_SPIDX  // for testing
+
+void  MatchingGeometry::closeGeometries( const Geometry *geom )
+{
+    // find close geometries
+    closeSet.clear();
+
+    for ( unsigned long i = 0; i < geometrySet->size(); i++ )
+    {
+        // test wether geometry from set is within given tolerance distance from tested geometry
+        if ( isClose( geometrySet->at(i).getGEOSGeom(), geom ) )
+        {
+            closeSet.push_back( geometrySet->at(i).getGEOSGeom() );
+
+        }
+
+    }
+
+} // void  MatchingGeometry::closeGeometries( TGeomLayer * closeSet, const Geometry *geom, bool isFirst )
+
+#else
 
 void  MatchingGeometry::closeGeometries( const Geometry *geom )
 {
@@ -77,6 +98,8 @@ void  MatchingGeometry::closeGeometries( const Geometry *geom )
     }
 
 } // void  MatchingGeometry::closeGeometries( TGeomLayer * closeSet, const Geometry *geom, bool isFirst )
+
+#endif
 
 
 bool MatchingGeometry::isClose( const Geometry * g1, const Geometry * g2 )

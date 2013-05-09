@@ -33,7 +33,11 @@ AlignGeometryEditorOperation::~AlignGeometryEditorOperation()
 void AlignGeometryEditorOperation::setTIN(TTin *t)
 {
     ttin = t;
+
+#ifdef WITHOUT_SPIDX
+#else
     sIndex = SpatialIndexBuilder::buildIndex(ttin);
+#endif
 
 } // void AlignGeometryEditorOperation::setTIN(TTin *t)
 
@@ -66,6 +70,44 @@ CoordinateSequence* AlignGeometryEditorOperation::edit(const CoordinateSequence 
 
 } // CoordinateSequence* AlignGeometryEditorOperation::edit(const CoordinateSequence *, const Geometry *g )
 
+#ifdef WITHOUT_SPIDX  // for testing
+
+bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
+{
+
+    // build point geometry
+    GeometryFactory f;
+    Geometry * p = f.createPoint( *point );
+
+    // test all close triangles
+    for ( size_t i = 0; i < ttin->size(); i++ )
+    {
+
+        Triangle t = ttin->at(i);
+        Geometry *g = f.createGeometry(t.getTriangleGeom());
+
+
+        // check if point is inside triangle
+        if ( g->intersects( p ) )
+        {
+            idPoints1 = t.getTriangle();
+            idPoints2 = t.getCorrespondingTriangle();
+
+            f.destroyGeometry(p);
+            f.destroyGeometry(g);
+            return true;
+        }
+
+        f.destroyGeometry(g);
+
+    }
+
+    f.destroyGeometry(p);
+    return false;
+
+} // bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
+
+#else
 
 bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
 {
@@ -108,6 +150,7 @@ bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
 
 } // bool AlignGeometryEditorOperation::findIdPoints( Coordinate *point )
 
+#endif
 
 
 } //namespace geoc

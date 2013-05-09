@@ -40,6 +40,53 @@ VertexSnapper::~VertexSnapper()
 
 } // destructor
 
+#ifdef WITHOUT_SPIDX // for testing
+
+void VertexSnapper::snap()
+{
+
+    newGeometry = subGeometry;
+
+    if ((refGeometry.size() == 0) || (subGeometry.size() == 0) )
+    {
+        return;
+    }
+
+    for ( unsigned int i = 0; i < subGeometry.size(); i++ )
+    {
+        // find close features from the reference layer
+        CoordinateSequence *closeCoord = new CoordinateArraySequence();
+
+        for ( unsigned int j = 0; j < refGeometry.size(); j++)
+        {
+            // check if features from sub and ref are close
+            bool close = subGeometry[i].getGEOSGeom()->distance( refGeometry[j].getGEOSGeom() ) < tolDistance;
+            if (close)
+            {
+                // add close coordinates
+                closeCoord->add(refGeometry[j].getGEOSGeom()->getCoordinates(), true, true );
+            }
+
+        }
+
+        // snap vertex if there are close points
+        if ( closeCoord->size() > 0 )
+        {
+            GEOCGeom newGeom = subGeometry[i];
+            snapVertices( &newGeom, closeCoord );
+            newGeometry[i] = newGeom;
+        }
+
+        if (closeCoord)
+        {
+            delete closeCoord;
+        }
+
+    }
+
+} // void VertexSnapper::snap()
+
+#else
 
 void VertexSnapper::snap()
 {
@@ -99,6 +146,8 @@ void VertexSnapper::snap()
     }
 
 } // void VertexSnapper::snap()
+
+#endif
 
 
 void VertexSnapper::snapVertices(GEOCGeom *geom, CoordinateSequence *closeCoord)
