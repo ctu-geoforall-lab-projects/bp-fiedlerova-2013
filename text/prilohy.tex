@@ -12,7 +12,7 @@ volána pomocí jednoduchého skriptu pro \textit{bash} (aplikaci, skript,
  i~data lze nalézt na~CD). 
 
 Porovnání bylo provedeno měřením času výpočtu pro daný algoritmus
-pro~různá vstupní data a~dvě různě zvolené toleranční vzdálenosti.
+pro~různá vstup\-ní data a~dvě různě zvolené toleranční vzdálenosti.
 Pro každou konfiguraci (algoritmus, vstupní data, toleranční vzdálenost)
 byl měřen čas výpočtu celkem desetkrát bez použití a~desetkrát s~použitím
 prostorových indexů. Cílem bylo určení změny rychlosti algoritmů po~zavedení
@@ -55,9 +55,8 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
   \label{tab:vstup}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[ht]
  \centering
-  \small
    \caption{\texttt{Vertex\-Snapper} -
 	    čas zpracování bez prostorových indexů}
   \begin{tabular}{|c|c|c|c|c|}
@@ -86,9 +85,8 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
    \label{tab:vs-bez}
 \end{table}
  
-\begin{table}[H]
+\begin{table}[ht]
  \centering
-  \small
    \caption{\texttt{Vertex\-Snapper} -
 	    čas zpracování s prostorovými indexy}
   \begin{tabular}{|c|c|c|c|c|}
@@ -117,9 +115,8 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
    \label{tab:vs-s}
 \end{table}
  
-\begin{table}[H]
+\begin{table}[ht]
  \centering
-  \small
    \caption{\texttt{Coverage\-Alignment} - 
 	    čas zpracování bez prostorových indexů}
   \begin{tabular}{|c|c|c|c|c|}
@@ -148,9 +145,8 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
    \label{tab:ca-bez}
 \end{table}
  
-\begin{table}[H]
+\begin{table}[ht]
  \centering
-  \small
    \caption{\texttt{Coverage\-Alignment} - 
 	    čas zpracování s~prostorovými indexy}
   \begin{tabular}{|c|c|c|c|c|}
@@ -178,8 +174,6 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
   \end{tabular}
    \label{tab:ca-s}
 \end{table}
- 
-\normalsize
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                 PŘÍLOHA - UML DIAGRAMY TŘÍD                                   %%
@@ -190,6 +184,7 @@ toleranční vzdálenost. Časy jsou uváděny v~sekundách.
 Následující UML diagramy zobrazují třídy spojené s~jednotlivými 
 algoritmy a~jejich nejdůležitější atributy a~metody.
 
+\vspace{2cm}
   \begin{figure}[ht]
     \centering
       \includegraphics[width=420pt]{./pictures/uml-vs.pdf}
@@ -197,6 +192,7 @@ algoritmy a~jejich nejdůležitější atributy a~metody.
       \label{fig:uml-vs}
   \end{figure}
 
+\vspace{2cm}
   \begin{figure}[t]
     \centering
       \includegraphics[width=420pt]{./pictures/uml-ca.pdf}
@@ -204,8 +200,10 @@ algoritmy a~jejich nejdůležitější atributy a~metody.
       \label{fig:uml-ca}
   \end{figure}
 
+\vspace{2cm}
   \begin{figure}[t]
     \centering
+      \tiny
       \includegraphics[width=420pt]{./pictures/uml-lm.pdf}
       \caption{UML diagram tříd pro LineMatcher}
       \label{fig:uml-lm}
@@ -222,6 +220,8 @@ v~jiných verzích se může způsob načtení modulu, popř. i~jiné činnosti 
 
 % \section{Instalace}
 % \label{prirucka-instalace}
+% 
+% Není třeba.
 
 \section{Načtení zásuvného modulu}
 \label{prirucka-nacteni}
@@ -274,7 +274,7 @@ Na~výběr jsou tyto metody, jejichž princip je naznačen na~obrázku \ref{fig:
 	aby odpovídala poloze blízkých bodů vrstvy referenční.
  \item \textbf{Zarovnání vrstev} (\textit{Coverage Alignment}) - princip této 
 	metody je složitější. Na~rozdíl od~předchozí metody nepracuje s~jednotlivými
-	body, ale s celými prvky. Upravuje i~některé prvky, k nimž neexistují 
+	body, ale s celými prvky. Upravuje i~ně\-které prvky, k nimž neexistují 
 	žádné odpovídající ve~vrstvě refe\-renční, a~to na~základě změny okolních 
 	prvků. Je proto vhodnější zejména pro datasety, které mají rozdílný počet
 	prvků. Obecně je možné s~touto metodou dosáhnout přesnějších a~často
@@ -317,7 +317,7 @@ metodu a~teprve po zobrazení výsledků případně parametry změnit.
 Poslední nastavovanou možností je \textbf{automatická oprava geometrie}
  zaškrtnutím \textit{Try to repair invalid geometries}. Při této volbě se 
 program pokusí opravit nově vzniklé nevalidní geometrie. Opravováno je pouze 
-křížení úseků v~polygonu a~tzv. \uv{slepé větve}. Automatická oprava  
+křížení úseků v~polygonu a~tzv. \uv{slepé větve}. Automa\-tická oprava  
 může ovlivnit přesnost výsledku a~někdy i~vytvořit topologické chyby, proto 
 je třeba ji používat opatrně. Při volbě \textit{Match Lines} není tato možnost
 dostupná, jelikož uvedené situace nejsou u~liniových geometrií považovány
@@ -346,7 +346,7 @@ Upravená vrstva se automaticky přidá do~otevřeného projektu v~QGISu.
 V~dialogu zásuvného modulu se do~textového pole vlevo vypíše protokol o~zpracování.
 Formát protokolu je popsán na~obrázku \ref{fig:protokol}.  
 
-  \begin{figure}[H]
+  \begin{figure}[ht]
     \centering
       \includegraphics[width=420pt]{./pictures/protokol.pdf}
       \caption{Formát protokolu}

@@ -2,7 +2,7 @@
 \label{2-conflation}
 
 Cílem této kapitoly je přiblížit čtenáři pojem sloučení vektorových map
-(\textit{conflation}). Kromě definice samotného pojmu kapitola popisuje 
+(\textit{conflation}). Kro\-mě definice samotného pojmu kapitola popisuje 
 i~klasifikaci sjednocování map a~obecný postup při této úloze. Hned zpočátku
 bych však ráda upozornila na~to, že v~angličtině používaný pojem 
 \textit{conflation} nemá žádný oficiální český ekvivalent, proto je v~některých
@@ -34,7 +34,7 @@ zahraničních zdrojů.
     
     (Wiki.GIS.com - The GIS Encyclopedia Glossary, 
     \url{http://wiki.gis.com/wiki/index.php/GIS\_Glossary/C},
-    cit. 30.~4.~2013)
+    citováno 30.~4.~2013)
 
   \item \textit{Feature conflation} je proces kombinování geografických 
     informací z~překrývajících se zdrojových dat, který zachovává přesnost 
@@ -47,13 +47,18 @@ zahraničních zdrojů.
      
     (Shekhar, Xiong: Encyclopedia of GIS \cite[][s.~129]{gisencyclopedia})
 
+  \item Proces sjednocení dvou rozdílných datasetů.
+    
+    (Blasby, Davis, Kim, Ramsey: GIS Conflation Using Open Source Tools 
+    \cite[][s.~2]{opensourceconflation})
+
  \item \textit{Conflation} je proces, jehož cílem je geometricky upravit 
-    (posunem, transformací) digitální data zobrazující stejné území 
+    (posunem, transformací) di\-gitální data zobrazující stejné území 
     (obvykle pořízená v~jiném čase) tak, aby byla vzájemně geograficky 
     \uv{korektní} a~vzájemně se překrývaly.
     
     (HUIC Data Services, \url{http://huic.com/HUIC/job/right/conflation.htm}, 
-     \linebreak cit. 30.~4.~2013)
+     citováno 30.~4.~2013)
 
   \item Schopnost kombinovat data z~různých zdrojů do~jednoho společného
     datasetu je jedním ze~základních problémů v~\zk{GIS}. Tato úloha je
@@ -61,12 +66,7 @@ zahraničních zdrojů.
     dat.
    
     (Freitas, Afonso: Distributed Vector Based Spatial Data Conflation 
-    Services \linebreak \cite[][s.~23]{freitas})
-
-  \item Proces sjednocení dvou rozdílných datasetů.
-    
-    (Blasby, Davis, Kim, Ramsey: GIS Conflation Using Open Source Tools 
-    \cite[][s.~2]{opensourceconflation})
+    Services \cite[][s.~23]{freitas})
 
   \item Soubor funkcí a~procedur, které zarovnávají prvky jednoho \zk{GIS} 
     souboru k~prvkům jiného a~následně převádí atributy mezi~těmito vrstvami.
@@ -75,7 +75,7 @@ zahraničních zdrojů.
    
     (Prince George's County - GIS Glossary,
     \url{http://www.princegeorgescountymd.gov/Government/AgencyIndex/OITC/GIS/glossary.asp#C},
-    cit. 30.~4.~2013)
+    citováno 30.~4.~2013)
 
   \item Proces sladění poloh odpovídajících si prvků v~různých datových 
     vrstvách. Funkce pro spojení map (\textit{conflation}) provádějí toto 
@@ -83,7 +83,7 @@ zahraničních zdrojů.
     
     (Geographic Information Nova Scotia - Standards Manual,
     \url{http://www.gov.ns.ca/snsmr/land/standards/post/manual/appedxa1.asp#C},
-     cit. 30.~4.~2013)
+     citováno 30.~4.~2013)
 
 \end{itemize}
 
@@ -141,14 +141,6 @@ struktur a~vzájemných vztahů.
 \subsection{Dle typu vstupních vrstev}
 \label{dle-vstupu}
 
-  \begin{figure}[H]
-    \centering
-      \small
-      \input{./pictures/klasifikace.pdf_tex}
-      \caption{Klasifikace \textit{conflation} dle vstupních vrstev}
-      \label{fig:classification}
-  \end{figure}
-
 \begin{enumerate}
   \item \textbf{Imagery to imagery, Raster to raster}
     \subitem Jedná se o~případ, kdy je úkolem na~sebe napasovat dva rastrové 
@@ -171,25 +163,33 @@ struktur a~vzájemných vztahů.
 	       \item Užití stereo obrazu, výškových dat a~dalších znalostí
 		  pro~porovnání vektorových a~rastrových dat. 
 	       \item Využití prostorových informací a~jiných vlastností mapy 
-		  (jako např. barev) k~rozpoznání odpovídajících si prvků.
+		  (jako např. barev) k~roz\-poznání odpovídajících si prvků.
 	      \end{enumerate}
   \item \textbf{Vector to vector} \nopagebreak
     \subitem Případem sloučení dvou vektorových datasetů se zabývá tato práce. 
-	Jednou ze~specifických a~velmi častých aplikací je navázání silničních 
-	sítí, dále aktualizace digitálních map aj. Existuje mnoho různých algoritmů
+	Jednou ze~spe\-cifických a~velmi častých aplikací je navázání silničních 
+	sítí, dále aktualizace digitál\-ních map aj. Existuje mnoho různých algoritmů
 	pro~slučování vektorových dat, přičemž základní přístupy k~řešení problému 
 	jsou následující \cite{gisencyclopedia}: 
 	      \begin{enumerate}
 	       \item Sloučení dat za~pomoci algoritmů, které pracují na~základě 
-		  porovnávání geometrických vlastností prvků.
+		  porovnávání geome\-trických vlastností prvků.
 	       \item Algoritmy, které berou v~potaz podobnost tvarů prvků a~zároveň
 		  podobnost jejich atributů.
 	       \item Spojení vektorových dat s~neznámým souřadnicovým systémem 
-		  na~základě rozmístění významných bodových prvků (např. křižovatky 
+		  na~základě rozmí\-stění významných bodových prvků (např. křižovatky 
 		  cest).
 	      \end{enumerate}
 
 \end{enumerate}
+
+  \begin{figure}[H]
+    \centering
+      \small
+      \input{./pictures/klasifikace.pdf_tex}
+      \caption{Klasifikace \textit{conflation} dle vstupních vrstev}
+      \label{fig:classification}
+  \end{figure}
 
 \section{Obecný postup}
 \label{postup}
@@ -202,12 +202,12 @@ nejdříve provést přípravu dat a~následně data zpracovat a~upravit.
   \item \textbf{Předzpracování dat}
     \subitem Tento krok slouží k~zajištění kompatibility vstupních dat tak, 
       aby bylo možné je porovnávat. Obvykle spočívá v~převedení vstupních 
-      datasetů do~stejného souřadnicového systému, zajištění stejných 
+      datasetů do~stejného souřadnico\-vé\-ho systému, zajištění stejných 
       základních jednotek a~dalších měnších úpravách. 
   \item \textbf{Kontrola kvality dat a~topologické správnosti vrstev}
     \subitem Zde se kontroluje vnitřní konzistence dat každé vstupní vrstvy.
       V~tomto případě záleží především na~požadavcích zvoleného algoritmu 
-      pro~sloučení map. Může jít například o~odstranění topologických chyb 
+      pro~sloučení map. Může jít na\-pří\-klad o~odstranění topologických chyb 
       v~dané vrstvě jako jsou nežádoucí drobné překryty či mezery 
       mezi~polygony.
   \item \textbf{Vyhledání odpovídajících si prvků}

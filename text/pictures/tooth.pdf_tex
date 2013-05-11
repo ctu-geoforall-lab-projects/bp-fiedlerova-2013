@@ -50,6 +50,6 @@
   \makeatother%
   \begin{picture}(1,0.39540686)%
     \put(0,0){\includegraphics[width=\unitlength]{./pictures/tooth.pdf}}%
-    \put(0.30931183,0.28860288){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Vznik "zubu"}}}%
+    \put(0.30931183,0.28860288){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Vznik \uv{zubu}}}}%
   \end{picture}%
 \endgroup%

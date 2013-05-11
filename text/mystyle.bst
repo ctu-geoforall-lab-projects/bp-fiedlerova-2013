@@ -915,7 +915,7 @@ FUNCTION {inproceedings}
           publisher output
           format.date "year" output.check
         }
-        { address " : " * publisher *   % CHANGE mudrd8mz 2005-10-12 
+        { address ": " * publisher *   % CHANGE mudrd8mz 2005-10-12 
           "publisher" output.check
           format.date "year" output.check
           new.sentence

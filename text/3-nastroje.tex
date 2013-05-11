@@ -79,7 +79,7 @@ najednou pro více vybraných prvků.
 
 Nástroj \textit{Integrate} umožňuje sladění dvou datasetů. Na~vstupu vyžaduje 
 dvě či více vrstev, které chceme zarovnat, a~dále maximální vzdálenost, při~které
-lze považovat prvky za~odpovídající si. U~každého datasetu navíc lze zadat 
+lze považovat prvky za~odpo\-vídající si. U~každého datasetu navíc lze zadat 
 prioritu (\textit{rank}). Prvky s~nižší prioritou se pak budou zarovnávat 
 k~těm s~prioritou vyšší. Tato funkce je velmi užitečná, pokud máme dvě 
 překrývající se nebo sousedící vrstvy s~malými rozdíly např. v~důsledku různé
@@ -99,7 +99,7 @@ jedná o~stejné prvky či nikoli. Kromě automatického procesu umožňuje prog
 i~následnou ruční editaci.
 
 ConfleX je k~dispozici jako samostatná aplikace ale také jako extenze 
-programu ArcGIS 9/10.
+programu ArcGIS Desktop 9/10.
 
 
 \subsection{Intergraph GeoMedia Fusion}
@@ -158,7 +158,7 @@ Knihovna \zk{JCS} je závislá na~knihovně
 \zkratka{JTS}\footnote{\url{http://www.vividsolutions.com/jts/}}, která poskytuje 
 základní geometrické funkce pro práci s~prostorovými daty. Obě knihovny jsou navrženy 
 v~souladu s~\zk{OGC} specifikací \textit{Simple Features} pro SQL,
-která popisuje způsob uložení geografických digitálních dat, pro\-storové vztahy 
+která popisuje způsob uložení geografic\-kých digitálních dat, pro\-storové vztahy 
 a~funkce. Knihovna \zk{JCS} vznikla v~rámci projektu JUMP Unified Mapping Platform. Je 
 poskytována pod~licencí 
 \zkratka{LGPL}\footnote{\url{http://www.gnu.org/licenses/lgpl.html}}.
@@ -218,7 +218,7 @@ nejkratší vzdálenost mezi prvky, ale i~vzdálenost největší.
 Zohledňuje tedy do~jisté míry i~topologické vztahy.
 
 Na~výpočet je Hausdorffova vzdálenost poměrně složitá. Proto se v~algoritmech
-použitých v~\zk{JCS} používá spíše vrcholová Hausdorffova vzdálenost 
+použi\-tých v~\zk{JCS} používá spíše vrcholová Hausdorffova vzdálenost 
 (\textit{Vertex Hausdorff Distance}), která není vztažena ke~geometrickému 
 prvku, ale pouze k~jeho vrcholům. Tato varianta Hausdorffovy vzdálenosti 
 ve~většině případů vrací stejně dobré výsledky.
@@ -272,7 +272,7 @@ s~tímto nástrojem řešit.
     vrstvy do~blízkých vrcholů vrstvy referenční.
 
  \item Poměrně specifickou, ale velmi častou úlohou je \textit{Road Network 
-    Matching} neboli \uv{spojování silničních sítí}. Na~vstupu jsou dvě 
+    Matching} neboli \uv{spojo\-vá\-ní silničních sítí}. Na~vstupu jsou dvě 
     vektorové mapy té samé silniční sítě. Při~této úloze se hledá podobnost
     mezi liniovými prvky obou datasetů, které jsou označeny za~odpovídající si.
     Poté je vytvořena nová vrstva silniční sítě, která obsahuje odpovídající
@@ -282,7 +282,7 @@ s~tímto nástrojem řešit.
     manuálně.
 
 \item Úloha \textit{Geometry Difference Detection}, v~češtině \uv{detekce
-    geometrických rozdílů}, na~rozdíl od~předchozích nijak neupravuje vstupní
+    geometrických rozdílů}, na~roz\-díl od~předchozích nijak neupravuje vstupní
     vrstvy ani z~nich netvoří jiné. Cílem je pouze nalézt rozdíly mezi vstupními
     datasety. Nejčastěji je používána pro rozpoznání změn mezi dvěma verzemi
     jedné vektorové mapy (např. po aktualizaci).
@@ -306,7 +306,7 @@ pouze k~identifikaci geometrických rozdílů.
     Zároveň musí být mezi hranami polygonů, které tvoří tuto mezeru, úhel menší
     než daná úhlová tolerance.
  \item \textit{Find Coverage Overlaps} - najde všechny překryty mezi polygony
-    v~rámci jednoho datasetu, respektive všechny překrývající se polygony.
+    v~rámci jednoho data\-setu, respektive všechny překrývající se polygony.
  \item \textit{Find Close Vertices} - identifikuje body (samostatné body,
     vrcholy linií či polygonů) ze~dvou různých datasetů, jejichž vzdálenost
     je menší než daná tolerance.
@@ -329,8 +329,8 @@ k~samo\-tnému spojování vektorových map a~navázání dvou sousedních map.
     je nutné označit, která vrstva je referenční (s~body z~této vrstvy se 
     nebude hýbat).
  \item \textit{Coverage Alignment} - zarovná geometrii jednoho datasetu 
-    k~jinému referenčnímu datasetu v~místech, kde se překrývají nebo spolu
-    sousedí. Na~rozdíl od~předchozí funkce nepracuje pouze s~odpovídajícími
+    k~jinému referenčnímu data\-setu v~místech, kde se překrývají nebo spolu
+    sousedí. Na~rozdíl od~předchozí funkce ne\-pra\-cuje pouze s~odpovídajícími
     si body, ale s~celými geometriemi.
  \item \textit{PolygonToolboxMatcherPlugin} - tento nástroj slouží k~identifikaci
     podobných polygonů ve~dvou různých datasetech, přičemž umožňuje různá 

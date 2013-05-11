@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \documentclass[%
-  12pt,         			% Velikost základního písma je 12 bodů
+  11pt,         			% Velikost základního písma je 12 bodů
   a4paper,      			% Formát papíru je A4
   twoside,       			% Oboustranný tisk
   pdftex				% překlad bude proveden programem 'pdftex' do PDF
@@ -45,9 +45,10 @@
 \usepackage{amsmath}
 \addtolength{\jot}{1em} 
 
-\usepackage[
-    nohyperlinks    
-]{acronym}
+\usepackage{chngcntr}
+\counterwithout{footnote}{chapter}
+
+\usepackage{acronym}
 
 \usepackage[
     unicode,                

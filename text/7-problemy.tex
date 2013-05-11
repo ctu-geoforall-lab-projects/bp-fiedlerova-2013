@@ -25,7 +25,7 @@ vše překompilovat.
 
 S~tím souvisí i~další problém převodu geometrie. Jelikož v~programu \zk{QGIS} 
 je používáno právě C~API, nelze \zk{GEOS} geometrii jednoduše převést na~typ 
-\zk{QGIS} geometrie. Tento problém byl vyřešen konverzí mezi těmito dvěma
+\zk{QGIS} geometrie. Tento pro\-blém byl vyřešen konverzí mezi těmito dvěma
 typy přes \zk{WKT}. Nevýhoda tohoto postupu je však zpomalení běhu programu 
 obzvláště u~většího objemu dat. Toto by mělo být v~budoucnu vyřešeno 
 vytvořením vlastního C~API.
@@ -41,10 +41,10 @@ ze~dvou vrstev. Pro~nalezení takových dvojic prvků je obecně třeba porovnat
 každý prvek z~jedné vrstvy s~každým prvkem z~vrstvy druhé. Je tedy třeba 
 porovnat $n\cdot m$ dvojic, kde $n$ je počet prvků vrstvy první a~$m$ vrstvy 
 druhé. U~rozsáhlejších datasetů je nutné provést poměrně velké množství 
-operací a~čas zpracování pak výrazně roste. Tento problém byl částečně vyřešen 
-aplikací prostorových indexů\footnote{Prostorové indexy jsou využívány pro 
-optimalizaci prostorových dotazů v~prostorových databázích.}. Konkrétně byla 
-využita třída \texttt{geos::index::strtree::STRtree} knihovny \zk{GEOS} .
+operací a~čas zpracování pak výrazně roste. Tento pro\-blém byl částečně vyřešen 
+aplikací prostorových indexů, ty slouží k~optimalizaci prostorových dotazů 
+v~pro\-storových databázích. Konkrétně byla 
+využita třída \texttt{geos::index::strtree::STRtree} knihovny~\zk{GEOS} .
 Tato třída implementuje metodu indexování dat založenou 
 na~\textit{R-Tree}\footnote{Česky R-strom, prostorová stromová datová struktura 
 využívající minimální ohraničující obdélníky.}. Díky tomu se porovnávají pouze 
@@ -132,7 +132,7 @@ nedostatečné hustoty vrcholů a~nevhodného tvaru vzniká nežádoucí kříž
 
   \begin{figure}[H]
     \centering
-      \def\svgwidth{400pt}
+      \def\svgwidth{410pt}
       \input{./pictures/vs-invalid.pdf_tex}
       \caption{Vznik nevalidní geometrie při přichycení vrcholů}
       \label{fig:vs-nevalidni}
@@ -174,7 +174,7 @@ riziko jednotlivé úseky napojovány.
 
   \begin{figure}[H]
     \centering
-      \def\svgwidth{320pt}
+      \def\svgwidth{300pt}
       \input{./pictures/tooth.pdf_tex}
       \caption{Příklad situace, kdy vzniká \uv{zub}}
       \label{fig:toothpic}
@@ -185,7 +185,7 @@ riziko jednotlivé úseky napojovány.
 \label{problemy-mg}
 
 Algoritmus \textit{Matching Geometry}, který využívá třída 
-\texttt{CoverageAlignment}, vyhledává odpovídající si geometrie tak,
+\texttt{CoverageAlignment}, vyhledává od\-po\-vídající si geometrie tak,
 že nejdříve nalezne blízké prvky k~dané geometrii a~pak testuje postupně všechny
 tyto blízké prvky. Po nalezení prvního odpovídajícího prvku se už další prvky
 netestují. To může způsobit, že je nalezen sice odpovídající prvek, avšak
@@ -246,7 +246,7 @@ Tento problém úzce souvisí s~volbou toleranční vzdálenosti. Při dodržen�
 o~nejkratším segmentu  se mu lze téměř vyhnout (stále mohou vznikat nevalidní 
 geometrie u~příliš úzkých, protáhlých tvarů apod.). 
 
-
+\vspace{0.5cm}
   \begin{figure}[H]
     \centering
       \def\svgwidth{400pt}
@@ -294,6 +294,7 @@ Automaticky je možné opravit tyto dvě chyby v~geometrii:
  \item Křížení segmentů
 	\subitem Změněna orientace hrany či hran mezi křížícími se úseky.
 
+\vspace{0.2cm}
   \begin{figure}[H]
     \centering
       \def\svgwidth{360pt}
@@ -304,7 +305,7 @@ Automaticky je možné opravit tyto dvě chyby v~geometrii:
 
  \item Slepé větve
 	\subitem Vyřešeno odstraněním bodu na~konci větve.
-
+\vspace{0.2cm}
   \begin{figure}[H]
     \centering
       \def\svgwidth{360pt}
@@ -320,7 +321,7 @@ U~křížících se polygonů se často používá také pouhé přidání vrcho
 do~místa průsečíku segmentů. Tím vznikne validní geometrie a~nezmění
 se přitom její tvar. Vzhledem k~tomu, že u~úprav prováděných 
 s~polygony při slučování map, vznikají křížením většinou spíše drobné
-\uv{výstupky}, je použité řešení přijatelné. Navíc funkci pro opravu
+\uv{vý\-stup\-ky}, je použité řešení přijatelné. Navíc funkci pro opravu
 geometrií přidáním bodů obsahuje většina \zk{GIS} programů, takže není
 pro uživatele složité ji po~spojení dat v~rámci dodatečných úprav
 aplikovat. Stejně tak se ručně musí opravit další chyby jako je 
