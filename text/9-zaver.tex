@@ -21,15 +21,27 @@ K~problému sjednocení vektorových map existuje mnoho přístupů.
 Aplikace všech by však byla příliš náročná, proto byl zvolen jediný 
 přístup zabývající se pouze geometrickými vlastnostmi dat.
 
-
 Jelikož se jedná o~poměrně novou oblast v~\zk{GIS}, bylo
 obtížné najít literaturu, která by popisovala nějaké obecné 
 algoritmy. Většina dosavadních prací či článků se totiž zabývá 
-spojováním map pro nějaký specifický případ. Na druhou stranu
-jsem se však dověděla mnoho nového o~pro mě donedávna neznámém
-tématu.
+spojováním map pro nějaký specifický případ. Proto bylo při 
+implementaci nutné některé věci řešit na~základě vlastního uvážení. 
+Přesto však výsledky zpracování pomocí použitých algoritmů
+odpovídají původní představě o~funkcionalitě zásuvného modulu.
 
 Přestože knihovnu i~zásuvný modul je možné ještě v~různých směrech 
-vylepšit, lze říci, že stanovené cíle práce byly splněny. Nejbližším
-krokem by nyní mělo být uvedení projektu do~takového stavu, aby 
-mohl být poskytnut uživatelům programu \zkratkatext{QGIS}.
+mírně vylepšit, lze říci, že stanovené cíle práce byly splněny. 
+Zásuvný modul už nyní lze využít pro některé praktické úlohy.
+Algoritmus \textit{Vertex Snapper} se hodí například pro napojení
+dvou blízkých vrstev, aby výsledkem byla topologicky správná data,
+nebo pro napasování hranic parcel k~hranicím katastrálního území atp.
+\textit{Coverage Alignment} lze využít pro úpravu méně přesné, avšak
+obsáhlejší mapy dle přesnějšího zdroje. Konkrétně například pro 
+zarovnání map z~OpenStreetMap, které jsou sice velmi podrobné, ale
+nedosahují takové geometrické přesnosti. Poslední algoritmus
+\textit{LineMatcher} je díky svému zaměření na liniová data vhodný
+pro spojování map silničních sítí, zpřesnění map tras vytvořených 
+pomocí \zk{GNSS} technologií apod. 
+
+Nejbližším krokem by nyní mělo být uvedení projektu do~takového 
+stavu, aby mohl být poskytnut uživatelům programu \zkratkatext{QGIS}.

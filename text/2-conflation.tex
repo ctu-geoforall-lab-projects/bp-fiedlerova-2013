@@ -13,7 +13,7 @@ textu.
 \label{definice}
 
 Pojem \textit{conflation} byl poprvé v~souvislosti s~kartografií a~\zk{GIS}
-použit manželkou Jamese Corbetta, matematika působícího v~US~Census Bureau.
+použit manželkou Jamese Corbetta, matematika působícího v~US~Census Bureau \cite{saalfeldvideo}.
 Termín pochází z~latinského \textit{con flare}, což znamená \uv{rozdmýchávat}
 nebo doslovněji \uv{foukat dohromady}. Ještě před tím, než se toto slovo 
 objevilo v~digitální kartografii, používalo se pro popis spojování dvou 
@@ -55,7 +55,7 @@ zahraničních zdrojů.
  \item \textit{Conflation} je proces, jehož cílem je geometricky upravit 
     (posunem, transformací) di\-gitální data zobrazující stejné území 
     (obvykle pořízená v~jiném čase) tak, aby byla vzájemně geograficky 
-    \uv{korektní} a~vzájemně se překrývaly.
+    \uv{korektní} a~vzájemně se překrývala.
     
     (HUIC Data Services, \url{http://huic.com/HUIC/job/right/conflation.htm}, 
      citováno 30.~4.~2013)
@@ -70,7 +70,7 @@ zahraničních zdrojů.
 
   \item Soubor funkcí a~procedur, které zarovnávají prvky jednoho \zk{GIS} 
     souboru k~prvkům jiného a~následně převádí atributy mezi~těmito vrstvami.
-    Zarovnání předchází převodu atributů a~je nejčestěji prováděno 
+    Zarovnání předchází převodu atributů a~je nejčastěji prováděno 
     \textit{rubber-sheeting} operacemi.
    
     (Prince George's County - GIS Glossary,
@@ -94,10 +94,10 @@ Až do 80.~let 20.~století bylo pořízení digitálních dat velmi drahé, a~p
 se často nestávalo, že by nějaká firma vlastnila více mapových souborů jediného 
 území. S~vývojem počítačů a~digitálních technologií se však tato data stávala 
 stále do\-stupnějšími a~náhle vyvstala potřeba kombinovat data o~jednom území 
-z~více zdrojů a~provádění aktualizace těchto dat. 
+z~více zdrojů a~provádět aktualizace těchto dat. 
 
 Jako první se k~takovému množství dat dostaly pochopitelně různé vládní 
-instituce. Ačkoli první článek o~problematice spojování geografických dat 
+instituce \cite{saalfeld}. Ačkoli první článek o~problematice spojování geografických dat 
 z~více zdrojů vyšel už v~roce 1981 (\textit{M. White: The~Theory of~Geographical
 Data Conflation}), k~opravdovému rozvoji došlo až po~roce 1985. V~té době 
 totiž vznikl projekt, jehož cílem bylo propojení mapových souborů organizací
@@ -110,10 +110,10 @@ S~narůstající dostupností dat a~zveřejněním této myšlenky přibývalo i
 firem zabývajících se problémem kombinace mapových souborů z~různých zdrojů.
 
 Zatímco před dvaceti lety se datasety slučovaly pouze na~základě geometric\-kých 
-a~topologických vlastností, dnes stále větší roli hrají i~atributy jednotlivých 
-prvků, které mohou práci velmi usnadnit. Nejnovějším přístupem je pak zjišťování 
-sémantické podobnosti, která je založena na~porovnávání atributů, datových 
-struktur a~vzájemných vztahů.
+a~topologických vlastností \cite{saalfeld}, dnes stále větší roli hrají i~atributy 
+jednotlivých prvků \cite{cobb}, které mohou práci velmi usnadnit. Nejnovějším 
+přístupem je pak zjišťování sémantické podobnosti, která je založena na~porovnávání 
+atributů, datových struktur a~vzájemných vztahů \cite{semantic}.
 
 
 \section{Klasifikace \textit{conflation}}
@@ -195,15 +195,16 @@ struktur a~vzájemných vztahů.
 \label{postup}
 
 Obecný postup při~slučování vektorových map z~více zdrojů se skládá z~několika
-kroků, které jsou uvedeny níže. Jako u~většiny podobných operací je třeba 
-nejdříve provést přípravu dat a~následně data zpracovat a~upravit.
+kroků, které jsou uvedeny níže \cite{wiemann,opensourceconflation}. Jako 
+u~většiny podobných operací je třeba nejdříve provést přípravu dat a~následně 
+data zpracovat a~upravit.
 
 \begin{enumerate}
   \item \textbf{Předzpracování dat}
     \subitem Tento krok slouží k~zajištění kompatibility vstupních dat tak, 
       aby bylo možné je porovnávat. Obvykle spočívá v~převedení vstupních 
       datasetů do~stejného souřadnico\-vé\-ho systému, zajištění stejných 
-      základních jednotek a~dalších měnších úpravách. 
+      základních jednotek a~dalších menších úpravách. 
   \item \textbf{Kontrola kvality dat a~topologické správnosti vrstev}
     \subitem Zde se kontroluje vnitřní konzistence dat každé vstupní vrstvy.
       V~tomto případě záleží především na~požadavcích zvoleného algoritmu 

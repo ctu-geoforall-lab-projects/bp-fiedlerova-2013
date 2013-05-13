@@ -89,7 +89,7 @@ pouze abstraktní metody bez implementace, není možné vytvořit
 instanci této třídy.} třídou pro editaci geometrie.
 
 Pro kontrolu validity geometrií je volána metoda \texttt{isValid()} 
-třídy \texttt{geos::geom::\-Geometry}.
+třídy \texttt{geos::geom::\linebreak Geometry}.
 
 Výsledné geometrie lze získat zavoláním metody \texttt{getNewGeometry()},
 která vrací vektor s~interní reprezentací geometrií.
@@ -266,7 +266,7 @@ segmenty.
 \label{lm-algoritmus}
 
 Jak je uvedeno výše, tento algoritmus pracuje pouze s~úseky jednotlivých
-linií, a~to z~toho důvodu, že jedna dlouhá linie, může být v~jiném datasetu
+linií, a~to z~toho důvodu, že jedna dlouhá linie může být v~jiném datasetu
 rozdělena na~několik menších například přerušením na~křižovatkách. Pro každou
 linii jednoho datasetu je pak provedeno následující. 
 
@@ -317,7 +317,7 @@ Veškeré funkce pro tento algoritmus jsou obsaženy ve~třídě \texttt{Line\-M
 
 Funkce \texttt{match()} hledá postupně ke~každé linii blízké linie z~druhého datasetu.
 Následně předá výsledky tohoto hledání metodě \texttt{match\-Line()}, která ke~každému
-úseku linie, nalezne prostřednictvím metody \texttt{matching\-Segment()} odpovídající
+úseku linie nalezne prostřednictvím metody \texttt{matching\-Segment()} odpovídající
 segment mezi předanými blíz\-kými prvky. Pokud k~nějakému úseku linie není určen
 žádný dostatečně podobný, je zde linie přerušena. Z~původního jednoduchého liniového
 prvku tak může vzniknout multiprvek. Pro vytváření nových geometrií jsou využívány

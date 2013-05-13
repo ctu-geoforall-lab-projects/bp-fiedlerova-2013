@@ -26,7 +26,7 @@ produktů.
 V~softwaru ArcGIS 10\footnote{\url{http://www.esri.com/software/arcgis}} 
 existuje několik nástrojů, které lze využít pro spojování
 geo\-grafických dat, přenos atributů a~odstraňování geometrických rozdílů 
-mezi datasety. 
+mezi datasety \cite{arcgishelp}. 
 
 \subsubsection{Spatial Adjustment}
 
@@ -127,7 +127,7 @@ kvality dat. Umožňuje převod atributů mezi dvěma překrývajícími se mapa
 navázání hranic dvou sousedících map, přidání prvků z~jedné mapy do~druhé, 
 synchronizaci mapy s~její aktualizovanou verzí, identifikaci geometrických 
 a~atributových rozdílů mezi dvěma verzemi té samé mapy. První verze programu 
-vyšla již v~roce 1998, od~té doby již firma vyvinula 9~verzí. Z~uvedených 
+vyšla již v~roce 1998, od~té doby již firma vyvinula devět~verzí. Z~uvedených 
 nástrojů poskytuje asi nejvíce možností zpracování a~díky specializaci 
 přímo na~spojování map se řadí mezi nejvýkonnější programy v~této oblasti. 
 
@@ -135,7 +135,7 @@ přímo na~spojování map se řadí mezi nejvýkonnější programy v~této obl
 \section{Open Source nástroje}
 \label{open-source}
 
-V~této sféře zatím neexistuje mnoho nástrojů, které by komplexně řešili problém
+V~této sféře zatím neexistuje mnoho nástrojů, které by komplexně řešily problém
 spojování vektorových map (\textit{conflation}). Většinou jde pouze o~malé 
 programy či zásuvné moduly k~větším projektům, pomocí nichž se dá provést manuální
 nebo poloautomatické sloučení vektorových datasetů, případně jejich atributů. 
@@ -243,7 +243,7 @@ zóna o~velikosti vzdálenostní tolerance prvního prvku obsahuje prvek druhý
 a~naopak. Tato podmínka je ekvivalentní k~podmínce, že Hausdorffova vzdálenost
 musí být menší nebo rovna toleranci. 
 
-Pro~odstraňování překrytů či mezer neexistuje exaktní algoritmus,
+Pro~odstraňování překryvů či mezer neexistuje exaktní algoritmus,
 ale jsou vy\-užívány různé heuristiky poskytující dobré topologické výsledky.
 
 Následující výčet podává přehled nejčastějších úloh, které je možné 
@@ -251,7 +251,7 @@ s~tímto nástrojem řešit.
 
 \begin{itemize}
  \item Jako \textit{Coverage Cleaning} je  označován proces hledání
-    a~odstraňování topologických chyb - mezer a~překrytů v~rámci jedné
+    a~odstraňování topologických chyb - mezer a~překryvů v~rámci jedné
     vektorové mapy tvořené polygony či multipolygony. Detekce nežádoucích
     mezer mezi polygony je založena na~rozpoznání blízkých liniových segmentů,
     kde blízkost je určena zvolenou vzdálenostní to\-le\-rancí. 
@@ -259,7 +259,7 @@ s~tímto nástrojem řešit.
  \item Další často řešenou úlohou je \textit{Boundary Alignment}, což by
     bylo možné přeložit do češtiny jako \uv{zarovnání či navázání hranic}. 
     Cílem je napojit k~sobě dvě vektorové vrstvy, které zobrazují sousedící
-    území, tak, aby se mezi nimi nevyskytovaly nežádoucí mezery či překryty.
+    území, tak, aby se mezi nimi nevyskytovaly nežádoucí mezery či překryvy.
     Výsledkem jsou tedy plynule navazující datasety, které tvoří bezešvou mapu.
     Při této úloze je nutné zvolit přesnější referenční vrstvu, jejíž 
     geometrické vlastnosti se nezmění.
@@ -298,14 +298,14 @@ pouze k~identifikaci geometrických rozdílů.
 
 \begin{itemize}
  \item \textit{Find Misaligned Segments} - slouží k~nalezení segmentů 
-    ze~dvou datasetů, které by si v~rámci dané tolerance měli odpovídat,
-    ale je mezi nimi mezera či překryt. 
+    ze~dvou datasetů, které by si v~rámci dané tolerance měly odpovídat,
+    ale je mezi nimi mezera či překryv. 
  \item \textit{Find Overlaps} - najde překrývající se prvky ze~dvou datasetů.
  \item \textit{Find Coverage Gaps} - umožňuje nalézt mezery mezi polygony
     jednoho datasetu, které jsou užší než zadaná vzdálenostní tolerance.
     Zároveň musí být mezi hranami polygonů, které tvoří tuto mezeru, úhel menší
     než daná úhlová tolerance.
- \item \textit{Find Coverage Overlaps} - najde všechny překryty mezi polygony
+ \item \textit{Find Coverage Overlaps} - najde všechny překryvy mezi polygony
     v~rámci jednoho data\-setu, respektive všechny překrývající se polygony.
  \item \textit{Find Close Vertices} - identifikuje body (samostatné body,
     vrcholy linií či polygonů) ze~dvou různých datasetů, jejichž vzdálenost
@@ -351,7 +351,7 @@ nalezených pomocí funkcí skupiny \textit{QA} v~rámci jednoho datasetu.
     topologii vrstvy. Zatím však umožňuje pouze odstranění krátkých izolovaných
     segmentů.
  \item \textit{CoverageCleaningToolboxPlugin} - poskytuje stejnou funkcionalitu
-    jako první ná\-stroj z~této skupiny, navíc umožňuje odhalit překryty 
+    jako první ná\-stroj z~této skupiny, navíc umožňuje odhalit překryvy 
     mezi polygony jedné vrstvy.
 \end{itemize}
 
@@ -380,7 +380,7 @@ konkrétní účel (např. pro spojování silničních sítí v~USA) a~ne vždy
 je proto jejich použití zcela obecné. Uživatel si tedy mnohdy musí poradit
 sám a~použít několik různých nástrojů, aby dosáhl požadovaného výsledku.
 Dále uvádím nástroje, které lze pro některé činnosti související 
-se~spojováním map použít. 
+se~spojováním map použít \cite{osmconflation}. 
 
 \subsubsection{JOSM conflation plugin}
 

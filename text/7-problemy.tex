@@ -11,8 +11,8 @@ o~nové rozhraní k~existujícímu programu, které má umožnit kompatibilitu
 s~externím programem apod.) v~podobě C~API. Hlavním důvodem toho je 
 zajištění vyšší stability. Při~použití C~API totiž není nutné vlastní 
 aplikaci, která ho používá, při~každé změně v~knihovně \zk{GEOS} překompilovat. 
-Proto většina programů využívajících \zk{GEOS} a~mezi nimi i~Quantum 
-GIS používají právě C~API. Nicméně to má i~své nevýhody. V~C~API bohužel 
+Proto většina programů využívajících \zk{GEOS}, mezi nimi i~Quantum 
+GIS, používají právě C~API. Nicméně to má i~své nevýhody. V~C~API bohužel 
 zatím není implementována veškerá funkcionalita C++~API. Některé chybějící 
 funkce lze obejít aplikací sice složitějšího postupu, nicméně výsledek je 
 obdobný jako při~použití C++~API. Avšak jiná funkcionalita je pro~uživatele 
@@ -44,7 +44,7 @@ druhé. U~rozsáhlejších datasetů je nutné provést poměrně velké množst
 operací a~čas zpracování pak výrazně roste. Tento pro\-blém byl částečně vyřešen 
 aplikací prostorových indexů, ty slouží k~optimalizaci prostorových dotazů 
 v~pro\-storových databázích. Konkrétně byla 
-využita třída \texttt{geos::index::strtree::STRtree} knihovny~\zk{GEOS} .
+využita třída \texttt{geos::index::strtree::STRtree} knihovny~\zk{GEOS}.
 Tato třída implementuje metodu indexování dat založenou 
 na~\textit{R-Tree}\footnote{Česky R-strom, prostorová stromová datová struktura 
 využívající minimální ohraničující obdélníky.}. Díky tomu se porovnávají pouze 
@@ -85,7 +85,8 @@ trvat poměrně dlouho.
 Testovány byly vždy uvedené dvojice datasetů pro různé toleranční vzdálenosti,
 a~to při zpracování algoritmy \texttt{Vertex\-Snapper} a~\texttt{Coverage\-Alignment}
 s~použitím prostorových indexů a~bez jejich použití. Kompletní výsledky testování 
-jsou uvedeny v~tabulkách v~příloze \ref{priloha-testovani}. Zde je uveden jen přehled 
+jsou uvedeny v~tabulkách v~příloze \ref{priloha-testovani}, parametry použitého 
+počítače pak tamtéž v~tabulce \ref{tab:parametry}. Zde je uveden jen přehled 
 výsledků testování.
 
 \begin{table}[H]
@@ -95,7 +96,7 @@ výsledků testování.
 \begin{tabular}{|c|cc|cc|}
 \hline
   & \multicolumn{2}{|c}{VertexSnapper} & \multicolumn{2}{|c|}{CoverageAlignment} \\
- toleranční vzálenost & 100 m & 1000 m & 100/1000 m & 10 000 m \\
+ toleranční vzdálenost & 100 m & 1000 m & 100/1000 m & 10 000 m \\
 \hline
 \hline
  polygonová data & 20.9 $\rightarrow$ 0.8 s& 22.6 $\rightarrow$ 0.7 s& 
@@ -155,7 +156,7 @@ vzdálenosti v~poměru k~velikosti prvku. U~datasetů obsahujících prvky
 o~výrazně rozdílných velikostech se tomu nelze vždy vyhnout. V knihovně
 \zk{GEOC} není tento problém zatím vyřešen. Nejjednodušší řešení, které
 by bylo možné implementovat, je nabídnout uživateli, co s~takovými prvky provést.
-Na~výběr by byly tyto možnosti - odstranění takových prvků, export těchto prvků 
+Na~výběr by byly tyto možnosti: odstranění takových prvků, export těchto prvků 
 do~nové vrstvy, kde by bylo možné je dále upravovat, nebo ponechání původní 
 geometrie.
 
