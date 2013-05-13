@@ -184,13 +184,14 @@ bool QgsConflateProvider::copyLayer( QString uri )
     QgsFeatureRequest request = QgsFeatureRequest(); // default feature request
     QgsVectorLayerFeatureIterator featureIt = QgsVectorLayerFeatureIterator(mSubLayer, request);
     featureIt.rewind(); // reset iterator to the start position
-    QList<QgsFeature> features;
+    QgsFeatureList features;
 
     while( featureIt.nextFeature( myFeature ) )
     {
         // add feature to the list
         features.push_back( myFeature );
     }
+
 
     // add features from list to the layer
     if( mNewLayer->dataProvider()->addFeatures(features) )

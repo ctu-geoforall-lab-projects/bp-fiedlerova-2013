@@ -20,9 +20,6 @@
 #ifndef QGSCONFLATEPLUGIN_H
 #define QGSCONFLATEPLUGIN_H
 
-#ifndef QgsConflatePlugin_H
-#define QgsConflatePlugin_H
-
 //QGIS includes
 #include <QObject>
 #include <QAction>
@@ -60,6 +57,5 @@ class QgsConflatePlugin : public QObject, public QgisPlugin
 
 };
 
-#endif // QgsConflatePlugin_H
 
 #endif // QGSCONFLATEPLUGIN_H
