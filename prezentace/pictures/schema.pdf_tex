@@ -1,0 +1,60 @@
+%% Creator: Inkscape inkscape 0.48.3.1, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'schema.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{427.78481445bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.13326766)%
+    \put(0,0){\includegraphics[width=\unitlength]{./pictures/schema.pdf}}%
+    \put(0.03752909,0.07771871){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflatePlugin}}}%
+    \put(0.45295257,0.07656385){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Dialog}}}%
+    \put(0.7340145,0.07971295){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{QgsConflateProvider}}}%
+    \put(0.05554316,0.00937606){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{zásuvný modul}}}%
+    \put(0.39868684,0.00843154){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{grafické rozhraní}}}%
+    \put(0.77306855,0.01263758){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{funkcionalita}}}%
+  \end{picture}%
+\endgroup%
