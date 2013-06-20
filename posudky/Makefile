@@ -1,5 +1,5 @@
 PDFLATEX = pdflatex
-FILE = posudek
+FILE = vedouci
 
 all: 
 	$(PDFLATEX) $(FILE).tex
