@@ -48,11 +48,11 @@
     \titlepage % uvodni stranka
   \end{frame}
 
-  \begin{frame}  % uvést o čem budu mluvit
-    \frametitle{Obsah}
-    \setcounter{tocdepth}{1}
-    \tableofcontents 
-  \end{frame}
+%   \begin{frame}  % uvést o čem budu mluvit
+%     \frametitle{Obsah}
+%     \setcounter{tocdepth}{1}
+%     \tableofcontents 
+%   \end{frame}
 
   \section{Zadání}  % říct zadání a~cíle práce
   \begin{frame}
@@ -89,38 +89,38 @@
 
   \end{frame}
 
-  \subsection{Klasifikace} % šla by zmínit ve slidu s definicí
-  \begin{frame}
-  \frametitle{Klasifikace} % obrázek?
-    \textbf{Dle typu vstupních vrstev:}
-     \begin{itemize}
-      \item rastr - rastr (imagery to imagery)
-      \item rastr - vektor (vector to imagery)
-      \item \textcolor{red!70!black}{vektor - vektor} (vector to vector)
-     \end{itemize}
-    \textbf{Dle území zobrazovaného vstupními vrstvami:}
-     \begin{itemize}
-      \item horizontální
-        \begin{itemize}
-         \item vrstvy zobrazující sousedící území
-        \end{itemize}
-      \item vertikální
-        \begin{itemize}
-         \item vrstvy zobrazující překrývající se území
-        \end{itemize}
-     \end{itemize}
-  \end{frame}
+%   \subsection{Klasifikace} % šla by zmínit ve slidu s definicí
+%   \begin{frame}
+%   \frametitle{Klasifikace} % obrázek?
+%     \textbf{Dle typu vstupních vrstev:}
+%      \begin{itemize}
+%       \item rastr - rastr (imagery to imagery)
+%       \item rastr - vektor (vector to imagery)
+%       \item \textcolor{red!70!black}{vektor - vektor} (vector to vector)
+%      \end{itemize}
+%     \textbf{Dle území zobrazovaného vstupními vrstvami:}
+%      \begin{itemize}
+%       \item horizontální
+%         \begin{itemize}
+%          \item vrstvy zobrazující sousedící území
+%         \end{itemize}
+%       \item vertikální
+%         \begin{itemize}
+%          \item vrstvy zobrazující překrývající se území
+%         \end{itemize}
+%      \end{itemize}
+%   \end{frame}
 
   \subsection{Obecný postup}
   \begin{frame}
   \frametitle{Obecný postup}   % stručně popsat, první dva kroky a~poslední krok bývá v~režii uživatele, zbytek by měl vykonat conflation systém
      \textbf{Postup při slučování vektorových dat:}
      \begin{enumerate}
-      \item Předzpracování dat (zajištění kompatibility)
+      \item Předzpracování dat% (zajištění kompatibility)
       \item Kontrola kvality dat a~topologické správnosti vrstev
       \item Vyhledání odpovídajících si prvků
       \item Sloučení geometrických prvků a/nebo jejich atributů
-      \item Závěrečné úpravy (kontrola, drobné opravy)
+      \item Závěrečné úpravy %(kontrola, drobné opravy)
      \end{enumerate}
       \pause[]
      Úkolem programu pro automatické sloučení dat jsou kroky 3 a~4,
@@ -138,9 +138,9 @@
 	  \begin{itemize}
 	    \item dílčí nástroje umožňující různé operace
 	  \end{itemize}
-      \item Intergraph Geomedia Fusion
+      \item Intergraph Geomedia - Fusion
 	  \begin{itemize}
-	    \item údržba dat v~geografických databázích, topologické opravy, 
+	    \item údržba dat v~geografických databázích, %topologické opravy, 
 		  integrace dat
 	  \end{itemize}
       \item ESEA MapMerger
@@ -149,8 +149,8 @@
 	  \end{itemize}
       \item ConfleX
 	  \begin{itemize}
-	    \item využití umělé inteligence, porovnávání jednotlivých segmentů
-		  a~topologických vztahů
+	    \item využití umělé inteligence%, porovnávání jednotlivých segmentů
+		  %a~topologických vztahů
 	  \end{itemize}
      \end{itemize}
   \end{frame}
@@ -163,11 +163,11 @@
 	      \begin{itemize}
 		\item jediný ucelenější nástroj v~této skupině
 		\item knihovna založená na JTS (Java Topology Suite)
-		\item kolekce zásuvných modulů pro OpenJUMP - QA, Conflate, RoadMatcher
+		\item kolekce zásuvných modulů pro OpenJUMP %- QA, Conflate, RoadMatcher
 	      \end{itemize}
 	  \item OpenStreetMap
 	      \begin{itemize}
-		\item JOSM conflation, Potlatch2merging tool
+		%\item JOSM conflation, Potlatch2merging tool
 		\item drobné nástroje, spíše ruční slučování map
 	      \end{itemize}
 	\end{itemize} 
@@ -180,7 +180,7 @@
   \begin{frame}
   \frametitle{GEOC}
      \begin{itemize}
-      \item knihovna obsahující algoritmy pro slučování vektorových map
+      \item knihovna s~algoritmy pro slučování vektorových map
       \item navržena nezávisle na QGIS zásuvném modulu 
       \item využívá knihovnu GEOS (Geometry Engine, Open Source)
       \begin{itemize}
@@ -264,11 +264,11 @@
      \begin{columns}[c]
 	\column{2in}
 	\begin{enumerate}
-	    \item nalezení blízkých linií k~danému segmentu
+	    \item nalezení blízkých linií% k~danému segmentu
 	    \item testování segmentu s~každým úsekem blízké linie
 	    \item určení nejpodobnějšího segmentu
 		  (délka, úhel, blízkost) 
-	    \item průměr z~odpovídajících si segmentů
+	    \item průměr z~podobných segmentů
 	\end{enumerate}
 	\column{2in}
 	  \begin{figure}
@@ -368,18 +368,18 @@
    \textbf{Využití}
      \begin{itemize}
       \item Vertex Snaper - 
-	  přichycení map sousedících území,
-	  sjednocení hranic parcel s hranicemi katastrálního území
+	  sjednocení hranic map
+	  %sjednocení hranic parcel s hranicemi katastrálního území
       \item Coverage Alignment - 
-	  zpřesnění obsáhlých map (OSM)
+	  zpřesnění obsáhlých map %(OSM)
       \item Line Matcher - 
-	  spojování map silničních sítí,
-	  vyhledání cyklistických tras vedoucích po silnici
+	  spojování map silničních sítí%,
+	  %vyhledání cyklistických tras vedoucích po silnici
      \end{itemize}
    \textbf{Další vývoj}
      \begin{itemize}
       \item poskytnutí uživatelům QGIS
-      \item zvýšení rychlosti zpracování (paralelizace, zpracování po dlaždicích)
+      \item zvýšení rychlosti zpracování% (paralelizace, zpracování po dlaždicích)
      \end{itemize}
   \end{frame}
  
@@ -388,12 +388,72 @@
 \end{center}}
 
  \begin{frame}
-  \frametitle{Reakce na otázky oponenta}
-   \textbf{JCS do C++}
+  \frametitle{Reakce na výtky a otázky oponenta}
+\small
      \begin{itemize}
-      \item možnost připojení JCS do QGIS - užitečné x nezbytné úpravy knihovny, která je koncipována pro openJUMP
-      \item přepsání JCS do C++ - asi nezbytné pro připojení do QGIS, mohlo by být využitelné i~pro jiné projekty
+       %\item Citování literatury % v poznámkách pod čarou apod. uvedeny pouze odkazy na stránky firem a projektů z nichž jsem čerpala jen minimálně
+       \item Str. 23, kap 2.3.1 ods. 2: „Výsledkem celého procesu je jediný dataset, jehož 
+přesnost není horší než přesnost původních dat a obsahuje informace z obou 
+zdrojů“. Tato formulace je poněkud nejasná, může být pochopena tak, že vždy 
+dojde ke zpřesnění dat, ale to rozhodně nemusí být pravda. %
+       \item Str. 42: Není možné v případě C++ použít přímo termín interface (rozhraní) místo 
+termínu interface třída? % To samozřejmě v C++ možné je, avšak interface je zároveň třídou, takže si myslím že v pořádku jsou obě varianty.
+       \item Str. 43: \uv{Naopak je-li zvolená vzdálenost delší než nejkratší úsek geometrie (linie, 
+polygonu), může dojít k přichycení dvou bodů k jednomu bodu z referenční vrstvy. 
+Zda je toto přípustné či nikoli, je už na rozhodnutí uživatele.}. Z popisu není jasné 
+jak se uživatel rozhoduje. % Uživatel v tomto případě vybírá toleranční vzdálenost a pokud zvolí příliš velkou musí pak počítat s rizikem přichycení dvou bodů do jednoho.
      \end{itemize}
  \end{frame}
+
+ \begin{frame}
+  \frametitle{Reakce na otázky oponenta}
+Zajímavý by byl názor autorky na možnost připojit JCS (Java Conflation Suite) do 
+QGIS, případně názor na možnost přepsat celý JCS do C++.
+      \begin{itemize}
+       \item možnost připojení JCS do QGIS - užitečné x nezbytné úpravy knihovny, která je koncipována pro openJUMP
+       \item přepsání JCS do C++ - asi nezbytné pro připojení do QGIS, mohlo by být využitelné i~pro jiné projekty
+      \end{itemize}
+ \end{frame}
+
+
+% • Poněkud matoucí je nejednotný způsob citování zdrojů, např. v kap. 2.1 se 
+% kombinuje odkaz do seznamu literatury, s přímo uvedeným URL odkazem. Na 
+% některých stranách se zase používají poznámky pod čarou. Toto se objevuje v textu 
+% práce poměrně často. 
+% • Str. 23, kap 2.3.1 ods. 2: „Výsledkem celého procesu je jediný dataset, jehož 
+% přesnost není horší než přesnost původních dat a obsahuje informace z obou 
+% zdrojů“. Tato formulace je poněkud nejasná, může být pochopena tak, že vždy 
+% dojde ke zpřesnění dat, ale to rozhodně nemusí být pravda.
+% • Str. 23, kap. 2.3.2.: Termíny napasovat, napasováním jsou problematické. Sám se s 
+% překladem těchto pojmů potýkám již řadu let. K dispozici je celá řada různých 
+% překladů. Určitě by stálo za to aby komise k tomuto zaujala nějaké stanovisko, které 
+% by bylo zveřejněno.
+% • Str. 24, kap. 2.3.2. (i dále): Termín dataset se běžně překládá jako datová sada. 
+% • Str. 28: Termín sladění je problematický. Určitě by stálo za to aby komise k tomuto 
+% zaujala nějaké stanovisko, které by bylo zveřejněno.
+% • Str. 36: Překlad katedra počítačů z originálního Computer Science Department je 
+% nevhodný. V tomto případě by bylo vhodné raději název katedry nepřekládat.
+% • Obrázek 4.1 je zcela zbytečný.
+% • Obrázek 4.2 je zcela zbytečný.
+% • Str. 38: „WKT ­ Textový značkovací jazyk pro popis vektorové geometrie 
+% geografických objektů“. Nikdy jsem se nesetkal s tím, že by se WKT označoval 
+% jakožto značkovací jazyk, i když by se do rodiny značkovacích jazyků zařadit jistě 
+% dal.
+%  • Str. 42: Není možné v případě C++ použít přímo termín interface (rozhraní) místo 
+% termínu interface třída? 
+%  • Str. 43: „Naopak je­li zvolená vzdálenost delší než nejkratší úsek geometrie (linie, 
+% polygonu), může dojít k přichycení dvou bodů k jednomu bodu z referenční vrstvy. 
+% Zda je toto přípustné či nikoli, je už na rozhodnutí uživatele.“. Z popisu není jasné 
+% jak se uživatel rozhoduje.
+%  • Str. 43: „Coverage alignment lze vysvětlit jako zarovnání jedné vrstvy k vrstvě 
+% druhé“. Vhodnější by bylo se odkázat do teoretické části práce.
+%  • Str. 43: Domnívám se, že slovo různit není spisovné.
+%  • Kap. 5.4.1: Zde by bylo vhodné text doplnit obrázkem.
+%  • Příloha E: Příloha mohla být zpracována v podobě map nikoli jen snímků 
+% obrazovky.
+%  • Zajímavý by byl názor autorky na možnost připojit JCS (Java Conflation Suite) do 
+% QGIS, případně názor na možnost přepsat celý JCS do C++.
+
+
 
 \end{document}
