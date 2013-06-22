@@ -165,7 +165,7 @@
 		\item knihovna založená na JTS (Java Topology Suite)
 		\item kolekce zásuvných modulů pro OpenJUMP %- QA, Conflate, RoadMatcher
 	      \end{itemize}
-	  \item OpenStreetMap
+	  \item OpenStreetMap % OpenStreetMap je projekt sloužící k tvorbě a vizualizaci geografických dat.
 	      \begin{itemize}
 		%\item JOSM conflation, Potlatch2merging tool
 		\item drobné nástroje, spíše ruční slučování map
@@ -288,7 +288,8 @@
     \begin{columns}[c]
 	\column{2.5in}
      \begin{itemize}
-      \item zásuvný modul pro Quantum GIS
+      \item zásuvný modul pro Quantum GIS % Quantum GIS (QGIS) je open source geografický informační nástroj
+
       \item psaný v~jazyce C++
       \item využití algoritmů knihovny GEOC
      \end{itemize}
@@ -388,17 +389,19 @@
 \end{center}}
 
  \begin{frame}
-  \frametitle{Reakce na výtky a otázky oponenta}
+  \frametitle{Reakce na poznámky oponenta}
 \small
      \begin{itemize}
        %\item Citování literatury % v poznámkách pod čarou apod. uvedeny pouze odkazy na stránky firem a projektů z nichž jsem čerpala jen minimálně
        \item Str. 23, kap 2.3.1 ods. 2: „Výsledkem celého procesu je jediný dataset, jehož 
 přesnost není horší než přesnost původních dat a obsahuje informace z obou 
 zdrojů“. Tato formulace je poněkud nejasná, může být pochopena tak, že vždy 
-dojde ke zpřesnění dat, ale to rozhodně nemusí být pravda. %
-       \item Str. 42: Není možné v případě C++ použít přímo termín interface (rozhraní) místo 
+dojde ke zpřesnění dat, ale to rozhodně nemusí být pravda. % V tomto případě jsem chtěla vyjádřit, že sloučení map by nemělo vést ke zhoršení geometrické přesnosti.
+      \pause[] 
+      \item Str. 42: Není možné v případě C++ použít přímo termín interface (rozhraní) místo 
 termínu interface třída? % To samozřejmě v C++ možné je, avšak interface je zároveň třídou, takže si myslím že v pořádku jsou obě varianty.
-       \item Str. 43: \uv{Naopak je-li zvolená vzdálenost delší než nejkratší úsek geometrie (linie, 
+      \pause[]  
+      \item Str. 43: \uv{Naopak je-li zvolená vzdálenost delší než nejkratší úsek geometrie (linie, 
 polygonu), může dojít k přichycení dvou bodů k jednomu bodu z referenční vrstvy. 
 Zda je toto přípustné či nikoli, je už na rozhodnutí uživatele.}. Z popisu není jasné 
 jak se uživatel rozhoduje. % Uživatel v tomto případě vybírá toleranční vzdálenost a pokud zvolí příliš velkou musí pak počítat s rizikem přichycení dvou bodů do jednoho.
@@ -432,13 +435,13 @@ QGIS, případně názor na možnost přepsat celý JCS do C++.
 % • Str. 28: Termín sladění je problematický. Určitě by stálo za to aby komise k tomuto 
 % zaujala nějaké stanovisko, které by bylo zveřejněno.
 % • Str. 36: Překlad katedra počítačů z originálního Computer Science Department je 
-% nevhodný. V tomto případě by bylo vhodné raději název katedry nepřekládat.
+% nevhodný. V tomto případě by bylo vhodné raději název katedry nepřekládat.             % V práci mám uveden originální název katedry a překlad katedra počítačů neměl být překladem názvu ale měl sloužit pouze k tomu, aby čtenáři přiblížil, čím se katedra zabývá.
 % • Obrázek 4.1 je zcela zbytečný.
-% • Obrázek 4.2 je zcela zbytečný.
+% • Obrázek 4.2 je zcela zbytečný.							   % Oba obrázky jsou loga projektů a mají sloužit k tomu, aby se čtenáři snáze vybavili dané projekty, pokud už se s nimi setkal.
 % • Str. 38: „WKT ­ Textový značkovací jazyk pro popis vektorové geometrie 
 % geografických objektů“. Nikdy jsem se nesetkal s tím, že by se WKT označoval 
 % jakožto značkovací jazyk, i když by se do rodiny značkovacích jazyků zařadit jistě 
-% dal.
+% dal.											   % Jak říká sám oponent definice není špatně, je pouze neobvyklá.
 %  • Str. 42: Není možné v případě C++ použít přímo termín interface (rozhraní) místo 
 % termínu interface třída? 
 %  • Str. 43: „Naopak je­li zvolená vzdálenost delší než nejkratší úsek geometrie (linie, 
@@ -446,11 +449,11 @@ QGIS, případně názor na možnost přepsat celý JCS do C++.
 % Zda je toto přípustné či nikoli, je už na rozhodnutí uživatele.“. Z popisu není jasné 
 % jak se uživatel rozhoduje.
 %  • Str. 43: „Coverage alignment lze vysvětlit jako zarovnání jedné vrstvy k vrstvě 
-% druhé“. Vhodnější by bylo se odkázat do teoretické části práce.
+% druhé“. Vhodnější by bylo se odkázat do teoretické části práce.			     % V teoretické části nemám vypsané různé typy a postupy slučování map a tato věta měla přiblížit konkrétní způsob sloučení tímto algoritmem.
 %  • Str. 43: Domnívám se, že slovo různit není spisovné.
 %  • Kap. 5.4.1: Zde by bylo vhodné text doplnit obrázkem.
 %  • Příloha E: Příloha mohla být zpracována v podobě map nikoli jen snímků 
-% obrazovky.
+% obrazovky.											% Úkolem bylo pouze ilustrovat jak zpracování vypadá, k tomu byla použita ukázková testovací data a proto se mi mapové výstupy nezdály nutností.
 %  • Zajímavý by byl názor autorky na možnost připojit JCS (Java Conflation Suite) do 
 % QGIS, případně názor na možnost přepsat celý JCS do C++.
 
