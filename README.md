@@ -10,7 +10,7 @@ Tereza Fiedlerová
 
 ## Vedoucí
 
-Ing. Martin Landa, Ph.D.
+Ing. Martin Landa
 
 ## Obhajoba
 
